@@ -17,9 +17,9 @@ root.render(
     <React.StrictMode>
       <Provider store={store}>
         <Routes>
-          <Route path='/' element={<App />}>
-            <Route path='UserInfo' element={<UserInfo />} />
-            <Route path='UserManage/UserList' element={<List />} />
+          <Route path="/" element={<App />}>
+            <Route path="UserInfo" element={<UserInfo />} />
+            <Route path="ContentManage/CityList" element={<List />} />
           </Route>
         </Routes>
       </Provider>

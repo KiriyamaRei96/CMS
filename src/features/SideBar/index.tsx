@@ -12,7 +12,7 @@ const SideBar = memo((props: SideBarProps) => {
   return (
     <div className={clsx(style.sideBar, "d-flex")}>
       <Menu
-        mode='inline'
+        mode="inline"
         defaultSelectedKeys={["/"]}
         defaultOpenKeys={["/"]}
         // selectable
@@ -21,55 +21,29 @@ const SideBar = memo((props: SideBarProps) => {
           {
             key: "/",
             title: "Báo cáo - thống kê",
-            icon: <i className='fa-solid fa-chart-simple'></i>,
-            label: <Link to='/'>Báo cáo - thống kê</Link>,
+            icon: <i className="fa-solid fa-chart-simple"></i>,
+            label: <Link to="/">Báo cáo - thống kê</Link>,
           },
-          {
-            key: uuid(),
-            title: "Quản trị người dùng",
-            icon: <i className='fa-solid fa-users-gear'></i>,
-            label: <span>Quản trị người dùng</span>,
-            children: [
-              {
-                key: "/UserManage/UserList",
-                title: "Danh sách người dùng",
-                label: (
-                  <Link to='/UserManage/UserList'>Danh sách người dùng</Link>
-                ),
-              },
-              {
-                key: uuid(),
-                title: "Danh sách nhóm quyền",
-                label: <span>Danh sách nhóm quyền</span>,
-              },
-              {
-                key: uuid(),
-                title: "Danh sách chức năng",
-                label: <span>Danh sách chức năng</span>,
-              },
-            ],
-          },
+
           {
             key: uuid(),
             title: "Quản lý nội dung",
-            icon: <i className='fa-solid fa-folder'></i>,
+            icon: <i className="fa-solid fa-folder"></i>,
             label: <span>Quản lý nội dung</span>,
             children: [
               {
                 key: uuid(),
                 title: "Quản lý thành phố",
-                label: <span>Quản lý thành phố</span>,
+                label: (
+                  <Link to="ContentManage/CityList">Quản lý thành phố</Link>
+                ),
               },
               {
                 key: uuid(),
                 title: "Quản lý địa điểm",
                 label: <span>Quản lý địa điểm</span>,
               },
-              {
-                key: uuid(),
-                title: "Quản lý dịch vụ du lịch (Quản lý lịch trình)",
-                label: <span>Quản lý dịch vụ du lịch</span>,
-              },
+
               {
                 key: uuid(),
                 title:
@@ -91,14 +65,9 @@ const SideBar = memo((props: SideBarProps) => {
           {
             key: uuid(),
             title: "Quản lý chung",
-            icon: <i className='fa-solid fa-gear'></i>,
+            icon: <i className="fa-solid fa-gear"></i>,
             label: <span>Quản lý chung</span>,
             children: [
-              {
-                key: uuid(),
-                title: "Quản lý ngôn ngữ",
-                label: <span>Quản lý ngôn ngữ</span>,
-              },
               {
                 key: uuid(),
                 title: "Quản lý loại địa điểm",
@@ -120,8 +89,8 @@ const SideBar = memo((props: SideBarProps) => {
           {
             key: "/UserInfo",
             title: "thông tin cá nhân",
-            icon: <i className='fa-regular fa-user'></i>,
-            label: <Link to='/UserInfo'>thông tin cá nhân</Link>,
+            icon: <i className="fa-regular fa-user"></i>,
+            label: <Link to="/UserInfo">thông tin cá nhân</Link>,
           },
         ]}
       ></Menu>

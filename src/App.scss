@@ -27,3 +27,10 @@
         background-color: #eff2f5;
     }
 }
+
+.vetical-input {
+    .ant-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

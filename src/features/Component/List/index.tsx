@@ -2,6 +2,7 @@ import React, { memo } from "react";
 import clsx from "clsx";
 import style from "./style.module.scss";
 import Search from "./Component/Search";
+import TableItems from "./Component/Table";
 
 export interface ListProps {}
 
@@ -13,6 +14,7 @@ const List = memo((props: ListProps) => {
       </div>
       <div className={clsx(style.main, "d-flex")}>
         <Search />
+        <TableItems />
       </div>
     </div>
   );
