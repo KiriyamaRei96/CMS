@@ -1,0 +1,29 @@
+@import '~antd/dist/antd.css';
+
+.ant-dropdown-menu-title-content {
+    white-space: nowrap;
+}
+
+.App {
+    flex-direction: column;
+    height: 100vh;
+
+    .Cotainer {
+        display: inherit;
+        flex: 1;
+        height: 100%;
+        padding-top: 50px;
+
+        .content {
+            flex: 1;
+            height: 100%;
+            overflow-x: unset;
+            overflow-y: auto;
+        }
+    }
+
+    .content {
+        flex-direction: column;
+        background-color: #eff2f5;
+    }
+}

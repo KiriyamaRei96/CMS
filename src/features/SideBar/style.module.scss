@@ -1,0 +1,16 @@
+.sideBar {
+
+    height: 100%;
+    width: fit-content;
+    border-right: 1px solid #f0f0f0;
+    flex-direction: column;
+
+    &>ul {
+        border-right: none;
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+
+
+    }
+}
