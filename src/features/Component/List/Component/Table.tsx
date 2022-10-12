@@ -1,4 +1,4 @@
-import { Button, Space, Tag } from "antd";
+import { Button, Pagination, Space, Tag } from "antd";
 import { ColumnsType } from "antd/lib/table";
 import React, { memo } from "react";
 import { Table } from "antd";
@@ -57,7 +57,7 @@ const columns: ColumnsType<DataType> = [
     title: "Action",
     key: "action",
     render: (_, record) => (
-      <Space size='middle'>
+      <Space size="middle">
         <span>Invite {record.name}</span>
         <span>Delete</span>
       </Space>
@@ -131,7 +131,7 @@ const itemColum: ColumnsType<InitSate> = [
         {imgList?.map((obj) => {
           // console.log(obj.name);
           return (
-            <img className={clsx(style.tableImg)} src={obj?.name} alt='' />
+            <img className={clsx(style.tableImg)} src={obj?.name} alt="" />
           );
         })}
       </>
@@ -143,9 +143,15 @@ const TableItems = memo((props: TableProps) => {
 
   return (
     <div>
-      <Button type='primary'>Thêm thông tin</Button>
+      <Button type="primary">Thêm thông tin</Button>
 
-      <Table columns={itemColum} dataSource={dataItem} />
+      <Table pagination={false} columns={itemColum} dataSource={dataItem} />
+      <Pagination
+        showSizeChanger
+        // onShowSizeChange={onShowSizeChange}
+        defaultCurrent={3}
+        total={500}
+      />
     </div>
   );
 });
