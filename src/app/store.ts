@@ -3,10 +3,12 @@ import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import { Fetcher } from "../features/slice/slice";
 import createSagaMiddleware from "redux-saga";
 import mySaga from "../features/slice/saga";
+import { userInfoSlice } from "../features/Component/Login/slice/UserSlice";
 const sagaMiddleware = createSagaMiddleware();
 export const store = configureStore({
   reducer: {
     fetch: Fetcher.reducer,
+    userInfo:userInfoSlice.reducer
   },
   middleware: (getDefaultMiddleware) => [sagaMiddleware],
 });
