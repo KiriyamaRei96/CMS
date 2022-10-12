@@ -1,7 +1,12 @@
-import { Space, Tag } from "antd";
+import { Button, Space, Tag } from "antd";
 import { ColumnsType } from "antd/lib/table";
 import React, { memo } from "react";
 import { Table } from "antd";
+import { selectData } from "../../../../app/store";
+import { useSelector } from "react-redux";
+import { InitSate } from "../../../slice/slice";
+import style from "../style.module.scss";
+import clsx from "clsx";
 export interface TableProps {}
 interface DataType {
   key: string;
@@ -10,12 +15,13 @@ interface DataType {
   address: string;
   tags: string[];
 }
+
 const columns: ColumnsType<DataType> = [
   {
     title: "Name",
     dataIndex: "name",
     key: "name",
-    render: (text) => <a>{text}</a>,
+    render: (text) => <span>{text}</span>,
   },
   {
     title: "Age",
@@ -51,9 +57,9 @@ const columns: ColumnsType<DataType> = [
     title: "Action",
     key: "action",
     render: (_, record) => (
-      <Space size="middle">
-        <a>Invite {record.name}</a>
-        <a>Delete</a>
+      <Space size='middle'>
+        <span>Invite {record.name}</span>
+        <span>Delete</span>
       </Space>
     ),
   },
@@ -81,10 +87,65 @@ const data: DataType[] = [
     tags: ["cool", "teacher"],
   },
 ];
+const itemColum: ColumnsType<InitSate> = [
+  {
+    title: "Name",
+    dataIndex: "Name",
+    key: "name",
+    render: (text) => <span>{text}</span>,
+  },
+  {
+    title: "describe",
+    dataIndex: "des",
+    key: "des",
+  },
+  {
+    title: "Renting",
+    dataIndex: "renting",
+    key: "renting",
+  },
+  {
+    title: "Type",
+    dataIndex: "type",
+    key: "type",
+    render: (_, { types }) => (
+      <>
+        {types?.map((type) => {
+          let color = type.length > 5 ? "geekblue" : "green";
+
+          return (
+            <Tag color={color} key={type}>
+              {type.toUpperCase()}
+            </Tag>
+          );
+        })}
+      </>
+    ),
+  },
+  {
+    title: "ImgList",
+    dataIndex: "imgList",
+    key: "imgList",
+    render: (_, { imgList }) => (
+      <>
+        {imgList?.map((obj) => {
+          // console.log(obj.name);
+          return (
+            <img className={clsx(style.tableImg)} src={obj?.name} alt='' />
+          );
+        })}
+      </>
+    ),
+  },
+];
 const TableItems = memo((props: TableProps) => {
+  const dataItem: InitSate | any = useSelector(selectData);
+
   return (
     <div>
-      <Table columns={columns} dataSource={data} />;
+      <Button type='primary'>Thêm thông tin</Button>
+
+      <Table columns={itemColum} dataSource={dataItem} />
     </div>
   );
 });

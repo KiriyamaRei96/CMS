@@ -1,0 +1,22 @@
+.login {
+    background-image: url('https://wallup.net/wp-content/uploads/2016/01/176363-stars-silhouette-galaxy.jpg');
+    background-size: cover;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+
+    &>div {
+        h1 {
+            font-size: 25px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        width: 30%;
+        background-color: white;
+        border-radius: 15px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+    }
+}

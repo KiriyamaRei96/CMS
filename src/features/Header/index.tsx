@@ -14,28 +14,28 @@ const Header = memo((props: HeaderProps) => {
         {
           key: uuid(),
           title: "Thông tin cá nhân",
-          label: <Link to="/UserInfo">thông tin cá nhân</Link>,
-          icon: <i className="fa-regular fa-user"></i>,
+          label: <Link to='/UserInfo'>thông tin cá nhân</Link>,
+          icon: <i className='fa-regular fa-user'></i>,
         },
 
         {
           key: uuid(),
           title: "Đăng xuất",
           label: <span>Đăng xuất</span>,
-          icon: <i className="fa-solid fa-right-from-bracket"></i>,
+          icon: <i className='fa-solid fa-right-from-bracket'></i>,
         },
       ]}
     ></Menu>
   );
   return (
     <div className={clsx(style.header, "align-items-center")}>
-      <Link to="/">
-        <h1>CMS</h1>
-      </Link>
+      {/* <Link to="/"> */}
+      <h1>CMS</h1>
+      {/* </Link> */}
 
-      <Dropdown overlay={menu} placement="bottom">
+      <Dropdown overlay={menu} placement='bottom'>
         <div className={clsx(style.info, "align-items-center")}>
-          <i className="fa-regular fa-user"></i>
+          <i className='fa-regular fa-user'></i>
           <span>user name</span>
         </div>
       </Dropdown>
