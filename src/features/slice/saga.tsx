@@ -70,7 +70,7 @@ function* updateInfo(action) {
     if (res.status === 1) {
       console.log(res);
 
-      // yield put({ type: "LOGIN-SUCCESS", payload: res.token });
+      yield put({ type: "UPDATE-SUCCESS", payload: res });
     }
   } catch (e) {
     // yield put({ type: "LOGIN_FAILED", message: e });

@@ -5,13 +5,14 @@ import { Button, Form, Input } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { userInfoSelector } from "./slice/UserSlice";
 import { useNavigate } from "react-router-dom";
+import getCookie from "../../../Api/getCookie";
 export interface LoginProps {}
 
 const Login = memo((props: LoginProps) => {
   const loginState = useSelector(userInfoSelector).isLogin;
   const navigate = useNavigate();
   useEffect(() => {
-    if (loginState || document.cookie !== "") {
+    if (loginState && getCookie("token") !== undefined) {
       navigate("/");
     }
   }, [loginState]);
@@ -30,30 +31,30 @@ const Login = memo((props: LoginProps) => {
         <h1>CMS cổng thông tin điện tử </h1>
         <Form
           labelCol={{ span: 6 }}
-          name='basic'
+          name="basic"
           initialValues={{ remember: true }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
-          autoComplete='off'
+          autoComplete="off"
         >
           <Form.Item
-            label='Username'
-            name='username'
+            label="Username"
+            name="username"
             rules={[{ required: true, message: "vui lòng nhập tên!" }]}
           >
             <Input />
           </Form.Item>
 
           <Form.Item
-            label='Password'
-            name='password'
+            label="Password"
+            name="password"
             rules={[{ required: true, message: "vui lòng nhập mật khẩu!" }]}
           >
             <Input.Password />
           </Form.Item>
 
           <Form.Item>
-            <Button type='primary' htmlType='submit'>
+            <Button type="primary" htmlType="submit">
               Submit
             </Button>
           </Form.Item>

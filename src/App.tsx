@@ -9,6 +9,7 @@ import {
 } from "./features/Component/Login/slice/UserSlice";
 import { useEffect } from "react";
 import getCookie from "./Api/getCookie";
+
 function App() {
   const loginState = useSelector(userInfoSelector).isLogin;
   const UserState = useSelector(userInfoSelector).info;
@@ -19,27 +20,36 @@ function App() {
   useEffect(() => {
     const cookie = getCookie("token");
     console.log(cookie);
-    if (!loginState) {
-      if (cookie === undefined) {
-        navigate("/login");
-      }
-      if (cookie !== "") {
+    if (cookie === undefined) {
+      navigate("/login");
+    }
+    if (cookie !== undefined) {
+      if (!loginState) {
         dispatch(reLogin());
       }
-    }
-    if (cookie !== "") {
       dispatch({ type: "USER_GETINFO_REQUESTED" });
     }
-  }, [loginState]);
+    // if (!loginState) {
+    //   if (cookie === undefined) {
+    //     navigate("/login");
+    //   }
+    //   if (cookie !== "") {
+    //     dispatch(reLogin());
+    //   }
+    // }
+    // if (cookie !== "") {
+    //
+    // }
+  }, []);
   useEffect(() => {
     if (UserState?.phone === null) {
       navigate("/UserInfo");
     }
-  }, [UserState]);
+  }, []);
   return (
-    <div className='App d-flex'>
+    <div className="App d-flex">
       <Header></Header>
-      <div className='Cotainer '>
+      <div className="Cotainer ">
         <SideBar></SideBar>
         <Outlet></Outlet>
       </div>

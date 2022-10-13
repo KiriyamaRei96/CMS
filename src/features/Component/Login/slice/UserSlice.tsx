@@ -43,17 +43,17 @@ export const userInfoSlice = createSlice({
         );
       })
       .addCase("LOG_OUT", (state, action: any) => {
-        // document.cookie.split(";").forEach(function (c) {
-        //   document.cookie = c
-        //     .replace(/^ +/, "")
-        //     .replace(
-        //       /=.*/,
-        //       "=;expires=" + new Date().toUTCString() + ";path=/"
-        //     );
-        // });
         return (state = { isLogin: false });
       })
       .addCase("GET_USER_INFO", (state, action: any) => {
+        state.info = action.payload;
+      })
+      .addCase("UPDATE-SUCCESS", (state, action: any) => {
+        openNotificationWithIcon(
+          "success",
+          "Cập nhật thành công",
+          "Bạn đã cập nhật thông tin cá nhân"
+        );
         state.info = action.payload;
       });
   },

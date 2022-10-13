@@ -10,53 +10,53 @@ export function UpdateInfo(props: UpdateInfoProps) {
   const dispatch = useDispatch();
   const onFinish = (value: any) => {
     console.log(value);
-    dispatch({ type: "USER_UPDATE_INFO_REQUESTED", payload: {} });
+    dispatch({ type: "USER_UPDATE_INFO_REQUESTED", payload: value });
   };
   return (
     <div className={clsx(style.form)}>
-      <Form onFinish={onFinish} layout='vertical'>
+      <Form onFinish={onFinish} layout="vertical">
         <Form.Item
           style={{ margin: "10px" }}
           rules={[
             { required: true, message: "Không được bỏ trống trường này!" },
           ]}
-          name='firstname'
-          label='Họ'
+          name="firstname"
+          label="Họ"
         >
-          <Input type='text' />
+          <Input type="text" />
         </Form.Item>
         <Form.Item
           style={{ margin: "10px" }}
           rules={[
             { required: true, message: "Không được bỏ trống trường này!" },
           ]}
-          name='lastname'
-          label='Tên'
+          name="lastname"
+          label="Tên"
         >
-          <Input type='text' />
+          <Input type="text" />
         </Form.Item>
         <Form.Item
           style={{ margin: "10px" }}
           rules={[
             { required: true, message: "Không được bỏ trống trường này!" },
           ]}
-          name='email'
-          label='Email'
+          name="email"
+          label="Email"
         >
-          <Input type='text' />
+          <Input type="text" />
         </Form.Item>
         <Form.Item
           style={{ margin: "10px" }}
           rules={[
             { required: true, message: "Không được bỏ trống trường này!" },
           ]}
-          name='phone'
-          label='Số điện thoại'
+          name="phone"
+          label="Số điện thoại"
         >
-          <Input type='text' />
+          <Input type="text" />
         </Form.Item>
         <Form.Item style={{ margin: "10px" }}>
-          <Button htmlType='submit' type='primary'>
+          <Button htmlType="submit" type="primary">
             Xác Nhận
           </Button>
         </Form.Item>
