@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { InitSate } from "../../../slice/slice";
 import style from "../style.module.scss";
 import clsx from "clsx";
+import { v4 as uuid } from "uuid";
 export interface TableProps {}
 interface DataType {
   key: string;
@@ -57,7 +58,7 @@ const columns: ColumnsType<DataType> = [
     title: "Action",
     key: "action",
     render: (_, record) => (
-      <Space size="middle">
+      <Space size='middle'>
         <span>Invite {record.name}</span>
         <span>Delete</span>
       </Space>
@@ -92,7 +93,7 @@ const itemColum: ColumnsType<InitSate> = [
     title: "Name",
     dataIndex: "Name",
     key: "name",
-    render: (text) => <span>{text}</span>,
+    render: (text) => <span key={uuid()}> {text}</span>,
   },
   {
     title: "describe",
@@ -114,7 +115,7 @@ const itemColum: ColumnsType<InitSate> = [
           let color = type.length > 5 ? "geekblue" : "green";
 
           return (
-            <Tag color={color} key={type}>
+            <Tag color={color} key={uuid()}>
               {type.toUpperCase()}
             </Tag>
           );
@@ -131,7 +132,12 @@ const itemColum: ColumnsType<InitSate> = [
         {imgList?.map((obj) => {
           // console.log(obj.name);
           return (
-            <img className={clsx(style.tableImg)} src={obj?.name} alt="" />
+            <img
+              key={uuid()}
+              className={clsx(style.tableImg)}
+              src={obj?.name}
+              alt=''
+            />
           );
         })}
       </>
@@ -142,14 +148,19 @@ const TableItems = memo((props: TableProps) => {
   const dataItem: InitSate | any = useSelector(selectData);
 
   return (
-    <div>
-      <Button type="primary">Thêm thông tin</Button>
+    <div className={clsx(style.wraper, "d-flex")}>
+      <Button type='primary'>Thêm thông tin</Button>
 
-      <Table pagination={false} columns={itemColum} dataSource={dataItem} />
+      <Table
+        className={clsx(style.table)}
+        pagination={false}
+        columns={itemColum}
+        dataSource={dataItem}
+      />
       <Pagination
         showSizeChanger
         // onShowSizeChange={onShowSizeChange}
-        defaultCurrent={3}
+        defaultCurrent={1}
         total={500}
       />
     </div>
