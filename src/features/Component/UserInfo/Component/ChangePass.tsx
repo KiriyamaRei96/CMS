@@ -1,0 +1,113 @@
+import { Button, Form, Input } from "antd";
+import React from "react";
+import clsx from "clsx";
+import style from "../style.module.scss";
+import { useDispatch, useSelector } from "react-redux";
+import { userInfoSelector } from "../../Login/slice/UserSlice";
+
+export interface ChangePassProps {}
+
+export function ChangePass(props: ChangePassProps) {
+  const dispatch = useDispatch();
+  const [form] = Form.useForm();
+  const storeState = useSelector(userInfoSelector).storeState;
+
+  const onFinish = (value: any) => {
+    dispatch({ type: "USER_CHANGE_PASS_REQUESTED", payload: value });
+  };
+  return (
+    <div className={clsx(style.form)}>
+      <Form form={form} onFinish={onFinish} layout='vertical'>
+        <Form.Item
+          style={{ margin: "10px" }}
+          rules={[
+            { required: true, message: "Không được bỏ trống trường này!" },
+            () => ({
+              validator(_, value) {
+                if (value.length > 6) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error("Mật khẩu phải có nhiều hơn 6 ký tự")
+                );
+              },
+            }),
+            () => ({
+              validator(_, value) {
+                if (storeState !== "error") {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error("Bạn đã nhập sai mật khẩu hiện tại")
+                );
+              },
+            }),
+          ]}
+          name='current_password'
+          label='Mật khẩu hiện tại'
+        >
+          <Input type='text' />
+        </Form.Item>
+        <Form.Item
+          style={{ margin: "10px" }}
+          rules={[
+            { required: true, message: "Không được bỏ trống trường này!" },
+            () => ({
+              validator(_, value) {
+                if (value.length > 6) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error("Mật khẩu phải có nhiều hơn 6 ký tự")
+                );
+              },
+            }),
+          ]}
+          name='new_password'
+          hasFeedback
+          label='Mật khẩu mới'
+        >
+          <Input.Password />
+        </Form.Item>
+        <Form.Item
+          style={{ margin: "10px" }}
+          dependencies={["new_password"]}
+          rules={[
+            { required: true, message: "Không được bỏ trống trường này!" },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue("new_password") === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error("Mật khẩu mới và mật khẩu xác nhận phải giống nhau")
+                );
+              },
+            }),
+            () => ({
+              validator(_, value) {
+                if (value.length > 6) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error("Mật khẩu phải có nhiều hơn 6 ký tự")
+                );
+              },
+            }),
+          ]}
+          name='confirm_password'
+          hasFeedback
+          label='Nhập lại mật khẩu'
+        >
+          <Input.Password />
+        </Form.Item>
+
+        <Form.Item style={{ margin: "10px" }}>
+          <Button htmlType='submit' type='primary'>
+            Xác Nhận
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
+  );
+}

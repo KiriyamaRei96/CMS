@@ -1,18 +1,16 @@
-import React, { memo, useEffect } from "react";
+import React, { memo } from "react";
 import clsx from "clsx";
 import { useSelector } from "react-redux";
 import { userInfoSelector } from "../Login/slice/UserSlice";
 import { Menu } from "antd";
-import { v4 as uuid } from "uuid";
+
 import style from "./style.module.scss";
 import { Link, Outlet } from "react-router-dom";
 export interface UserInfoProps {}
 
 const UserInfo = memo((props: UserInfoProps) => {
   const userInfo = useSelector(userInfoSelector).info;
-  useEffect(() => {
-    console.log(userInfo);
-  }, []);
+
   return (
     <div className={clsx(style.userInfo)}>
       <Menu
@@ -34,7 +32,7 @@ const UserInfo = memo((props: UserInfoProps) => {
           {
             key: "change password",
             title: "Thay đổi mật khẩu",
-            label: <Link to='/UserInfo/changePass'>thay đổi mật khẩu </Link>,
+            label: <Link to='/UserInfo/changePass'>Thay đổi mật khẩu </Link>,
           },
         ]}
       ></Menu>

@@ -19,7 +19,7 @@ function App() {
 
   useEffect(() => {
     const cookie = getCookie("token");
-    console.log(cookie);
+
     if (cookie === undefined) {
       navigate("/login");
     }
@@ -29,17 +29,6 @@ function App() {
       }
       dispatch({ type: "USER_GETINFO_REQUESTED" });
     }
-    // if (!loginState) {
-    //   if (cookie === undefined) {
-    //     navigate("/login");
-    //   }
-    //   if (cookie !== "") {
-    //     dispatch(reLogin());
-    //   }
-    // }
-    // if (cookie !== "") {
-    //
-    // }
   }, []);
   useEffect(() => {
     if (UserState?.phone === null) {
@@ -47,9 +36,9 @@ function App() {
     }
   }, []);
   return (
-    <div className="App d-flex">
+    <div className='App d-flex'>
       <Header></Header>
-      <div className="Cotainer ">
+      <div className='Cotainer '>
         <SideBar></SideBar>
         <Outlet></Outlet>
       </div>

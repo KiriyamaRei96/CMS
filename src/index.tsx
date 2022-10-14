@@ -11,6 +11,8 @@ import List from "./features/Component/List";
 import DashBroad from "./features/Component/Dashboard";
 import Login from "./features/Component/Login";
 import { UpdateInfo } from "./features/Component/UserInfo/Component/UpdateInfo";
+import Info from "./features/Component/UserInfo/Component/Info";
+import { ChangePass } from "./features/Component/UserInfo/Component/ChangePass";
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);
@@ -24,9 +26,9 @@ root.render(
           <Route element={<App />}>
             <Route index element={<DashBroad />} />
             <Route path='UserInfo' element={<UserInfo />}>
-              <Route index element={<List />} />
+              <Route index element={<Info />} />
               <Route path='/UserInfo/updateInfo' element={<UpdateInfo />} />
-              <Route path='/UserInfo/changePass' element={<List />} />
+              <Route path='/UserInfo/changePass' element={<ChangePass />} />
             </Route>
             <Route path='Statistic/businessUnit' element={<List />} />
 

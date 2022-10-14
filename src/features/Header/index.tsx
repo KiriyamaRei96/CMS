@@ -4,14 +4,16 @@ import style from "./style.module.scss";
 import { Dropdown, Menu } from "antd";
 import { v4 as uuid } from "uuid";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import clearCookie from "../function/clearCookie";
+import { useDispatch, useSelector } from "react-redux";
+import { userInfoSelector } from "../Component/Login/slice/UserSlice";
 
 export interface HeaderProps {}
 function delete_cookie(name) {
   document.cookie = name + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
 }
 const Header = memo((props: HeaderProps) => {
+  const userInfo = useSelector(userInfoSelector).info;
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const menu = (
@@ -44,14 +46,18 @@ const Header = memo((props: HeaderProps) => {
   );
   return (
     <div className={clsx(style.header, "align-items-center")}>
-      {/* <Link to="/"> */}
-      <h1>CMS</h1>
-      {/* </Link> */}
+      <Link to='/'>
+        <h1>CMS</h1>
+      </Link>
 
       <Dropdown overlay={menu} placement='bottom'>
         <div className={clsx(style.info, "align-items-center")}>
           <i className='fa-regular fa-user'></i>
-          <span>user name</span>
+          <span>
+            {userInfo
+              ? `${userInfo.firstname} ${userInfo.lastname}`
+              : "user name"}
+          </span>
         </div>
       </Dropdown>
     </div>

@@ -1,34 +1,40 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-export interface InitSate {
-  id?: string;
-  Name?: string;
-  types?: [string] | [];
-  des?: string;
-  renting?: number;
-  date?: string;
-  imgList?: [object | any];
-  movie?: [string];
-  source?: string;
+export interface infoObj {
+  id?: number;
+  title?: string;
+  locale?: boolean;
+  creationDate?: string;
 }
-const initialState: [InitSate][] = [];
+export interface InitSate {
+  storeState?: "loading" | "success" | "error";
+  infoArray?: [infoObj];
+  pagination?: Object;
+  actionApi?: string;
+}
+const initialState: InitSate = {};
 export const Fetcher = createSlice({
   name: "Fetcher",
   initialState,
-  reducers: {
-    logState: (state, action) => {
-      //   state = action.payload;
-      state.push(action.payload);
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase("TABLE_LOADING", (state) => {
+        state.storeState = "loading";
+      })
+      .addCase("ADD_ROW", (state, action: any) => {
+        state.infoArray?.unshift(action.payload);
+        state.storeState = "success";
+      })
       .addCase("FETCH-SUCCESS", (state, action: any) => {
-        return (state = action.payload);
+        state.storeState = "success";
+        state.infoArray = action.payload.itemArray;
+        state.pagination = action.payload.pagination;
+        state.actionApi = action.payload.actionApi;
+        return state;
       })
       .addCase("FETCH-FAIL", (state, action) => {
         console.log(state, action);
       });
   },
 });
-export const { logState } = Fetcher.actions;
+export const {} = Fetcher.actions;

@@ -1,14 +1,16 @@
-import { Button, Pagination, Space, Tag } from "antd";
+import { Button, Form, Input, Modal, Pagination, Skeleton, Steps } from "antd";
 import { ColumnsType } from "antd/lib/table";
-import React, { memo } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { Table } from "antd";
 import { selectData } from "../../../../app/store";
-import { useSelector } from "react-redux";
-import { InitSate } from "../../../slice/slice";
+import { useDispatch, useSelector } from "react-redux";
+import { infoObj } from "../../../slice/slice";
 import style from "../style.module.scss";
 import clsx from "clsx";
 import { v4 as uuid } from "uuid";
-export interface TableProps {}
+export interface TableProps {
+  columns: any;
+}
 interface DataType {
   key: string;
   name: string;
@@ -16,154 +18,102 @@ interface DataType {
   address: string;
   tags: string[];
 }
+const { Step } = Steps;
 
-const columns: ColumnsType<DataType> = [
-  {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
-    render: (text) => <span>{text}</span>,
-  },
-  {
-    title: "Age",
-    dataIndex: "age",
-    key: "age",
-  },
-  {
-    title: "Address",
-    dataIndex: "address",
-    key: "address",
-  },
-  {
-    title: "Tags",
-    key: "tags",
-    dataIndex: "tags",
-    render: (_, { tags }) => (
-      <>
-        {tags.map((tag) => {
-          let color = tag.length > 5 ? "geekblue" : "green";
-          if (tag === "loser") {
-            color = "volcano";
-          }
-          return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          );
-        })}
-      </>
-    ),
-  },
-  {
-    title: "Action",
-    key: "action",
-    render: (_, record) => (
-      <Space size='middle'>
-        <span>Invite {record.name}</span>
-        <span>Delete</span>
-      </Space>
-    ),
-  },
-];
-const data: DataType[] = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-    tags: ["nice", "developer"],
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    age: 42,
-    address: "London No. 1 Lake Park",
-    tags: ["loser"],
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    age: 32,
-    address: "Sidney No. 1 Lake Park",
-    tags: ["cool", "teacher"],
-  },
-];
-const itemColum: ColumnsType<InitSate> = [
-  {
-    title: "Name",
-    dataIndex: "Name",
-    key: "name",
-    render: (text) => <span key={uuid()}> {text}</span>,
-  },
-  {
-    title: "describe",
-    dataIndex: "des",
-    key: "des",
-  },
-  {
-    title: "Renting",
-    dataIndex: "renting",
-    key: "renting",
-  },
-  {
-    title: "Type",
-    dataIndex: "type",
-    key: "type",
-    render: (_, { types }) => (
-      <>
-        {types?.map((type) => {
-          let color = type.length > 5 ? "geekblue" : "green";
+const TableItems = memo(({ columns }: TableProps) => {
+  const dataItem: infoObj | any = useSelector(selectData).infoArray;
+  const actionApi = useSelector(selectData).actionApi;
+  const storeSate = useSelector(selectData).storeState;
+  const dispatch = useDispatch();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [current, setCurrent] = useState(0);
+  const addRow = (title) => {
+    dispatch({
+      type: "ADD_ROW_REQUESTED",
+      payload: {
+        title,
+        action: actionApi,
+      },
+    });
+    setCurrent(1);
+  };
 
-          return (
-            <Tag color={color} key={uuid()}>
-              {type.toUpperCase()}
-            </Tag>
-          );
-        })}
-      </>
-    ),
-  },
-  {
-    title: "ImgList",
-    dataIndex: "imgList",
-    key: "imgList",
-    render: (_, { imgList }) => (
-      <>
-        {imgList?.map((obj) => {
-          // console.log(obj.name);
-          return (
-            <img
-              key={uuid()}
-              className={clsx(style.tableImg)}
-              src={obj?.name}
-              alt=''
-            />
-          );
-        })}
-      </>
-    ),
-  },
-];
-const TableItems = memo((props: TableProps) => {
-  const dataItem: InitSate | any = useSelector(selectData);
-
+  const steps = [
+    {
+      title: "Tạo tiêu đề thông tin",
+      content: (
+        <Form onFinish={addRow} layout='inline'>
+          <Form.Item
+            label='Tiêu đề thông tin'
+            rules={[
+              { required: true, message: "Không được bỏ trống trường này!" },
+            ]}
+            name='title'
+          >
+            <Input type='text' />
+          </Form.Item>
+          <Form.Item>
+            <Button htmlType='submit' type='primary'>
+              Xác Nhận
+            </Button>
+          </Form.Item>
+        </Form>
+      ),
+    },
+    {
+      title: "Chỉnh sửa nội dung thông tin",
+      content: (
+        <>
+          {storeSate === "loading" ? (
+            <Skeleton active />
+          ) : (
+            <div>
+              <span>{dataItem[0].title}</span>
+            </div>
+          )}
+        </>
+      ),
+    },
+  ];
   return (
-    <div className={clsx(style.wraper, "d-flex")}>
-      <Button type='primary'>Thêm thông tin</Button>
+    <>
+      <div className={clsx(style.wraper, "d-flex")}>
+        <div className={clsx(style.function, "d-flex")}>
+          <Button onClick={() => setIsModalOpen(true)} type='primary'>
+            Thêm thông tin
+          </Button>
+        </div>
 
-      <Table
-        className={clsx(style.table)}
-        pagination={false}
-        columns={itemColum}
-        dataSource={dataItem}
-      />
-      <Pagination
-        showSizeChanger
-        // onShowSizeChange={onShowSizeChange}
-        defaultCurrent={1}
-        total={500}
-      />
-    </div>
+        <Table
+          className={clsx(style.table)}
+          pagination={false}
+          columns={columns}
+          dataSource={dataItem}
+          rowKey={uuid()}
+        />
+        <Pagination
+          showSizeChanger
+          // onShowSizeChange={onShowSizeChange}
+          defaultCurrent={1}
+          total={500}
+        />
+      </div>
+      <Modal
+        open={isModalOpen}
+        onCancel={() => {
+          setIsModalOpen(false);
+        }}
+        footer={false}
+        title={"Thêm thông tin"}
+      >
+        <Steps current={current}>
+          {steps.map((item) => (
+            <Step key={item.title} title={item.title}></Step>
+          ))}
+        </Steps>
+        <div className={clsx(style.stepsContent)}>{steps[current].content}</div>
+      </Modal>
+    </>
   );
 });
 export default TableItems;

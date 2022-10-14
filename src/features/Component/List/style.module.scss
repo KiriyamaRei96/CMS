@@ -30,7 +30,21 @@
     flex-direction: column;
     align-items: flex-end;
 
+    .function {
+        padding: 12px 20px;
+        background-color: white;
+        width: 100%;
+
+    }
+
     .table {
         width: 100%;
     }
+}
+
+.stepsContent {
+    flex-direction: column;
+    max-height: 100%;
+    overflow-y: auto;
+    padding: 24px;
 }
