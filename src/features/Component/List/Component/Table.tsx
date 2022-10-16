@@ -68,7 +68,7 @@ const TableItems = memo(({ columns }: TableProps) => {
             <Skeleton active />
           ) : (
             <div>
-              <span>{dataItem[0].title}</span>
+              <span>{}</span>
             </div>
           )}
         </>
