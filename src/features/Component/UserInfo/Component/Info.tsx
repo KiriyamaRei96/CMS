@@ -1,14 +1,15 @@
 import React, { memo } from "react";
 import clsx from "clsx";
 import style from "../style.module.scss";
-import { useSelector } from "react-redux";
+
 import { userInfoSelector } from "../../Login/slice/UserSlice";
 import { Skeleton } from "antd";
+import { useAppSelector } from "../../../../app/hooks";
 export interface InfoProps {}
 
 const Info = memo((props: InfoProps) => {
-  const userInfo = useSelector(userInfoSelector).info;
-  const storeState = useSelector(userInfoSelector).storeState;
+  const userInfo = useAppSelector(userInfoSelector).info;
+  const storeState = useAppSelector(userInfoSelector).storeState;
 
   return (
     <div className={clsx(style.info, "d-flex")}>

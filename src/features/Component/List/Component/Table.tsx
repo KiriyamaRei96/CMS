@@ -3,11 +3,13 @@ import { ColumnsType } from "antd/lib/table";
 import React, { memo, useEffect, useState } from "react";
 import { Table } from "antd";
 import { selectData } from "../../../../app/store";
-import { useDispatch, useSelector } from "react-redux";
-import { infoObj } from "../../../slice/slice";
+
+import { infoObj } from "../slice/slice";
 import style from "../style.module.scss";
 import clsx from "clsx";
 import { v4 as uuid } from "uuid";
+import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
+import CreateForm from "./createForm";
 export interface TableProps {
   columns: any;
 }
@@ -21,12 +23,14 @@ interface DataType {
 const { Step } = Steps;
 
 const TableItems = memo(({ columns }: TableProps) => {
-  const dataItem: infoObj | any = useSelector(selectData).infoArray;
-  const actionApi = useSelector(selectData).actionApi;
-  const storeSate = useSelector(selectData).storeState;
-  const dispatch = useDispatch();
+  const dataItem: infoObj | any = useAppSelector(selectData).infoArray;
+  const actionApi = useAppSelector(selectData).actionApi;
+  const pagination = useAppSelector(selectData).pagination;
+
+  const dispatch = useAppDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [current, setCurrent] = useState(0);
+
   const addRow = (title) => {
     dispatch({
       type: "ADD_ROW_REQUESTED",
@@ -42,18 +46,18 @@ const TableItems = memo(({ columns }: TableProps) => {
     {
       title: "Tạo tiêu đề thông tin",
       content: (
-        <Form onFinish={addRow} layout='inline'>
+        <Form key={uuid()} onFinish={addRow} layout="inline">
           <Form.Item
-            label='Tiêu đề thông tin'
+            label="Tiêu đề thông tin"
             rules={[
               { required: true, message: "Không được bỏ trống trường này!" },
             ]}
-            name='title'
+            name="title"
           >
-            <Input type='text' />
+            <Input type="text" />
           </Form.Item>
           <Form.Item>
-            <Button htmlType='submit' type='primary'>
+            <Button htmlType="submit" type="primary">
               Xác Nhận
             </Button>
           </Form.Item>
@@ -63,15 +67,11 @@ const TableItems = memo(({ columns }: TableProps) => {
     {
       title: "Chỉnh sửa nội dung thông tin",
       content: (
-        <>
-          {storeSate === "loading" ? (
-            <Skeleton active />
-          ) : (
-            <div>
-              <span>{dataItem[0].title}</span>
-            </div>
-          )}
-        </>
+        <CreateForm
+          setCurrent={setCurrent}
+          setIsModalOpen={setIsModalOpen}
+          key={uuid()}
+        />
       ),
     },
   ];
@@ -79,7 +79,7 @@ const TableItems = memo(({ columns }: TableProps) => {
     <>
       <div className={clsx(style.wraper, "d-flex")}>
         <div className={clsx(style.function, "d-flex")}>
-          <Button onClick={() => setIsModalOpen(true)} type='primary'>
+          <Button onClick={() => setIsModalOpen(true)} type="primary">
             Thêm thông tin
           </Button>
         </div>
@@ -90,12 +90,23 @@ const TableItems = memo(({ columns }: TableProps) => {
           columns={columns}
           dataSource={dataItem}
           rowKey={uuid()}
+          scroll={{ x: "auto", y: "auto" }}
         />
         <Pagination
           showSizeChanger
-          // onShowSizeChange={onShowSizeChange}
-          defaultCurrent={1}
-          total={500}
+          current={pagination?.current}
+          onChange={(page, pageSize) => {
+            dispatch({
+              type: "SEARCH_ROW_REQUESTED",
+              payload: {
+                action: actionApi,
+                limit: pageSize,
+                page,
+                search: "",
+              },
+            });
+          }}
+          total={pagination?.totalCount}
         />
       </div>
       <Modal
