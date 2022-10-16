@@ -51,11 +51,11 @@ const List = memo((props: ListProps) => {
               key: key,
               render: (value) =>
                 value ? (
-                  <Tag key={uuid()} color="green">
+                  <Tag key={uuid()} color='green'>
                     Đã phát hành
                   </Tag>
                 ) : (
-                  <Tag key={uuid()} color="red">
+                  <Tag key={uuid()} color='red'>
                     Chưa phát hành
                   </Tag>
                 ),
@@ -66,7 +66,7 @@ const List = memo((props: ListProps) => {
               title: titleMap[key],
               dataIndex: key,
               key: key,
-              render: (value) => <img alt="" src={value?.path}></img>,
+              render: (value) => <img alt='' src={value?.path}></img>,
             };
           }
           if (key == "category") {
@@ -76,11 +76,11 @@ const List = memo((props: ListProps) => {
               key: key,
               render: (value) =>
                 value?.published ? (
-                  <Tag key={uuid()} color="green">
+                  <Tag key={uuid()} color='green'>
                     {value?.title}
                   </Tag>
                 ) : (
-                  <Tag key={uuid()} color="red">
+                  <Tag key={uuid()} color='red'>
                     {value?.title}
                   </Tag>
                 ),
@@ -100,7 +100,7 @@ const List = memo((props: ListProps) => {
           render: (_, record) => (
             <div key={uuid()}>
               <Button
-                size="small"
+                size='small'
                 key={uuid()}
                 onClick={() => {
                   dispatch({
@@ -115,7 +115,7 @@ const List = memo((props: ListProps) => {
                 Xóa thông tin
               </Button>
               <Button
-                size="small"
+                size='small'
                 onClick={() => {
                   setID(record.id);
                   setIsModalOpen(true);
