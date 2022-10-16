@@ -1,9 +1,11 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 
-import { Fetcher } from "../features/slice/slice";
+import { Fetcher } from "../features/Component/List/slice/slice";
 import createSagaMiddleware from "redux-saga";
-import mySaga from "../features/slice/saga";
+
 import { userInfoSlice } from "../features/Component/Login/slice/UserSlice";
+import rootSaga from "./rootSaga";
+
 const sagaMiddleware = createSagaMiddleware();
 export const store = configureStore({
   reducer: {
@@ -11,8 +13,9 @@ export const store = configureStore({
     userInfo:userInfoSlice.reducer
   },
   middleware: (getDefaultMiddleware) => [sagaMiddleware],
+  
 });
-sagaMiddleware.run(mySaga);
+sagaMiddleware.run(rootSaga);
 export const selectData = (state) => state.fetch;
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
