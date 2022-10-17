@@ -22,6 +22,7 @@ import Cookies from "js-cookie";
 import moment from "moment";
 import { UploadOutlined } from "@ant-design/icons";
 import { RcFile } from "antd/lib/upload";
+import getCookie from "../../../../Api/getCookie";
 export interface CreateFormProps {
   setIsModalOpen?: any;
   setCurrent?: any;
@@ -92,6 +93,7 @@ const CreateForm = ({
         console.log(err);
       }
   };
+
   return (
     <>
       {storeSate !== "loading" && data ? (
@@ -106,7 +108,9 @@ const CreateForm = ({
             const info = { ...data, ...value };
 
             info.date = moment(info.date, "DD-MM-YYYY").format("YYYY-MM-DD");
-
+            if (info.featureImage !== undefined) {
+              info.featureImage = data.featureImage.id;
+            }
             dispatch({
               type: "UPDATE_ROW_REQUESTED",
               payload: {
@@ -122,9 +126,9 @@ const CreateForm = ({
               setIsModalOpen(false);
             }
           }}
-          layout='inline'
+          layout="inline"
         >
-          <div className='d-flex'>
+          <div className="d-flex">
             {data.id ? (
               <Form.Item key={uuid()} label={titleMap.id}>
                 <span key={uuid()}>{data.id}</span>
@@ -142,12 +146,15 @@ const CreateForm = ({
                 <Checkbox
                   key={uuid()}
                   onChange={(e) => {
-                    setData({
-                      ...data,
-                      published: e.target.checked,
+                    callApi(actionApi + "/published", {
+                      method: "PUT",
+                      headers: { Authorization: Cookies.get("token") },
+                      data: {
+                        id: data.id,
+                        published: e.target.checked ? 1 : 0,
+                      },
                     });
                   }}
-                  checked={data.published}
                 ></Checkbox>
               </Form.Item>
             ) : (
@@ -196,78 +203,101 @@ const CreateForm = ({
               <Form.Item
                 key={uuid()}
                 name={"date"}
-                label='Thời gian cập nhật cuối'
+                label="Thời gian cập nhật cuối"
               >
                 <DatePicker key={uuid()}></DatePicker>
               </Form.Item>
             ) : (
               false
             )}
-            {data.featureImage !== undefined ? (
-              <Form.Item key={uuid()} name={"featureImage"} label='Ảnh'>
+          </div>
+          <div className={clsx(style.titleWraper, "d-flex")}>
+            {data.title ? (
+              <Form.Item
+                className={clsx(style.formDes)}
+                key={uuid()}
+                label={"Tiêu đề"}
+                name={"title"}
+              >
+                <Input placeholder={data?.title}></Input>
+              </Form.Item>
+            ) : (
+              false
+            )}
+            {data.address !== undefined ? (
+              <Form.Item
+                className={clsx(style.formDes)}
+                key={uuid()}
+                name={"address"}
+                label="Địa chỉ"
+              >
+                <Input placeholder={data?.address}></Input>
+              </Form.Item>
+            ) : (
+              false
+            )}
+            {data.description !== undefined ? (
+              <Form.Item
+                className={clsx(style.formDes)}
+                key={uuid()}
+                name={"description"}
+                label="Mô tả"
+              >
+                <Input placeholder={data?.description}></Input>
+              </Form.Item>
+            ) : (
+              false
+            )}
+            {data.featureImage !== undefined &&
+            data?.featureImage?.img === undefined ? (
+              <Form.Item
+                className={clsx(style.formDes)}
+                key={uuid()}
+                name={"featureImage"}
+                label="Ảnh"
+              >
                 <Upload
-                  // action={(e: RcFile) =>
-                  //   callApi("v1/asset/upload", {
-                  //     method: "POST",
-                  //     headers: { Authentication: Cookies.get("token") },
-                  //     data: e,
-                  //   })
-                  // }
+                  action={`${process.env.REACT_APP_CMS_API}/v1/asset/upload`}
+                  headers={{ Authorization: getCookie("token") }}
                   maxCount={1}
+                  onChange={(e: any) => {
+                    if (e.file.status === "done") {
+                      setData({
+                        ...data,
+                        featureImage: {
+                          img: e.file?.response?.data["path_150px"],
+                          id: e.file?.response?.data.id,
+                        },
+                      });
+                    }
+                  }}
                 >
                   <Button icon={<UploadOutlined />}>Click để Upload</Button>
                 </Upload>
+              </Form.Item>
+            ) : data?.featureImage?.img !== undefined ? (
+              <Form.Item
+                className={clsx(style.formDes)}
+                key={uuid()}
+                name={"featureImage"}
+                label="Ảnh"
+              >
+                <img src={data.featureImage.img} alt="example"></img>
               </Form.Item>
             ) : (
               false
             )}
           </div>
-          {data.title ? (
-            <Form.Item
-              className={clsx(style.formItem)}
-              key={uuid()}
-              label={"Tiêu đề"}
-              name={"title"}
-            >
-              <Input placeholder={data?.title}></Input>
-            </Form.Item>
-          ) : (
-            false
-          )}
-          {data.address !== undefined ? (
-            <Form.Item
-              className={clsx(style.formItem)}
-              key={uuid()}
-              name={"address"}
-              label='Địa chỉ'
-            >
-              <Input placeholder={data?.address}></Input>
-            </Form.Item>
-          ) : (
-            false
-          )}
-          {data.description !== undefined ? (
-            <Form.Item
-              className={clsx(style.formItem)}
-              key={uuid()}
-              name={"description"}
-              label='Mô tả'
-            >
-              <Input placeholder={data?.description}></Input>
-            </Form.Item>
-          ) : (
-            false
-          )}
 
           {data.content !== undefined ? (
             <Form.Item
               className={clsx(style.formItem)}
               key={uuid()}
               name={"content"}
-              label='Nội dung'
+              label="Nội dung"
             >
               <ReactQuill
-                theme='snow'
+                theme="snow"
                 className={clsx(style.quill)}
                 value={data.content}
                 placeholder={data.content}
@@ -282,8 +312,8 @@ const CreateForm = ({
             <Button
               className={clsx(style.submit)}
               key={uuid()}
-              htmlType='submit'
-              type='primary'
+              htmlType="submit"
+              type="primary"
             >
               Xác Nhận
             </Button>

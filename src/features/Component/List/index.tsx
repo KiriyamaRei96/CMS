@@ -51,11 +51,11 @@ const List = memo((props: ListProps) => {
               key: key,
               render: (value) =>
                 value ? (
-                  <Tag key={uuid()} color='green'>
+                  <Tag key={uuid()} color="green">
                     Đã phát hành
                   </Tag>
                 ) : (
-                  <Tag key={uuid()} color='red'>
+                  <Tag key={uuid()} color="red">
                     Chưa phát hành
                   </Tag>
                 ),
@@ -66,8 +66,8 @@ const List = memo((props: ListProps) => {
               title: titleMap[key],
               dataIndex: key,
               key: key,
-              render: (value) => <img alt='' src={value?.path}></img>,
-              width: 100,
+              render: (value) => <img alt="" src={value?.["path_150px"]}></img>,
+              width: 150,
             };
           }
           if (key == "category") {
@@ -77,11 +77,11 @@ const List = memo((props: ListProps) => {
               key: key,
               render: (value) =>
                 value?.published ? (
-                  <Tag key={uuid()} color='green'>
+                  <Tag key={uuid()} color="green">
                     {value?.title}
                   </Tag>
                 ) : (
-                  <Tag key={uuid()} color='red'>
+                  <Tag key={uuid()} color="red">
                     {value?.title}
                   </Tag>
                 ),
@@ -110,17 +110,17 @@ const List = memo((props: ListProps) => {
                     },
                   });
                 }}
-                title='Bạn muốn xóa thông tin này ?'
-                okText='Xóa'
-                cancelText='Cancel'
+                title="Bạn muốn xóa thông tin này ?"
+                okText="Xóa"
+                cancelText="Cancel"
               >
-                <Button size='small' key={uuid()}>
+                <Button size="small" key={uuid()}>
                   Xóa
                 </Button>
               </Popconfirm>
 
               <Button
-                size='small'
+                size="small"
                 onClick={() => {
                   setID(record.id);
                   setIsModalOpen(true);
@@ -252,7 +252,7 @@ const List = memo((props: ListProps) => {
       <Modal
         centered={true}
         open={isModalOpen}
-        width='70vw'
+        width="70vw"
         onCancel={() => {
           setIsModalOpen(false);
         }}
