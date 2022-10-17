@@ -52,11 +52,11 @@ function* deleteRow(action) {
 function* getRow(action) {
   try {
     const getID = new URLSearchParams(action.payload.ID).toString();
-
+    const cookie = Cookies.get("token");
     const res = yield callApi({
       method: "GET",
       url: action.payload.action + "/get?" + getID,
-      headers,
+      headers: { Authorization: cookie },
     })
       .then((res) => res.data)
       .catch((err) => console.log(err));

@@ -112,7 +112,7 @@ const List = memo((props: ListProps) => {
                 }}
                 title="Bạn muốn xóa thông tin này ?"
                 okText="Xóa"
-                cancelText="Cancel"
+                cancelText="Hủy"
               >
                 <Button size="small" key={uuid()}>
                   Xóa
