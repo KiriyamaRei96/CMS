@@ -32,30 +32,30 @@ const Login = memo((props: LoginProps) => {
         <h1>CMS cổng thông tin điện tử </h1>
         <Form
           labelCol={{ span: 6 }}
-          name="basic"
+          name='basic'
           initialValues={{ remember: true }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
-          autoComplete="off"
+          autoComplete='off'
         >
           <Form.Item
-            label="Username"
-            name="username"
+            label='Tên tài khoản'
+            name='username'
             rules={[{ required: true, message: "vui lòng nhập tên!" }]}
           >
             <Input />
           </Form.Item>
 
           <Form.Item
-            label="Password"
-            name="password"
+            label='mật khẩu'
+            name='password'
             rules={[{ required: true, message: "vui lòng nhập mật khẩu!" }]}
           >
             <Input.Password />
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit">
+            <Button type='primary' htmlType='submit'>
               Submit
             </Button>
           </Form.Item>

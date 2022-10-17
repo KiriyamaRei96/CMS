@@ -6,7 +6,7 @@ import TableItems from "./Component/Table";
 
 import { useLocation } from "react-router-dom";
 import getCookie from "../../../Api/getCookie";
-import { Button, Modal, Space, Tag } from "antd";
+import { Button, Modal, Popconfirm, Space, Tag } from "antd";
 import { v4 as uuid } from "uuid";
 import { selectData } from "../../../app/store";
 import { userInfoSelector } from "../Login/slice/UserSlice";
@@ -30,7 +30,7 @@ const List = memo((props: ListProps) => {
   useEffect(() => {
     if (infoArray.length > 0) {
       let menu: any = [];
-      Object.keys(infoArray[0]).forEach((key) => {
+      Object.keys(infoArray[infoArray.length - 1]).forEach((key) => {
         if (titleMap[key] !== undefined) {
           let menuObj = {};
           if (
@@ -67,6 +67,7 @@ const List = memo((props: ListProps) => {
               dataIndex: key,
               key: key,
               render: (value) => <img alt='' src={value?.path}></img>,
+              width: 100,
             };
           }
           if (key == "category") {
@@ -90,7 +91,7 @@ const List = memo((props: ListProps) => {
           menu.push(menuObj);
         }
       });
-      console.log(menu);
+
       setColumns([
         ...menu,
         {
@@ -99,10 +100,8 @@ const List = memo((props: ListProps) => {
           fixed: "right",
           render: (_, record) => (
             <div key={uuid()}>
-              <Button
-                size='small'
-                key={uuid()}
-                onClick={() => {
+              <Popconfirm
+                onConfirm={() => {
                   dispatch({
                     type: "DELETE_REQUESTED",
                     payload: {
@@ -111,9 +110,15 @@ const List = memo((props: ListProps) => {
                     },
                   });
                 }}
+                title='Bạn muốn xóa thông tin này ?'
+                okText='Xóa'
+                cancelText='Cancel'
               >
-                Xóa thông tin
-              </Button>
+                <Button size='small' key={uuid()}>
+                  Xóa
+                </Button>
+              </Popconfirm>
+
               <Button
                 size='small'
                 onClick={() => {
@@ -122,7 +127,7 @@ const List = memo((props: ListProps) => {
                 }}
                 key={uuid()}
               >
-                Sửa thông tin
+                Sửa
               </Button>
             </div>
           ),
@@ -183,7 +188,7 @@ const List = memo((props: ListProps) => {
           setName("Quản lý sự kiện");
 
           break;
-        case "/Manage/placeType":
+        case "/ContentManage/placeType":
           dispatch({
             type: "USER_FETCH_REQUESTED",
             payload: {
@@ -202,7 +207,29 @@ const List = memo((props: ListProps) => {
               actionApi: "v1/category",
             },
           });
-          setName("Quản lý category tin tức");
+          setName("Quản lý danh mục tin tức");
+
+          break;
+        case "/ContentManage/hotelType":
+          dispatch({
+            type: "USER_FETCH_REQUESTED",
+            payload: {
+              getApi: "v1/hotel-type/gets?limit=10&page=1&search=",
+              actionApi: "v1/hotel-type",
+            },
+          });
+          setName(" Quản lý loại khách sạn");
+
+          break;
+        case "/ContentManage/hotelList":
+          dispatch({
+            type: "USER_FETCH_REQUESTED",
+            payload: {
+              getApi: "v1/hotel/gets?limit=10&page=1&search=",
+              actionApi: "v1/hotel",
+            },
+          });
+          setName("Quản lý khách sạn");
 
           break;
         case "/Manage/utilitiesType":
@@ -223,7 +250,9 @@ const List = memo((props: ListProps) => {
         <TableItems columns={columns} />
       </div>
       <Modal
+        centered={true}
         open={isModalOpen}
+        width='70vw'
         onCancel={() => {
           setIsModalOpen(false);
         }}

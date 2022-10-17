@@ -2,6 +2,7 @@ import { call, put, take, takeLatest } from "redux-saga/effects";
 
 import Cookies from "js-cookie";
 import { callApi } from "../../../../Api/Axios";
+import openNotificationWithIcon from "../../../function/toast";
 
 const headers = { Authorization: Cookies.get("token") };
 
@@ -130,6 +131,11 @@ function* updateRow(action) {
       .then((res) => res.data)
       .catch((err) => console.log(err));
     if (res.status === 1) {
+      openNotificationWithIcon(
+        "success",
+        "Cập nhật thông tin thành công",
+        "bạn đã cập nhật thông tin thành công"
+      );
       yield put({
         type: "UPDATE_ROW",
         payload: res.data,

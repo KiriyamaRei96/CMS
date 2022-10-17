@@ -51,4 +51,27 @@
 
 .form {
     flex-direction: column;
+
+    .formItem {
+        width: 100%;
+
+        &>div {
+            flex-direction: column;
+            display: flex;
+
+            &>:first-child {
+                align-self: flex-start;
+            }
+
+        }
+    }
+}
+
+.submit {
+    margin-top: 15px;
+}
+
+.quill {
+
+    margin-bottom: 10px;
 }

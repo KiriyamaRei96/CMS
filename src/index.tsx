@@ -38,9 +38,11 @@ root.render(
             <Route path='ContentManage/placeList' element={<List />} />
             <Route path='ContentManage/news' element={<List />} />
             <Route path='ContentManage/events' element={<List />} />
-            <Route path='Manage/placeType' element={<List />} />
+            <Route path='ContentManage/placeType' element={<List />} />
             <Route path='Manage/newsCategory' element={<List />} />
             <Route path='Manage/utilitiesType' element={<List />} />
+            <Route path='ContentManage/hotelType' element={<List />} />
+            <Route path='ContentManage/hotelList' element={<List />} />
           </Route>
         </Routes>
       </Provider>

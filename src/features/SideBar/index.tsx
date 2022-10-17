@@ -50,6 +50,29 @@ const SideBar = memo((props: SideBarProps) => {
               },
             ],
           },
+          {
+            key: uuid(),
+            title: "Quản lý chung",
+            icon: <i className='fa-solid fa-gear'></i>,
+            label: <span>Quản lý chung</span>,
+            children: [
+              {
+                key: uuid(),
+                title: "Quản lý category tin tức",
+                label: (
+                  <Link to='Manage/newsCategory'>Quản lý danh mục tin tức</Link>
+                ),
+              },
+              {
+                key: uuid(),
+                title:
+                  "Danh mục loại tiện ích (địa điểm tiện ích dùng để hiển thị bản đồ)",
+                label: (
+                  <Link to='Manage/utilitiesType'>Danh mục loại tiện ích</Link>
+                ),
+              },
+            ],
+          },
 
           {
             key: uuid(),
@@ -66,12 +89,42 @@ const SideBar = memo((props: SideBarProps) => {
               },
               {
                 key: uuid(),
-                title: "Quản lý địa điểm",
+                title: "Quản lý địa điểm du lịch",
                 label: (
-                  <Link to='ContentManage/placeList'>Quản lý địa điểm</Link>
+                  <Link to='ContentManage/placeList'>
+                    Quản lý địa điểm du lịch
+                  </Link>
                 ),
+                children: [
+                  {
+                    key: uuid(),
+                    title: "Quản lý loại địa điểm",
+                    label: (
+                      <Link to='ContentManage/placeType'>
+                        Quản lý loại địa điểm
+                      </Link>
+                    ),
+                  },
+                ],
               },
-
+              {
+                key: uuid(),
+                title: "Quản lý khách sạn",
+                label: (
+                  <Link to='ContentManage/hotelList'>Quản lý khách sạn</Link>
+                ),
+                children: [
+                  {
+                    key: uuid(),
+                    title: "Quản lý loại khách sạn",
+                    label: (
+                      <Link to='ContentManage/hotelType'>
+                        Quản lý loại khách sạn
+                      </Link>
+                    ),
+                  },
+                ],
+              },
               {
                 key: uuid(),
                 title:
@@ -92,34 +145,7 @@ const SideBar = memo((props: SideBarProps) => {
               },
             ],
           },
-          {
-            key: uuid(),
-            title: "Quản lý chung",
-            icon: <i className='fa-solid fa-gear'></i>,
-            label: <span>Quản lý chung</span>,
-            children: [
-              {
-                key: uuid(),
-                title: "Quản lý loại địa điểm",
-                label: <Link to='Manage/placeType'>Quản lý loại địa điểm</Link>,
-              },
-              {
-                key: uuid(),
-                title: "Quản lý category tin tức",
-                label: (
-                  <Link to='Manage/newsCategory'>Quản lý category tin tức</Link>
-                ),
-              },
-              {
-                key: uuid(),
-                title:
-                  "Danh mục loại tiện ích (địa điểm tiện ích dùng để hiển thị bản đồ)",
-                label: (
-                  <Link to='Manage/utilitiesType'>Danh mục loại tiện ích</Link>
-                ),
-              },
-            ],
-          },
+
           {
             key: "/UserInfo",
             title: "thông tin cá nhân",

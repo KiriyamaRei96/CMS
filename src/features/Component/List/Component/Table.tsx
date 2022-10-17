@@ -110,9 +110,11 @@ const TableItems = memo(({ columns }: TableProps) => {
         />
       </div>
       <Modal
+        width='70vw'
         open={isModalOpen}
         onCancel={() => {
           setIsModalOpen(false);
+          setCurrent(0);
         }}
         footer={false}
         title={"Thêm thông tin"}
