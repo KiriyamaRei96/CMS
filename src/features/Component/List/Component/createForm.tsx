@@ -100,7 +100,7 @@ const CreateForm = ({
         console.log(err);
       }
   };
-
+  const key = process.env.REACT_APP_GOOGLE_KEY;
   return (
     <>
       {storeSate !== "loading" && data ? (
@@ -134,9 +134,9 @@ const CreateForm = ({
               setIsModalOpen(false);
             }
           }}
-          layout='inline'
+          layout="inline"
         >
-          <div className='d-flex'>
+          <div className="d-flex">
             {data.id ? (
               <Form.Item key={uuid()} label={titleMap.id}>
                 <span key={uuid()}>{data.id}</span>
@@ -217,7 +217,7 @@ const CreateForm = ({
               <Form.Item
                 key={uuid()}
                 name={"date"}
-                label='Thời gian cập nhật cuối'
+                label="Thời gian cập nhật cuối"
               >
                 <DatePicker
                   defaultPickerValue={moment()}
@@ -234,9 +234,9 @@ const CreateForm = ({
                   return (
                     <Select.Option value={key}>
                       <img
-                        className='icon'
+                        className="icon"
                         src={localeArr[key].icon}
-                        alt=''
+                        alt=""
                       ></img>
                     </Select.Option>
                   );
@@ -264,7 +264,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"address"}
-                label='Địa chỉ'
+                label="Địa chỉ"
               >
                 <Input placeholder={data?.address}></Input>
               </Form.Item>
@@ -276,7 +276,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"description"}
-                label='Mô tả'
+                label="Mô tả"
               >
                 <Input placeholder={data?.description}></Input>
               </Form.Item>
@@ -289,7 +289,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"featureImage"}
-                label='Ảnh'
+                label="Ảnh"
               >
                 <Upload
                   action={`${process.env.REACT_APP_CMS_API}/v1/asset/upload`}
@@ -315,9 +315,9 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"featureImage"}
-                label='Ảnh'
+                label="Ảnh"
               >
-                <img src={data.featureImage.img} alt='example'></img>
+                <img src={data.featureImage.img} alt="example"></img>
               </Form.Item>
             ) : (
               false
@@ -327,7 +327,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"ar"}
-                label='AR'
+                label="AR"
               >
                 <Input placeholder={data?.ar}></Input>
               </Form.Item>
@@ -339,7 +339,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"vr"}
-                label='VR'
+                label="VR"
               >
                 <Input placeholder={data?.vr}></Input>
               </Form.Item>
@@ -353,10 +353,10 @@ const CreateForm = ({
               className={clsx(style.formItem)}
               key={uuid()}
               name={"content"}
-              label='Nội dung'
+              label="Nội dung"
             >
               <ReactQuill
-                theme='snow'
+                theme="snow"
                 className={clsx(style.quill)}
                 value={data.content}
                 placeholder={data.content}
@@ -372,12 +372,12 @@ const CreateForm = ({
               className={clsx(style.formItem)}
               key={uuid()}
               name={"content"}
-              label='Chọn vị trí trên bản đồ '
+              label="Chọn vị trí trên bản đồ "
             >
               <div style={{ width: "100%", height: "500px" }}>
                 <GoogleMapReact
                   bootstrapURLKeys={{
-                    key: "AIzaSyAcwcJSrJ4_PqEIJoQCtC5RP988Eka0YE8",
+                    key: key ? key : "",
                   }}
                   defaultCenter={{
                     lat: Number(data?.lat)
@@ -422,8 +422,8 @@ const CreateForm = ({
             <Button
               className={clsx(style.submit)}
               key={uuid()}
-              htmlType='submit'
-              type='primary'
+              htmlType="submit"
+              type="primary"
             >
               Xác Nhận
             </Button>
