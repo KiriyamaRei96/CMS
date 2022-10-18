@@ -36,11 +36,15 @@ function App() {
     if (UserState?.phone === null) {
       navigate("/UserInfo");
     }
+
+    dispatch({
+      type: "GET_LOCALE_REQUESTED",
+    });
   }, []);
   return (
-    <div className="App d-flex">
+    <div className='App d-flex'>
       <Header></Header>
-      <div className="Cotainer ">
+      <div className='Cotainer '>
         <SideBar></SideBar>
         <Outlet></Outlet>
       </div>

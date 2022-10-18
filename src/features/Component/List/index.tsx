@@ -11,8 +11,9 @@ import { v4 as uuid } from "uuid";
 import { selectData } from "../../../app/store";
 import { userInfoSelector } from "../Login/slice/UserSlice";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import CreateForm from "./Component/createForm";
+import CreateForm from "./Component/CreateForm";
 import { titleMap } from "./titleMap";
+import { setLocate } from "./slice/slice";
 
 export interface ListProps {}
 
@@ -22,6 +23,8 @@ const List = memo((props: ListProps) => {
   const loginSate = useAppSelector(userInfoSelector).loginSate;
   const infoArray = useAppSelector(selectData).infoArray;
   const actionApi = useAppSelector(selectData).actionApi;
+  const locale = useAppSelector(selectData).locale;
+
   const [name, setName] = useState("");
   const [columns, setColumns] = useState(Array<any>);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -33,6 +36,16 @@ const List = memo((props: ListProps) => {
       Object.keys(infoArray[infoArray.length - 1]).forEach((key) => {
         if (titleMap[key] !== undefined) {
           let menuObj = {};
+          if (key == "title") {
+            menuObj = {
+              title: titleMap[key],
+              dataIndex: key,
+              key: key,
+              render: (text) => (
+                <span key={uuid()}>{text ? text : "chưa nhập tiêu đề"}</span>
+              ),
+            };
+          }
           if (
             typeof infoArray[0][key] === "string" ||
             typeof infoArray[0][key] === "number"
@@ -51,11 +64,11 @@ const List = memo((props: ListProps) => {
               key: key,
               render: (value) =>
                 value ? (
-                  <Tag key={uuid()} color="green">
+                  <Tag key={uuid()} color='green'>
                     Đã phát hành
                   </Tag>
                 ) : (
-                  <Tag key={uuid()} color="red">
+                  <Tag key={uuid()} color='red'>
                     Chưa phát hành
                   </Tag>
                 ),
@@ -66,8 +79,14 @@ const List = memo((props: ListProps) => {
               title: titleMap[key],
               dataIndex: key,
               key: key,
-              render: (value) => <img alt="" src={value?.["path_150px"]}></img>,
-              width: 150,
+              render: (value) => (
+                <img
+                  className={clsx(style.img)}
+                  alt=''
+                  src={value?.["path_150px"]}
+                ></img>
+              ),
+              width: 64,
             };
           }
           if (key == "category") {
@@ -77,11 +96,11 @@ const List = memo((props: ListProps) => {
               key: key,
               render: (value) =>
                 value?.published ? (
-                  <Tag key={uuid()} color="green">
+                  <Tag key={uuid()} color='green'>
                     {value?.title}
                   </Tag>
                 ) : (
-                  <Tag key={uuid()} color="red">
+                  <Tag key={uuid()} color='red'>
                     {value?.title}
                   </Tag>
                 ),
@@ -110,17 +129,17 @@ const List = memo((props: ListProps) => {
                     },
                   });
                 }}
-                title="Bạn muốn xóa thông tin này ?"
-                okText="Xóa"
-                cancelText="Hủy"
+                title='Bạn muốn xóa thông tin này ?'
+                okText='Xóa'
+                cancelText='Hủy'
               >
-                <Button size="small" key={uuid()}>
+                <Button size='small' key={uuid()}>
                   Xóa
                 </Button>
               </Popconfirm>
 
               <Button
-                size="small"
+                size='small'
                 onClick={() => {
                   setID(record.id);
                   setIsModalOpen(true);
@@ -137,6 +156,9 @@ const List = memo((props: ListProps) => {
   }, [infoArray]);
   useEffect(() => {
     if (getCookie("token") !== undefined || loginSate) {
+      if (locale !== "vi") {
+        dispatch(setLocate("vi"));
+      }
       switch (location) {
         case "/Statistic/businessUnit":
           setName("Thống kê các đơn vị kinh doanh");
@@ -233,6 +255,13 @@ const List = memo((props: ListProps) => {
 
           break;
         case "/Manage/utilitiesType":
+          dispatch({
+            type: "USER_FETCH_REQUESTED",
+            payload: {
+              getApi: "v1/utilities-type/gets?limit=10&page=1&search=",
+              actionApi: "v1/utilities-type",
+            },
+          });
           setName("Danh mục loại tiện ích");
 
           break;
@@ -246,13 +275,13 @@ const List = memo((props: ListProps) => {
         <h3>{name}</h3>
       </div>
       <div className={clsx(style.main, "d-flex")}>
-        <Search />
+        <Search locale={locale} />
         <TableItems columns={columns} />
       </div>
       <Modal
         centered={true}
         open={isModalOpen}
-        width="70vw"
+        width='70vw'
         onCancel={() => {
           setIsModalOpen(false);
         }}

@@ -13,40 +13,46 @@ import Login from "./features/Component/Login";
 import { UpdateInfo } from "./features/Component/UserInfo/Component/UpdateInfo";
 import Info from "./features/Component/UserInfo/Component/Info";
 import { ChangePass } from "./features/Component/UserInfo/Component/ChangePass";
+import System from "./features/Component/System";
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);
 
 root.render(
   <BrowserRouter>
-    <React.StrictMode>
-      <Provider store={store}>
-        <Routes>
-          <Route path='login' element={<Login />} />
-          <Route element={<App />}>
-            <Route index element={<DashBroad />} />
-            <Route path='UserInfo' element={<UserInfo />}>
-              <Route index element={<Info />} />
-              <Route path='/UserInfo/updateInfo' element={<UpdateInfo />} />
-              <Route path='/UserInfo/changePass' element={<ChangePass />} />
-            </Route>
-            <Route path='Statistic/businessUnit' element={<List />} />
-
-            <Route path='Statistic/placeInfo' element={<List />} />
-            <Route path='ContentManage/CityList' element={<List />} />
-            <Route path='ContentManage/utilities' element={<List />} />
-            <Route path='ContentManage/placeList' element={<List />} />
-            <Route path='ContentManage/news' element={<List />} />
-            <Route path='ContentManage/events' element={<List />} />
-            <Route path='ContentManage/placeType' element={<List />} />
-            <Route path='Manage/newsCategory' element={<List />} />
-            <Route path='Manage/utilitiesType' element={<List />} />
-            <Route path='ContentManage/hotelType' element={<List />} />
-            <Route path='ContentManage/hotelList' element={<List />} />
+    {/* <React.StrictMode> */}
+    <Provider store={store}>
+      <Routes>
+        <Route path='login' element={<Login />} />
+        <Route element={<App />}>
+          <Route index element={<DashBroad />} />
+          <Route path='UserInfo' element={<UserInfo />}>
+            <Route index element={<Info />} />
+            <Route path='/UserInfo/updateInfo' element={<UpdateInfo />} />
+            <Route path='/UserInfo/changePass' element={<ChangePass />} />
           </Route>
-        </Routes>
-      </Provider>
-    </React.StrictMode>
+          <Route path='Statistic/businessUnit' element={<DashBroad />} />
+
+          <Route path='Statistic/placeInfo' element={<DashBroad />} />
+          {/* quản lý chung  */}
+          <Route path='Manage/newsCategory' element={<List />} />
+          <Route path='Manage/utilitiesType' element={<List />} />
+          <Route path='Manage/System' element={<System />} />
+
+          {/* quảng lý nội dung  */}
+          <Route path='ContentManage/CityList' element={<DashBroad />} />
+          <Route path='ContentManage/utilities' element={<List />} />
+          <Route path='ContentManage/placeList' element={<List />} />
+          <Route path='ContentManage/news' element={<List />} />
+          <Route path='ContentManage/events' element={<List />} />
+          <Route path='ContentManage/placeType' element={<List />} />
+
+          <Route path='ContentManage/hotelType' element={<List />} />
+          <Route path='ContentManage/hotelList' element={<List />} />
+        </Route>
+      </Routes>
+    </Provider>
+    {/* </React.StrictMode> */}
   </BrowserRouter>
 );
 

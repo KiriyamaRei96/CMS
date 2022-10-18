@@ -9,7 +9,7 @@ import style from "../style.module.scss";
 import clsx from "clsx";
 import { v4 as uuid } from "uuid";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
-import CreateForm from "./createForm";
+import CreateForm from "./CreateForm";
 export interface TableProps {
   columns: any;
 }
@@ -26,6 +26,8 @@ const TableItems = memo(({ columns }: TableProps) => {
   const dataItem: infoObj | any = useAppSelector(selectData).infoArray;
   const actionApi = useAppSelector(selectData).actionApi;
   const pagination = useAppSelector(selectData).pagination;
+  const locale = useAppSelector(selectData).locale;
+  const storeState = useAppSelector(selectData).storeState;
 
   const dispatch = useAppDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -83,15 +85,19 @@ const TableItems = memo(({ columns }: TableProps) => {
             Thêm thông tin
           </Button>
         </div>
+        {storeState !== "loading" ? (
+          <Table
+            className={clsx(style.table)}
+            pagination={false}
+            columns={columns}
+            dataSource={dataItem}
+            rowKey={uuid()}
+            scroll={{ x: "auto", y: "auto" }}
+          />
+        ) : (
+          <Skeleton active />
+        )}
 
-        <Table
-          className={clsx(style.table)}
-          pagination={false}
-          columns={columns}
-          dataSource={dataItem}
-          rowKey={uuid()}
-          scroll={{ x: "auto", y: "auto" }}
-        />
         <Pagination
           showSizeChanger
           current={pagination?.current}
@@ -103,6 +109,7 @@ const TableItems = memo(({ columns }: TableProps) => {
                 limit: pageSize,
                 page,
                 search: "",
+                locale,
               },
             });
           }}

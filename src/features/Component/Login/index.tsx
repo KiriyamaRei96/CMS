@@ -39,7 +39,7 @@ const Login = memo((props: LoginProps) => {
           autoComplete='off'
         >
           <Form.Item
-            label='Tên tài khoản'
+            label='Tài khoản'
             name='username'
             rules={[{ required: true, message: "vui lòng nhập tên!" }]}
           >

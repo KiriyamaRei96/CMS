@@ -23,11 +23,14 @@ import moment from "moment";
 import { UploadOutlined } from "@ant-design/icons";
 import { RcFile } from "antd/lib/upload";
 import getCookie from "../../../../Api/getCookie";
+import GoogleMapReact from "google-map-react";
 export interface CreateFormProps {
   setIsModalOpen?: any;
   setCurrent?: any;
   id?: number;
 }
+
+const Marker = ({ child, lat, lng }) => <div>{child}</div>;
 
 const CreateForm = ({
   setCurrent,
@@ -37,9 +40,12 @@ const CreateForm = ({
   const dataItem: any = useAppSelector(selectData).infoArray;
   const storeSate = useAppSelector(selectData).storeState;
   const actionApi = useAppSelector(selectData).actionApi;
+  const locale = useAppSelector(selectData).locale;
+  const localeArr = useAppSelector(selectData).localeArr;
+
   const dispatch = useAppDispatch();
   const [data, setData] = useState<any>();
-  const [option, setOption] = useState<any>();
+  const [typeOption, setTypeOption] = useState<any>();
 
   useEffect(() => {
     if (id) {
@@ -48,6 +54,7 @@ const CreateForm = ({
         payload: {
           ID: { id: id },
           action: actionApi,
+          locale,
         },
       });
     }
@@ -60,10 +67,10 @@ const CreateForm = ({
     } else if (data?.hotelType !== undefined) {
       getSelectList("v1/hotel-type/gets?limit=10&page=1&search=");
     }
-  }, [data, option, id]);
+  }, [data, typeOption, id]);
 
   useEffect(() => {
-    setOption(false);
+    setTypeOption(false);
     if (storeSate !== "loading") {
       if (id) {
         setData(dataItem[dataItem.findIndex((obj) => obj.id === id)]);
@@ -73,9 +80,9 @@ const CreateForm = ({
         setData(dataItem[id]);
       }
     }
-  }, [dataItem, storeSate, id]);
+  }, [dataItem, storeSate, id, locale]);
   const getSelectList = async (getApi) => {
-    if (!option)
+    if (!typeOption)
       try {
         const cookie = Cookies.get("token");
         const result = await callApi
@@ -88,7 +95,7 @@ const CreateForm = ({
             return <Select.Option value={obj.id}>{obj?.title}</Select.Option>;
           }
         });
-        setOption(option);
+        setTypeOption(option);
       } catch (err) {
         console.log(err);
       }
@@ -108,9 +115,10 @@ const CreateForm = ({
             const info = { ...data, ...value };
 
             info.date = moment(info.date, "DD-MM-YYYY").format("YYYY-MM-DD");
-            if (info.featureImage !== undefined) {
+            if (info.featureImage !== undefined && info.featureImage !== null) {
               info.featureImage = data.featureImage.id;
             }
+            info.locale = locale;
             dispatch({
               type: "UPDATE_ROW_REQUESTED",
               payload: {
@@ -126,9 +134,9 @@ const CreateForm = ({
               setIsModalOpen(false);
             }
           }}
-          layout="inline"
+          layout='inline'
         >
-          <div className="d-flex">
+          <div className='d-flex'>
             {data.id ? (
               <Form.Item key={uuid()} label={titleMap.id}>
                 <span key={uuid()}>{data.id}</span>
@@ -166,8 +174,8 @@ const CreateForm = ({
                 name={"category"}
                 label={titleMap.category}
               >
-                <Select placeholder={"Chọn danh mục"} loading={!option}>
-                  {option}
+                <Select placeholder={"Chọn danh mục"} loading={!typeOption}>
+                  {typeOption}
                 </Select>
               </Form.Item>
             ) : (
@@ -179,8 +187,11 @@ const CreateForm = ({
                 name={"pointType"}
                 label={"Loại địa điểm"}
               >
-                <Select placeholder={"Chọn loại địa điểm"} loading={!option}>
-                  {option}
+                <Select
+                  placeholder={"Chọn loại địa điểm"}
+                  loading={!typeOption}
+                >
+                  {typeOption}
                 </Select>
               </Form.Item>
             ) : (
@@ -192,8 +203,11 @@ const CreateForm = ({
                 name={"hotelType"}
                 label={"Loại khách sạn"}
               >
-                <Select placeholder={"Chọn loại khách sạn"} loading={!option}>
-                  {option}
+                <Select
+                  placeholder={"Chọn loại khách sạn"}
+                  loading={!typeOption}
+                >
+                  {typeOption}
                 </Select>
               </Form.Item>
             ) : (
@@ -203,23 +217,44 @@ const CreateForm = ({
               <Form.Item
                 key={uuid()}
                 name={"date"}
-                label="Thời gian cập nhật cuối"
+                label='Thời gian cập nhật cuối'
               >
-                <DatePicker key={uuid()}></DatePicker>
+                <DatePicker
+                  defaultPickerValue={moment()}
+                  key={uuid()}
+                ></DatePicker>
               </Form.Item>
             ) : (
               false
             )}
+
+            <Form.Item key={uuid()} name={"locale"} label={"Ngôn ngữ"}>
+              <Select defaultValue={locale} placeholder={"Chọn Ngôn ngữ"}>
+                {Object.keys(localeArr).map((key) => {
+                  return (
+                    <Select.Option value={key}>
+                      <img
+                        className='icon'
+                        src={localeArr[key].icon}
+                        alt=''
+                      ></img>
+                    </Select.Option>
+                  );
+                })}
+              </Select>
+            </Form.Item>
           </div>
           <div className={clsx(style.titleWraper, "d-flex")}>
-            {data.title ? (
+            {data.title !== undefined ? (
               <Form.Item
                 className={clsx(style.formDes)}
                 key={uuid()}
                 label={"Tiêu đề"}
                 name={"title"}
               >
-                <Input placeholder={data?.title}></Input>
+                <Input
+                  placeholder={data?.title ? data?.title : "Chưa nhập tiêu đề"}
+                ></Input>
               </Form.Item>
             ) : (
               false
@@ -229,7 +264,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"address"}
-                label="Địa chỉ"
+                label='Địa chỉ'
               >
                 <Input placeholder={data?.address}></Input>
               </Form.Item>
@@ -241,7 +276,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"description"}
-                label="Mô tả"
+                label='Mô tả'
               >
                 <Input placeholder={data?.description}></Input>
               </Form.Item>
@@ -254,7 +289,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"featureImage"}
-                label="Ảnh"
+                label='Ảnh'
               >
                 <Upload
                   action={`${process.env.REACT_APP_CMS_API}/v1/asset/upload`}
@@ -280,9 +315,33 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"featureImage"}
-                label="Ảnh"
+                label='Ảnh'
               >
-                <img src={data.featureImage.img} alt="example"></img>
+                <img src={data.featureImage.img} alt='example'></img>
+              </Form.Item>
+            ) : (
+              false
+            )}
+            {data.ar !== undefined ? (
+              <Form.Item
+                className={clsx(style.formDes)}
+                key={uuid()}
+                name={"ar"}
+                label='AR'
+              >
+                <Input placeholder={data?.ar}></Input>
+              </Form.Item>
+            ) : (
+              false
+            )}
+            {data.vr !== undefined ? (
+              <Form.Item
+                className={clsx(style.formDes)}
+                key={uuid()}
+                name={"vr"}
+                label='VR'
+              >
+                <Input placeholder={data?.vr}></Input>
               </Form.Item>
             ) : (
               false
@@ -294,10 +353,10 @@ const CreateForm = ({
               className={clsx(style.formItem)}
               key={uuid()}
               name={"content"}
-              label="Nội dung"
+              label='Nội dung'
             >
               <ReactQuill
-                theme="snow"
+                theme='snow'
                 className={clsx(style.quill)}
                 value={data.content}
                 placeholder={data.content}
@@ -308,12 +367,63 @@ const CreateForm = ({
             false
           )}
 
+          {data.lat !== undefined && data.lng !== undefined ? (
+            <Form.Item
+              className={clsx(style.formItem)}
+              key={uuid()}
+              name={"content"}
+              label='Chọn vị trí trên bản đồ '
+            >
+              <div style={{ width: "100%", height: "500px" }}>
+                <GoogleMapReact
+                  bootstrapURLKeys={{
+                    key: "AIzaSyAcwcJSrJ4_PqEIJoQCtC5RP988Eka0YE8",
+                  }}
+                  defaultCenter={{
+                    lat: Number(data?.lat)
+                      ? Number(data?.lat)
+                      : 21.028344147220377,
+                    lng: Number(data?.lng)
+                      ? Number(data?.lng)
+                      : 105.83696287966175,
+                  }}
+                  defaultZoom={15}
+                  onClick={(e) =>
+                    setData({
+                      ...data,
+                      lat: e.lat.toString(),
+                      lng: e.lng.toString(),
+                    })
+                  }
+                >
+                  <Marker
+                    lat={
+                      Number(data?.lat) ? Number(data?.lat) : 21.028344147220377
+                    }
+                    lng={
+                      Number(data?.lng) ? Number(data?.lng) : 105.83696287966175
+                    }
+                    child={
+                      <i
+                        className={clsx(
+                          "fa-solid fa-location-dot",
+                          style.marker
+                        )}
+                      ></i>
+                    }
+                  ></Marker>
+                </GoogleMapReact>
+              </div>
+            </Form.Item>
+          ) : (
+            false
+          )}
           <Form.Item key={uuid()}>
             <Button
               className={clsx(style.submit)}
               key={uuid()}
-              htmlType="submit"
-              type="primary"
+              htmlType='submit'
+              type='primary'
             >
               Xác Nhận
             </Button>
@@ -326,96 +436,3 @@ const CreateForm = ({
   );
 };
 export default CreateForm;
-{
-  /* {Object.keys(data).map((key) => (
-            <>
-              {key == "id" || key == "creationDate" ? (
-                <Form.Item
-                  key={key}
-                  label={titleMap[key] ? titleMap[key] : key}
-                >
-                  <span key={uuid()}>{data[key]}</span>
-                </Form.Item>
-              ) : key == "date" ? (
-                <Form.Item key={key} name={key} label='Thời gian'>
-                  <DatePicker key={uuid()}></DatePicker>
-                </Form.Item>
-              ) : key == "content" ? (
-                <Form.Item
-                  key={key}
-                  name={key}
-                  label={titleMap[key] ? titleMap[key] : key}
-                >
-                  <ReactQuill
-                    theme='snow'
-                    className={clsx(style.quill)}
-                    value={value}
-                    onChange={(value) => {
-                      console.log(value);
-                    }}
-                  ></ReactQuill>
-                </Form.Item>
-              ) : key == "category" ? (
-                <Form.Item
-                  key={key}
-                  name={key}
-                  label={titleMap[key] ? titleMap[key] : key}
-                >
-                  <Select
-                    onFocus={() => {
-                      getSelectList("v1/category/gets?limit=10&page=1&search=");
-                    }}
-                    placeholder={titleMap[key] ? titleMap[key] : key}
-                  >
-                    {option}
-                  </Select>
-                </Form.Item>
-              ) : key == "featureImage" ? (
-                <Form.Item
-                  key={key}
-                  name={key}
-                  label={titleMap[key] ? titleMap[key] : key}
-                >
-                  <Select
-                    onFocus={() => {
-                      getSelectList(
-                        "v1/asset/gets?page=1&limit=10&parentId=17"
-                      );
-                    }}
-                    placeholder={titleMap[key] ? titleMap[key] : key}
-                  >
-                    {option}
-                  </Select>
-                </Form.Item>
-              ) : typeof data[key] === "string" ||
-                typeof data[key] === "number" ? (
-                <Form.Item
-                  key={key}
-                  name={key}
-                  label={titleMap[key] ? titleMap[key] : key}
-                >
-                  <Input
-                    key={uuid()}
-                    placeholder={data[key].toString()}
-                  ></Input>
-                </Form.Item>
-              ) : typeof data[key] === "boolean" ? (
-                <Form.Item
-                  key={key}
-                  name={key}
-                  label={titleMap[key] ? titleMap[key] : key}
-                >
-                  <Checkbox
-                    key={uuid()}
-                    onChange={(e) => {
-                      setData({ ...data, [key]: e.target.checked });
-                    }}
-                    checked={data[key]}
-                  ></Checkbox>
-                </Form.Item>
-              ) : (
-                false
-              )}
-            </>
-          ))} */
-}

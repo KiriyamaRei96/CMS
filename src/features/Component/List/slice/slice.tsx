@@ -7,8 +7,8 @@ export interface infoObj {
   featureImage?: Object;
   address?: string | null;
   ar?: string | null;
-  lat?: number | null;
-  lng?: number | null;
+  lat?: string | number | null;
+  lng?: string | number | null;
   vr?: Object | null;
 }
 export interface InitSate {
@@ -16,18 +16,30 @@ export interface InitSate {
   infoArray: [infoObj] | any;
   pagination?: Object;
   actionApi?: string;
+  localeArr?: Object;
+  locale: string;
 }
 const initialState: InitSate = {
   infoArray: [],
+  localeArr: {},
+  locale: "vi",
 };
 export const Fetcher = createSlice({
   name: "Fetcher",
   initialState,
-  reducers: {},
+  reducers: {
+    setLocate: (state, action) => {
+      state.locale = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase("TABLE_LOADING", (state) => {
         state.storeState = "loading";
+      })
+      .addCase("GET_LOCALE", (state, action: any) => {
+        state.localeArr = action.payload;
+        state.storeState = "success";
       })
       .addCase("ADD_ROW", (state, action: any) => {
         state.infoArray?.unshift(action.payload);
@@ -66,4 +78,4 @@ export const Fetcher = createSlice({
       });
   },
 });
-export const {} = Fetcher.actions;
+export const { setLocate } = Fetcher.actions;

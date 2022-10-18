@@ -71,6 +71,11 @@ const SideBar = memo((props: SideBarProps) => {
                   <Link to='Manage/utilitiesType'>Danh mục loại tiện ích</Link>
                 ),
               },
+              {
+                key: uuid(),
+                title: "Quản lý hệ thống ",
+                label: <Link to='Manage/System'>Quản lý hệ thống</Link>,
+              },
             ],
           },
 
