@@ -48,31 +48,29 @@ const TableItems = memo(({ columns }: TableProps) => {
     {
       title: "Tạo tiêu đề thông tin",
       content: (
-        <Form key={uuid()} onFinish={addRow} layout='inline'>
+        <Form key={uuid()} onFinish={addRow} layout="inline">
           <Form.Item
-            label='Tiêu đề thông tin'
+            label="Tiêu đề thông tin"
             rules={[
               { required: true, message: "Không được bỏ trống trường này!" },
             ]}
-            name='title'
-          >
-            <Input type='text' />
-          </Form.Item>
+            name="title"
+          ></Form.Item>
           {actionApi === "v1/page" ? (
             <Form.Item
-              label='Định danh trang'
+              label="Định danh trang"
               rules={[
                 { required: true, message: "Không được bỏ trống trường này!" },
               ]}
-              name='name'
+              name="name"
             >
-              <Input type='text' />
+              <Input type="text" />
             </Form.Item>
           ) : (
             false
           )}
           <Form.Item>
-            <Button htmlType='submit' type='primary'>
+            <Button htmlType="submit" type="primary">
               Xác Nhận
             </Button>
           </Form.Item>
@@ -94,7 +92,7 @@ const TableItems = memo(({ columns }: TableProps) => {
     <>
       <div className={clsx(style.wraper, "d-flex")}>
         <div className={clsx(style.function, "d-flex")}>
-          <Button onClick={() => setIsModalOpen(true)} type='primary'>
+          <Button onClick={() => setIsModalOpen(true)} type="primary">
             Thêm thông tin
           </Button>
         </div>
@@ -130,7 +128,7 @@ const TableItems = memo(({ columns }: TableProps) => {
         />
       </div>
       <Modal
-        width='70vw'
+        width="70vw"
         open={isModalOpen}
         onCancel={() => {
           setIsModalOpen(false);
