@@ -121,4 +121,10 @@
 
 .snipContent {
     flex-wrap: wrap;
+    width: 100%;
+}
+
+.snipCover {
+    height: 150px;
+    object-fit: cover;
 }
