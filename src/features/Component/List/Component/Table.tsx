@@ -58,6 +58,19 @@ const TableItems = memo(({ columns }: TableProps) => {
           >
             <Input type='text' />
           </Form.Item>
+          {actionApi === "v1/page" ? (
+            <Form.Item
+              label='Định danh trang'
+              rules={[
+                { required: true, message: "Không được bỏ trống trường này!" },
+              ]}
+              name='name'
+            >
+              <Input type='text' />
+            </Form.Item>
+          ) : (
+            false
+          )}
           <Form.Item>
             <Button htmlType='submit' type='primary'>
               Xác Nhận

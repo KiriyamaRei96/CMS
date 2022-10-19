@@ -24,10 +24,11 @@ import { UploadOutlined } from "@ant-design/icons";
 import { RcFile } from "antd/lib/upload";
 import getCookie from "../../../../Api/getCookie";
 import GoogleMapReact from "google-map-react";
+import Snippets from "./Snippets";
 export interface CreateFormProps {
   setIsModalOpen?: any;
   setCurrent?: any;
-  id?: number;
+  id?: number | string;
 }
 
 const Marker = ({ child, lat, lng }) => <div>{child}</div>;
@@ -52,7 +53,7 @@ const CreateForm = ({
       dispatch({
         type: "GET_ROW_REQUESTED",
         payload: {
-          ID: { id: id },
+          ID: { id: id, name: id },
           action: actionApi,
           locale,
         },
@@ -66,6 +67,10 @@ const CreateForm = ({
       getSelectList("v1/point-type/gets?limit=10&page=1&search=");
     } else if (data?.hotelType !== undefined) {
       getSelectList("v1/hotel-type/gets?limit=10&page=1&search=");
+    } else if (data?.utilitiesType !== undefined) {
+      getSelectList("v1/utilities-type/gets?limit=10&page=1&search=");
+    } else if (data?.restaurantType !== undefined) {
+      getSelectList("v1/restaurant-type/gets?limit=10&page=1&search=");
     }
   }, [data, typeOption, id]);
 
@@ -73,7 +78,9 @@ const CreateForm = ({
     setTypeOption(false);
     if (storeSate !== "loading") {
       if (id) {
-        setData(dataItem[dataItem.findIndex((obj) => obj.id === id)]);
+        typeof id === "number"
+          ? setData(dataItem[dataItem.findIndex((obj) => obj.id === id)])
+          : setData(dataItem[dataItem.findIndex((obj) => obj.name === id)]);
       }
 
       if (!id) {
@@ -134,9 +141,9 @@ const CreateForm = ({
               setIsModalOpen(false);
             }
           }}
-          layout="inline"
+          layout='inline'
         >
-          <div className="d-flex">
+          <div className='d-flex'>
             {data.id ? (
               <Form.Item key={uuid()} label={titleMap.id}>
                 <span key={uuid()}>{data.id}</span>
@@ -153,6 +160,7 @@ const CreateForm = ({
               >
                 <Checkbox
                   key={uuid()}
+                  defaultChecked={data.published}
                   onChange={(e) => {
                     callApi(actionApi + "/published", {
                       method: "PUT",
@@ -160,6 +168,7 @@ const CreateForm = ({
                       data: {
                         id: data.id,
                         published: e.target.checked ? 1 : 0,
+                        name: data.name,
                       },
                     });
                   }}
@@ -174,7 +183,13 @@ const CreateForm = ({
                 name={"category"}
                 label={titleMap.category}
               >
-                <Select placeholder={"Chọn danh mục"} loading={!typeOption}>
+                <Select
+                  defaultValue={
+                    data?.category?.id ? data?.category?.id : undefined
+                  }
+                  placeholder={"Chọn danh mục"}
+                  loading={!typeOption}
+                >
                   {typeOption}
                 </Select>
               </Form.Item>
@@ -188,7 +203,33 @@ const CreateForm = ({
                 label={"Loại địa điểm"}
               >
                 <Select
+                  defaultValue={
+                    data?.pointType?.id !== null
+                      ? data?.pointType?.id
+                      : undefined
+                  }
                   placeholder={"Chọn loại địa điểm"}
+                  loading={!typeOption}
+                >
+                  {typeOption}
+                </Select>
+              </Form.Item>
+            ) : (
+              false
+            )}
+            {data.restaurantType !== undefined ? (
+              <Form.Item
+                key={uuid()}
+                name={"restaurantType"}
+                label={"Loại nhà hàng"}
+              >
+                <Select
+                  defaultValue={
+                    data?.restaurantType?.id !== null
+                      ? data?.restaurantType.id
+                      : undefined
+                  }
+                  placeholder={"Chọn loại nhà hàng"}
                   loading={!typeOption}
                 >
                   {typeOption}
@@ -204,7 +245,33 @@ const CreateForm = ({
                 label={"Loại khách sạn"}
               >
                 <Select
+                  defaultValue={
+                    data?.hotelType?.id !== null
+                      ? data?.hotelType?.id
+                      : undefined
+                  }
                   placeholder={"Chọn loại khách sạn"}
+                  loading={!typeOption}
+                >
+                  {typeOption}
+                </Select>
+              </Form.Item>
+            ) : (
+              false
+            )}
+            {data.utilitiesType !== undefined ? (
+              <Form.Item
+                key={uuid()}
+                name={"utilitiesType"}
+                label={"Loại tiện ích"}
+              >
+                <Select
+                  defaultValue={
+                    data?.utilitiesType?.id !== null
+                      ? data?.utilitiesType?.id
+                      : undefined
+                  }
+                  placeholder={"Chọn loại tiện ích"}
                   loading={!typeOption}
                 >
                   {typeOption}
@@ -217,7 +284,7 @@ const CreateForm = ({
               <Form.Item
                 key={uuid()}
                 name={"date"}
-                label="Thời gian cập nhật cuối"
+                label='Thời gian cập nhật cuối'
               >
                 <DatePicker
                   defaultPickerValue={moment()}
@@ -234,9 +301,9 @@ const CreateForm = ({
                   return (
                     <Select.Option value={key}>
                       <img
-                        className="icon"
+                        className='icon'
                         src={localeArr[key].icon}
-                        alt=""
+                        alt=''
                       ></img>
                     </Select.Option>
                   );
@@ -264,7 +331,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"address"}
-                label="Địa chỉ"
+                label='Địa chỉ'
               >
                 <Input placeholder={data?.address}></Input>
               </Form.Item>
@@ -276,7 +343,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"description"}
-                label="Mô tả"
+                label='Mô tả'
               >
                 <Input placeholder={data?.description}></Input>
               </Form.Item>
@@ -289,7 +356,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"featureImage"}
-                label="Ảnh"
+                label='Ảnh'
               >
                 <Upload
                   action={`${process.env.REACT_APP_CMS_API}/v1/asset/upload`}
@@ -315,9 +382,9 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"featureImage"}
-                label="Ảnh"
+                label='Ảnh'
               >
-                <img src={data.featureImage.img} alt="example"></img>
+                <img src={data.featureImage.img} alt='example'></img>
               </Form.Item>
             ) : (
               false
@@ -327,7 +394,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"ar"}
-                label="AR"
+                label='AR'
               >
                 <Input placeholder={data?.ar}></Input>
               </Form.Item>
@@ -339,9 +406,21 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"vr"}
-                label="VR"
+                label='VR'
               >
                 <Input placeholder={data?.vr}></Input>
+              </Form.Item>
+            ) : (
+              false
+            )}
+            {data.name !== undefined ? (
+              <Form.Item
+                className={clsx(style.formDes)}
+                key={uuid()}
+                name={"name"}
+                label='Định danh trang'
+              >
+                <Input placeholder={data?.name}></Input>
               </Form.Item>
             ) : (
               false
@@ -353,10 +432,10 @@ const CreateForm = ({
               className={clsx(style.formItem)}
               key={uuid()}
               name={"content"}
-              label="Nội dung"
+              label='Nội dung'
             >
               <ReactQuill
-                theme="snow"
+                theme='snow'
                 className={clsx(style.quill)}
                 value={data.content}
                 placeholder={data.content}
@@ -372,7 +451,7 @@ const CreateForm = ({
               className={clsx(style.formItem)}
               key={uuid()}
               name={"content"}
-              label="Chọn vị trí trên bản đồ "
+              label='Chọn vị trí trên bản đồ '
             >
               <div style={{ width: "100%", height: "500px" }}>
                 <GoogleMapReact
@@ -418,12 +497,24 @@ const CreateForm = ({
           ) : (
             false
           )}
+          {data.snippets !== undefined ? (
+            <Form.Item
+              className={clsx(style.formItem)}
+              key={uuid()}
+              name={"content"}
+              label='Khối nội dung'
+            >
+              <Snippets data={data?.snippets}></Snippets>
+            </Form.Item>
+          ) : (
+            false
+          )}
           <Form.Item key={uuid()}>
             <Button
               className={clsx(style.submit)}
               key={uuid()}
-              htmlType="submit"
-              type="primary"
+              htmlType='submit'
+              type='primary'
             >
               Xác Nhận
             </Button>

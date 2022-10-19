@@ -6,7 +6,7 @@ import TableItems from "./Component/Table";
 
 import { useLocation } from "react-router-dom";
 import getCookie from "../../../Api/getCookie";
-import { Button, Modal, Popconfirm, Space, Tag } from "antd";
+import { Button, Modal, Popconfirm, Tag } from "antd";
 import { v4 as uuid } from "uuid";
 import { selectData } from "../../../app/store";
 import { userInfoSelector } from "../Login/slice/UserSlice";
@@ -125,6 +125,7 @@ const List = memo((props: ListProps) => {
                     type: "DELETE_REQUESTED",
                     payload: {
                       id: record.id,
+                      name: record?.name,
                       action: actionApi,
                     },
                   });
@@ -141,7 +142,7 @@ const List = memo((props: ListProps) => {
               <Button
                 size='small'
                 onClick={() => {
-                  setID(record.id);
+                  setID(record.id ? record.id : record.name);
                   setIsModalOpen(true);
                 }}
                 key={uuid()}
@@ -184,6 +185,13 @@ const List = memo((props: ListProps) => {
 
           break;
         case "/ContentManage/utilities":
+          dispatch({
+            type: "USER_FETCH_REQUESTED",
+            payload: {
+              getApi: "v1/utilities/gets?limit=10&page=1&search=",
+              actionApi: "v1/utilities",
+            },
+          });
           setName("Quản lý các tiện ích");
 
           break;
@@ -263,6 +271,61 @@ const List = memo((props: ListProps) => {
             },
           });
           setName("Danh mục loại tiện ích");
+
+          break;
+        case "/ContentManage/restaurantType":
+          dispatch({
+            type: "USER_FETCH_REQUESTED",
+            payload: {
+              getApi: "v1/restaurant-type/gets?limit=10&page=1&search=",
+              actionApi: "v1/restaurant-type",
+            },
+          });
+          setName(" Quản lý loại nhà hàng");
+
+          break;
+        case "/ContentManage/restaurantList":
+          dispatch({
+            type: "USER_FETCH_REQUESTED",
+            payload: {
+              getApi: "v1/restaurant/gets?limit=10&page=1&search=",
+              actionApi: "v1/restaurant",
+            },
+          });
+          setName("Quản lý khách sạn");
+
+          break;
+        case "/ContentManage/tour":
+          dispatch({
+            type: "USER_FETCH_REQUESTED",
+            payload: {
+              getApi: "v1/tour/gets?limit=10&page=1&search=",
+              actionApi: "v1/tour",
+            },
+          });
+          setName("Quản lý Tour du lịch");
+
+          break;
+        case "/ContentManage/travelCompanies":
+          dispatch({
+            type: "USER_FETCH_REQUESTED",
+            payload: {
+              getApi: "v1/travel-companies/gets?limit=10&page=1&search=",
+              actionApi: "v1/travel-companies",
+            },
+          });
+          setName("Quản lý công ty lữ hành");
+
+          break;
+        case "/Pages":
+          dispatch({
+            type: "USER_FETCH_REQUESTED",
+            payload: {
+              getApi: "v1/page/gets?limit=10&page=1&search=",
+              actionApi: "v1/page",
+            },
+          });
+          setName("Quản lý trang");
 
           break;
       }

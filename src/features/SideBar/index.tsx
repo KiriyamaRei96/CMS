@@ -68,7 +68,9 @@ const SideBar = memo((props: SideBarProps) => {
                 title:
                   "Danh mục loại tiện ích (địa điểm tiện ích dùng để hiển thị bản đồ)",
                 label: (
-                  <Link to='Manage/utilitiesType'>Danh mục loại tiện ích</Link>
+                  <Link to='Manage/utilitiesType'>
+                    Quản lý danh mục loại tiện ích
+                  </Link>
                 ),
               },
               {
@@ -78,7 +80,12 @@ const SideBar = memo((props: SideBarProps) => {
               },
             ],
           },
-
+          {
+            key: uuid(),
+            title: "Quản lý trang",
+            icon: <i className='fa-solid  fa-folder-open'></i>,
+            label: <Link to='Pages'>Quản lý trang</Link>,
+          },
           {
             key: uuid(),
             title: "Quản lý nội dung",
@@ -129,6 +136,42 @@ const SideBar = memo((props: SideBarProps) => {
                     ),
                   },
                 ],
+              },
+              {
+                key: uuid(),
+                title: "Quản lý nhà hàng",
+                label: (
+                  <Link to='ContentManage/restaurantList'>
+                    Quản lý nhà hàng
+                  </Link>
+                ),
+                children: [
+                  {
+                    key: uuid(),
+                    title: "Quản lý loại nhà hàng",
+                    label: (
+                      <Link to='ContentManage/restaurantType'>
+                        Quản lý loại nhà hàng
+                      </Link>
+                    ),
+                  },
+                ],
+              },
+              {
+                key: uuid(),
+                title: "Quản lý Tour du lịch",
+                label: (
+                  <Link to='ContentManage/tour'>Quản lý Tour du lịch</Link>
+                ),
+              },
+              {
+                key: uuid(),
+                title: "Quản lý công ty lữ hành",
+                label: (
+                  <Link to='ContentManage/travelCompanies'>
+                    Quản lý công ty lữ hành
+                  </Link>
+                ),
               },
               {
                 key: uuid(),

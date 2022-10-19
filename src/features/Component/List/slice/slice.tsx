@@ -47,7 +47,10 @@ export const Fetcher = createSlice({
       })
       .addCase("UPDATE_ROW", (state, action: any) => {
         state.infoArray = state.infoArray.map((obj) => {
-          if (obj.id === action.payload.id) {
+          if (obj.id && obj.id === action.payload.id) {
+            return (obj = action.payload);
+          }
+          if (obj.name && obj.name === action.payload.name) {
             return (obj = action.payload);
           }
           return obj;
