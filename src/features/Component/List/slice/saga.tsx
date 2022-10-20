@@ -172,8 +172,34 @@ function* updateRow(action) {
     console.log(e);
   }
 }
+function* deleteSnippets(action) {
+  const data = new URLSearchParams(action.payload.data).toString();
+  yield put({ type: "TABLE_LOADING" });
+  try {
+    const res = yield callApi({
+      method: "DELETE",
+      url: "v1/snippet/delete",
+      headers,
+      data,
+    })
+      .then((res) => res.data)
+      .catch((err) => console.log(err));
+    if (res.status === 1) {
+      yield put({
+        type: "GET_ROW_REQUESTED",
+        payload: {
+          action: action.payload.actionApi,
+          ID: { name: action.payload.name },
+          locale: action.payload.locale,
+        },
+      });
+    }
+  } catch (e) {
+    console.log(e);
+  }
+}
 function* updateSnippets(action) {
-  const data = new URLSearchParams(action.payload).toString();
+  const data = new URLSearchParams(action.payload.data).toString();
   yield put({ type: "TABLE_LOADING" });
   try {
     const res = yield callApi({
@@ -190,10 +216,14 @@ function* updateSnippets(action) {
         "Cập nhật thông tin thành công",
         "bạn đã cập nhật thông tin thành công"
       );
-      // yield put({
-      //   type: "UPDATE_ROW",
-      //   payload: res.data,
-      // });
+      yield put({
+        type: "GET_ROW_REQUESTED",
+        payload: {
+          action: action.payload.actionApi,
+          ID: { name: action.payload.name },
+          locale: action.payload.locale,
+        },
+      });
     }
   } catch (e) {
     console.log(e);
@@ -232,5 +262,6 @@ function* listSaga() {
   yield takeLatest("SEARCH_ROW_REQUESTED", searchRow);
   yield takeLatest("SET_LOCALE_REQUESTED", setLocate);
   yield takeLatest("UPDATE_SNIPPETS_REQUESTED", updateSnippets);
+  yield takeLatest("DELETE_SNIPPETS_REQUESTED", deleteSnippets);
 }
 export default listSaga;

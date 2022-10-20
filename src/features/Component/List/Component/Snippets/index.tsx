@@ -1,13 +1,9 @@
 import {
   Button,
-  Card,
-  Col,
   Form,
   Input,
-  List,
   Modal,
   Popconfirm,
-  Row,
   Select,
   Steps,
   Table,
@@ -15,19 +11,18 @@ import {
 import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import style from "../../style.module.scss";
-import { useAppSelector } from "../../../../../app/hooks";
-import { selectData } from "../../../../../app/store";
 
-import typeMap from "./typeMap";
 import { v4 as uuid } from "uuid";
 import { callApi } from "../../../../../Api/Axios";
 import Cookies from "js-cookie";
 import openNotificationWithIcon from "../../../../function/toast";
 import SnippetsForm from "./SnippetForm";
+import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
+import { selectData } from "../../../../../app/store";
 
 export interface SnippetsProps {
   data: [any];
-  pageName: string | number;
+  pageName: String | number;
 }
 const { Step } = Steps;
 
@@ -37,6 +32,10 @@ const Snippets = ({ data, pageName }: SnippetsProps) => {
   const [snippets, setSnippets] = useState<any>();
 
   const [current, setCurrent] = useState<any>(false);
+  const dispatch = useAppDispatch();
+
+  const actionApi = useAppSelector(selectData).actionApi;
+  const locale = useAppSelector(selectData).locale;
 
   const snippetMap = {
     SnippetGalleries: "Khối hình ảnh",
@@ -75,23 +74,28 @@ const Snippets = ({ data, pageName }: SnippetsProps) => {
         <div>
           <Popconfirm
             onConfirm={() => {
-              // dispatch({
-              //   type: "DELETE_REQUESTED",
-              //   payload: {
-              //     id: record.id,
-              //     name: record?.name,
-              //     action: actionApi,
-              //   },
-              // });
+              dispatch({
+                type: "DELETE_SNIPPETS_REQUESTED",
+                payload: {
+                  data: {
+                    snippet_name: record["snippet_name"],
+
+                    page_name: pageName,
+                  },
+                  actionApi,
+                  name: pageName,
+                  locale,
+                },
+              });
             }}
-            title='Bạn muốn xóa thông tin này ?'
-            okText='Xóa'
-            cancelText='Hủy'
+            title="Bạn muốn xóa thông tin này ?"
+            okText="Xóa"
+            cancelText="Hủy"
           >
-            <Button size='small'>Xóa</Button>
+            <Button size="small">Xóa</Button>
           </Popconfirm>
           <Button
-            size='small'
+            size="small"
             onClick={() => {
               setSnippets({
                 key: record.key,
@@ -128,7 +132,11 @@ const Snippets = ({ data, pageName }: SnippetsProps) => {
               .catch((err) => console.log(err));
 
             if (res.status === 1) {
-              setSnippets({ key: value.key });
+              setSnippets({
+                key: value.key,
+                pageName,
+                name: value["snippet_name"],
+              });
               setCurrent(1);
             }
             if (res.status === 0) {
@@ -142,22 +150,22 @@ const Snippets = ({ data, pageName }: SnippetsProps) => {
           labelCol={{ span: 4 }}
         >
           <Form.Item
-            label='Tên Khối dữ liệu'
+            label="Tên Khối dữ liệu"
             rules={[
               { required: true, message: "Không được bỏ trống trường này!" },
             ]}
-            name='snippet_name'
+            name="snippet_name"
           >
-            <Input placeholder='Tên Khối dữ liệu' type='text' />
+            <Input placeholder="Tên Khối dữ liệu" type="text" />
           </Form.Item>
           <Form.Item
-            label='Chọn kiểu khối'
+            label="Chọn kiểu khối"
             rules={[
               { required: true, message: "Không được bỏ trống trường này!" },
             ]}
-            name='key'
+            name="key"
           >
-            <Select placeholder='Chọn kiểu khối'>
+            <Select placeholder="Chọn kiểu khối">
               {snipArr?.map((snip) => (
                 <Select.Option value={snip.key}>
                   {snippetMap[snip.key]}
@@ -166,7 +174,7 @@ const Snippets = ({ data, pageName }: SnippetsProps) => {
             </Select>
           </Form.Item>
           <Form.Item>
-            <Button htmlType='submit' type='primary'>
+            <Button htmlType="submit" type="primary">
               Xác Nhận
             </Button>
           </Form.Item>
@@ -175,7 +183,13 @@ const Snippets = ({ data, pageName }: SnippetsProps) => {
     },
     {
       title: "Cập nhật dữ liệu cho khối ",
-      content: <SnippetsForm snippets={snippets} />,
+      content: (
+        <SnippetsForm
+          setIsModalOpen={setIsModalOpen}
+          setCurrent={setCurrent}
+          snippets={snippets}
+        />
+      ),
     },
   ];
 
@@ -214,7 +228,7 @@ const Snippets = ({ data, pageName }: SnippetsProps) => {
         Tạo khối nội dung
       </Button>
       <Modal
-        width='70vw'
+        width="70vw"
         open={isModalOpen}
         onCancel={() => {
           setIsModalOpen(false);
@@ -234,7 +248,11 @@ const Snippets = ({ data, pageName }: SnippetsProps) => {
             </div>
           </>
         ) : (
-          <SnippetsForm snippets={snippets} />
+          <SnippetsForm
+            setIsModalOpen={setIsModalOpen}
+            setCurrent={setCurrent}
+            snippets={snippets}
+          />
         )}
       </Modal>
     </>

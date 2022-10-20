@@ -128,3 +128,9 @@
     height: 150px;
     object-fit: cover;
 }
+
+.snipHeader {
+    &>div {
+        margin-right: 10px;
+    }
+}
