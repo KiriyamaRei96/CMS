@@ -172,6 +172,33 @@ function* updateRow(action) {
     console.log(e);
   }
 }
+function* updateSnippets(action) {
+  const data = new URLSearchParams(action.payload).toString();
+  yield put({ type: "TABLE_LOADING" });
+  try {
+    const res = yield callApi({
+      method: "PUT",
+      url: "v1/snippet/update",
+      headers,
+      data: data,
+    })
+      .then((res) => res.data)
+      .catch((err) => console.log(err));
+    if (res.status === 1) {
+      openNotificationWithIcon(
+        "success",
+        "Cập nhật thông tin thành công",
+        "bạn đã cập nhật thông tin thành công"
+      );
+      // yield put({
+      //   type: "UPDATE_ROW",
+      //   payload: res.data,
+      // });
+    }
+  } catch (e) {
+    console.log(e);
+  }
+}
 function* setLocate(action) {
   const langArr = new URLSearchParams();
   // yield put({ type: "TABLE_LOADING" });
@@ -204,5 +231,6 @@ function* listSaga() {
   yield takeLatest("GET_ROW_REQUESTED", getRow);
   yield takeLatest("SEARCH_ROW_REQUESTED", searchRow);
   yield takeLatest("SET_LOCALE_REQUESTED", setLocate);
+  yield takeLatest("UPDATE_SNIPPETS_REQUESTED", updateSnippets);
 }
 export default listSaga;

@@ -124,7 +124,7 @@ const List = memo((props: ListProps) => {
                   dispatch({
                     type: "DELETE_REQUESTED",
                     payload: {
-                      id: record.id,
+                      id: record.id ? record.id : record.name,
                       name: record?.name,
                       action: actionApi,
                     },

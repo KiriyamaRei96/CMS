@@ -58,8 +58,8 @@ export const Fetcher = createSlice({
         state.storeState = "success";
       })
       .addCase("DELETE_ROW", (state, action: any) => {
-        state.infoArray = state.infoArray.filter(
-          (obj) => obj.id !== action.payload
+        state.infoArray = state.infoArray.filter((obj) =>
+          obj.id ? obj.id !== action.payload : obj.name !== action.payload
         );
         state.storeState = "success";
       })
