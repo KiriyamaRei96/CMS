@@ -100,13 +100,14 @@ function* getRow(action) {
 }
 function* searchRow(action) {
   yield put({ type: "TABLE_LOADING" });
+  const cookie = Cookies.get("token");
   try {
     const res = yield callApi({
       method: "GET",
       url:
         action.payload.action +
         `/gets?limit=${action.payload.limit}&page=${action.payload.page}&locale=${action.payload.locale}&search=${action.payload.search}`,
-      headers,
+      headers: { Authorization: cookie },
     })
       .then((res) => res.data)
       .catch((err) => console.log(err));
@@ -126,11 +127,12 @@ function* searchRow(action) {
 function* addRow(action) {
   const createTile = new URLSearchParams(action.payload.title).toString();
   yield put({ type: "TABLE_LOADING" });
+  const cookie = Cookies.get("token");
   try {
     const res = yield callApi({
       method: "POST",
       url: action.payload.action + "/create",
-      headers,
+      headers: { Authorization: cookie },
       data: createTile,
     })
       .then((res) => res.data)
@@ -174,12 +176,13 @@ function* updateRow(action) {
 }
 function* deleteSnippets(action) {
   const data = new URLSearchParams(action.payload.data).toString();
+  const cookie = Cookies.get("token");
   yield put({ type: "TABLE_LOADING" });
   try {
     const res = yield callApi({
       method: "DELETE",
       url: "v1/snippet/delete",
-      headers,
+      headers: { Authorization: cookie },
       data,
     })
       .then((res) => res.data)
