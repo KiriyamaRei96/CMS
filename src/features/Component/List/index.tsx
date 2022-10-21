@@ -46,6 +46,14 @@ const List = memo((props: ListProps) => {
               ),
             };
           }
+          if (key == "role") {
+            menuObj = {
+              title: titleMap[key],
+              dataIndex: key,
+              key: key,
+              render: (value) => <span color='green'>{value?.name}</span>,
+            };
+          }
           if (
             typeof infoArray[0][key] === "string" ||
             typeof infoArray[0][key] === "number"
@@ -101,7 +109,7 @@ const List = memo((props: ListProps) => {
                   </Tag>
                 ) : (
                   <Tag key={uuid()} color='red'>
-                    {value?.title}
+                    {value?.title ? value?.title : `Chưa có ${titleMap[key]}`}
                   </Tag>
                 ),
             };
@@ -326,6 +334,29 @@ const List = memo((props: ListProps) => {
             },
           });
           setName("Quản lý trang");
+
+          break;
+
+        case "/UserManager/roleList":
+          dispatch({
+            type: "USER_FETCH_REQUESTED",
+            payload: {
+              getApi: "v1/system/role/gets?limit=10&page=1&search=",
+              actionApi: "v1/system/role",
+            },
+          });
+          setName("Quản quyền truy cập");
+
+          break;
+        case "/UserManager/userList":
+          dispatch({
+            type: "USER_FETCH_REQUESTED",
+            payload: {
+              getApi: "v1/system/user/gets?limit=10&page=1&search=",
+              actionApi: "v1/system/user",
+            },
+          });
+          setName("Danh sách người dùng");
 
           break;
       }

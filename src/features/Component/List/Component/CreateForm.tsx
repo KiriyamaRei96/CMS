@@ -19,12 +19,14 @@ import style from "../style.module.scss";
 import clsx from "clsx";
 import { callApi } from "../../../../Api/Axios";
 import Cookies from "js-cookie";
-import moment from "moment";
+import moment, { now } from "moment";
 import { UploadOutlined } from "@ant-design/icons";
 import { RcFile } from "antd/lib/upload";
 import getCookie from "../../../../Api/getCookie";
 import GoogleMapReact from "google-map-react";
 import Snippets from "./Snippets";
+import { useLocation } from "react-router-dom";
+import Permissions from "./Permissions";
 export interface CreateFormProps {
   setIsModalOpen?: any;
   setCurrent?: any;
@@ -43,6 +45,7 @@ const CreateForm = ({
   const actionApi = useAppSelector(selectData).actionApi;
   const locale = useAppSelector(selectData).locale;
   const localeArr = useAppSelector(selectData).localeArr;
+  const location = useLocation().pathname;
 
   const dispatch = useAppDispatch();
   const [data, setData] = useState<any>();
@@ -62,23 +65,27 @@ const CreateForm = ({
   }, [id]);
   useEffect(() => {
     if (data?.category !== undefined) {
-      getSelectList("v1/category/gets?limit=10&page=1&search=");
+      getSelectList("v1/category/gets?limit=1000&page=1&search=");
     } else if (data?.pointType !== undefined) {
-      getSelectList("v1/point-type/gets?limit=10&page=1&search=");
+      getSelectList("v1/point-type/gets?limit=1000&page=1&search=");
     } else if (data?.hotelType !== undefined) {
-      getSelectList("v1/hotel-type/gets?limit=10&page=1&search=");
+      getSelectList("v1/hotel-type/gets?limit=1000&page=1&search=");
     } else if (data?.utilitiesType !== undefined) {
-      getSelectList("v1/utilities-type/gets?limit=10&page=1&search=");
+      getSelectList("v1/utilities-type/gets?limit=1000&page=1&search=");
     } else if (data?.restaurantType !== undefined) {
-      getSelectList("v1/restaurant-type/gets?limit=10&page=1&search=");
+      getSelectList("v1/restaurant-type/gets?limit=1000&page=1&search=");
+    }
+    if (data?.role !== undefined) {
+      getSelectList("/v1/system/role/gets?limit=1000&page=1&search=");
     }
   }, [data, typeOption, id]);
 
   useEffect(() => {
     setTypeOption(false);
+
     if (storeSate !== "loading") {
       if (id) {
-        typeof id === "number"
+        dataItem[dataItem.findIndex((obj) => obj.id === id)]
           ? setData(dataItem[dataItem.findIndex((obj) => obj.id === id)])
           : setData(dataItem[dataItem.findIndex((obj) => obj.name === id)]);
       }
@@ -96,10 +103,14 @@ const CreateForm = ({
           .get(getApi, { headers: { Authorization: cookie } })
           .then((response) => response.data)
           .catch((err) => console.log(err));
-
+        console.log(result.data);
         const option = result.data.map((obj) => {
-          if (obj?.title) {
-            return <Select.Option value={obj.id}>{obj?.title}</Select.Option>;
+          if (obj?.title || obj?.name) {
+            return (
+              <Select.Option key={uuid()} value={obj.id}>
+                {obj?.title ? obj?.title : obj?.name}
+              </Select.Option>
+            );
           }
         });
         setTypeOption(option);
@@ -107,6 +118,7 @@ const CreateForm = ({
         console.log(err);
       }
   };
+
   const key = process.env.REACT_APP_GOOGLE_KEY;
   return (
     <>
@@ -120,12 +132,15 @@ const CreateForm = ({
               }
             });
             const info = { ...data, ...value };
-
+            if (info.date === null) {
+              info.date = moment();
+            }
             info.date = moment(info.date, "DD-MM-YYYY").format("YYYY-MM-DD");
             if (info.featureImage !== undefined && info.featureImage !== null) {
               info.featureImage = data.featureImage.id;
             }
             info.locale = locale;
+
             dispatch({
               type: "UPDATE_ROW_REQUESTED",
               payload: {
@@ -286,10 +301,7 @@ const CreateForm = ({
                 name={"date"}
                 label='Thời gian cập nhật cuối'
               >
-                <DatePicker
-                  defaultPickerValue={moment()}
-                  key={uuid()}
-                ></DatePicker>
+                <DatePicker key={uuid()}></DatePicker>
               </Form.Item>
             ) : (
               false
@@ -418,9 +430,106 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"name"}
-                label='Định danh trang'
+                label='Định danh'
               >
                 <Input placeholder={data?.name}></Input>
+              </Form.Item>
+            ) : (
+              false
+            )}
+            {data.username !== undefined ? (
+              <Form.Item
+                className={clsx(style.formDes)}
+                key={uuid()}
+                label='Tên tài khoản'
+              >
+                <span>{data?.username}</span>
+              </Form.Item>
+            ) : (
+              false
+            )}
+            {data.firstname !== undefined ? (
+              <Form.Item
+                className={clsx(style.formDes)}
+                key={uuid()}
+                label='Họ và tên'
+              >
+                <div className='d-flex'>
+                  <Form.Item
+                    name={"firstname"}
+                    style={{
+                      display: "inline-block",
+                      width: "calc(50% - 8px)",
+                    }}
+                  >
+                    <Input placeholder={data.firstname} />
+                  </Form.Item>
+                  <Form.Item
+                    name='lastname'
+                    style={{
+                      display: "inline-block",
+                      width: "calc(50% - 8px)",
+                    }}
+                  >
+                    <Input placeholder={data.lastname} />
+                  </Form.Item>
+                </div>
+              </Form.Item>
+            ) : (
+              false
+            )}
+            {data.email !== undefined ? (
+              <Form.Item
+                className={clsx(style.formDes)}
+                key={uuid()}
+                name={"email"}
+                label='Email'
+              >
+                <Input placeholder={data?.email}></Input>
+              </Form.Item>
+            ) : (
+              false
+            )}
+            {data.phone !== undefined ? (
+              <Form.Item
+                className={clsx(style.formDes)}
+                key={uuid()}
+                name={"content"}
+                label='Số điện thoại'
+              >
+                <Input placeholder={data?.phone}></Input>
+              </Form.Item>
+            ) : (
+              false
+            )}
+            {data.firstname !== undefined ? (
+              <Form.Item
+                className={clsx(style.formDes)}
+                key={uuid()}
+                name={"password"}
+                label='Mật khẩu'
+              >
+                <Input></Input>
+              </Form.Item>
+            ) : (
+              false
+            )}
+            {data.role !== undefined ? (
+              <Form.Item
+                className={clsx(style.formDes)}
+                key={uuid()}
+                name={"role"}
+                label={"Nhóm quyền"}
+              >
+                <Select
+                  defaultValue={
+                    data?.role?.id !== null ? data?.role?.id : undefined
+                  }
+                  placeholder={"Chọn Nhóm quyền"}
+                  loading={!typeOption}
+                >
+                  {typeOption}
+                </Select>
               </Form.Item>
             ) : (
               false
@@ -433,13 +542,12 @@ const CreateForm = ({
               key={uuid()}
               name={"content"}
               label='Nội dung'
+              initialValue={data.content}
             >
               <ReactQuill
                 theme='snow'
                 className={clsx(style.quill)}
-                value={data.content}
-                placeholder={data.content}
-                defaultValue={"text text text"}
+                value='react'
               ></ReactQuill>
             </Form.Item>
           ) : (
@@ -505,6 +613,25 @@ const CreateForm = ({
               label='Khối nội dung'
             >
               <Snippets data={data?.snippets} pageName={data?.name}></Snippets>
+            </Form.Item>
+          ) : (
+            false
+          )}
+          {location.includes("UserManager") ? (
+            <Form.Item
+              className={clsx(style.formItem)}
+              key={uuid()}
+              label='Chọn quyền truy cập'
+            >
+              <Permissions
+                id={
+                  data.firstname
+                    ? {
+                        user_id: data.id,
+                      }
+                    : { role_id: data.id }
+                }
+              />
             </Form.Item>
           ) : (
             false

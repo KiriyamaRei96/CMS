@@ -49,18 +49,23 @@ const TableItems = memo(({ columns }: TableProps) => {
       title: "Tạo tiêu đề thông tin",
       content: (
         <Form key={uuid()} onFinish={addRow} layout='inline'>
-          <Form.Item
-            label='Tiêu đề thông tin'
-            rules={[
-              { required: true, message: "Không được bỏ trống trường này!" },
-            ]}
-            name='title'
-          >
-            <Input type='text' />
-          </Form.Item>
-          {actionApi === "v1/page" ? (
+          {!actionApi?.includes("system") ? (
             <Form.Item
-              label='Định danh trang'
+              label='Tiêu đề thông tin'
+              rules={[
+                { required: true, message: "Không được bỏ trống trường này!" },
+              ]}
+              name='title'
+            >
+              <Input type='text' />
+            </Form.Item>
+          ) : (
+            false
+          )}
+
+          {actionApi === "v1/page" || actionApi?.includes("system") ? (
+            <Form.Item
+              label='Định danh '
               rules={[
                 { required: true, message: "Không được bỏ trống trường này!" },
               ]}

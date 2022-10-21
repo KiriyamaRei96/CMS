@@ -51,6 +51,28 @@ const SideBar = memo((props: SideBarProps) => {
             ],
           },
           {
+            key: "Quản trị người dùng",
+            title: "Quản trị người dùng",
+            icon: <i className='fa-solid fa-users-gear'></i>,
+            label: <span>Quản trị người dùng</span>,
+            children: [
+              {
+                key: uuid(),
+                title: "Danh sách người dùng",
+                label: (
+                  <Link to='UserManager/userList'>Danh sách người dùng</Link>
+                ),
+              },
+              {
+                key: uuid(),
+                title: "Danh sách nhóm quyền",
+                label: (
+                  <Link to='UserManager/roleList'>Danh sách nhóm quyền</Link>
+                ),
+              },
+            ],
+          },
+          {
             key: uuid(),
             title: "Quản lý chung",
             icon: <i className='fa-solid fa-gear'></i>,

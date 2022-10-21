@@ -34,6 +34,10 @@ root.render(
           <Route path='Statistic/businessUnit' element={<DashBroad />} />
 
           <Route path='Statistic/placeInfo' element={<DashBroad />} />
+          {/* quản lý người dùng  */}
+          <Route path='UserManager/userList' element={<List />} />
+          <Route path='UserManager/roleList' element={<List />} />
+
           {/* quản lý chung  */}
           <Route path='Manage/newsCategory' element={<List />} />
           <Route path='Manage/utilitiesType' element={<List />} />
