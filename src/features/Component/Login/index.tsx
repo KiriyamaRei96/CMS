@@ -6,7 +6,7 @@ import { Button, Form, Input } from "antd";
 import { userInfoSelector } from "./slice/UserSlice";
 import { useNavigate } from "react-router-dom";
 import getCookie from "../../../Api/getCookie";
-import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 export interface LoginProps {}
 
 const Login = memo((props: LoginProps) => {

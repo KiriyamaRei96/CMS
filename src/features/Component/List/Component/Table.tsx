@@ -2,13 +2,13 @@ import { Button, Form, Input, Modal, Pagination, Skeleton, Steps } from "antd";
 import { ColumnsType } from "antd/lib/table";
 import React, { memo, useEffect, useState } from "react";
 import { Table } from "antd";
-import { selectData } from "../../../../app/store";
+import { selectData } from "../../../../store/store";
 
 import { infoObj } from "../slice/slice";
 import style from "../style.module.scss";
 import clsx from "clsx";
 import { v4 as uuid } from "uuid";
-import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import CreateForm from "./CreateForm";
 export interface TableProps {
   columns: any;

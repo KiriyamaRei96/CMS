@@ -9,7 +9,7 @@ import {
 } from "./features/Component/Login/slice/UserSlice";
 import { useEffect } from "react";
 import getCookie from "./Api/getCookie";
-import { useAppDispatch, useAppSelector } from "./app/hooks";
+import { useAppDispatch, useAppSelector } from "./store/hooks";
 
 function App() {
   const loginState = useAppSelector(userInfoSelector).isLogin;

@@ -4,7 +4,7 @@ import style from "../style.module.scss";
 
 import { userInfoSelector } from "../../Login/slice/UserSlice";
 import { Skeleton } from "antd";
-import { useAppSelector } from "../../../../app/hooks";
+import { useAppSelector } from "../../../../store/hooks";
 export interface InfoProps {}
 
 const Info = memo((props: InfoProps) => {

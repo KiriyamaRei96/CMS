@@ -6,7 +6,7 @@ import { Menu } from "antd";
 
 import style from "./style.module.scss";
 import { Link, Outlet } from "react-router-dom";
-import { useAppSelector } from "../../../app/hooks";
+import { useAppSelector } from "../../../store/hooks";
 export interface UserInfoProps {}
 
 const UserInfo = memo((props: UserInfoProps) => {
@@ -18,22 +18,22 @@ const UserInfo = memo((props: UserInfoProps) => {
         defaultSelectedKeys={[
           userInfo?.phone === null ? "update info" : "Info",
         ]}
-        mode="inline"
+        mode='inline'
         items={[
           {
             key: "Info",
             title: "Thông tin người dùng",
-            label: <Link to="/UserInfo">Thông tin người dùng </Link>,
+            label: <Link to='/UserInfo'>Thông tin người dùng </Link>,
           },
           {
             key: "update info",
             title: "Cập nhật thông tin",
-            label: <Link to="/UserInfo/updateInfo">Cập nhật thông tin </Link>,
+            label: <Link to='/UserInfo/updateInfo'>Cập nhật thông tin </Link>,
           },
           {
             key: "change password",
             title: "Thay đổi mật khẩu",
-            label: <Link to="/UserInfo/changePass">Thay đổi mật khẩu </Link>,
+            label: <Link to='/UserInfo/changePass'>Thay đổi mật khẩu </Link>,
           },
         ]}
       ></Menu>

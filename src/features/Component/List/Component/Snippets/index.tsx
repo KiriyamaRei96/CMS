@@ -17,8 +17,8 @@ import { callApi } from "../../../../../Api/Axios";
 import Cookies from "js-cookie";
 import openNotificationWithIcon from "../../../../function/toast";
 import SnippetsForm from "./SnippetForm";
-import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
-import { selectData } from "../../../../../app/store";
+import { useAppDispatch, useAppSelector } from "../../../../../store/hooks";
+import { selectData } from "../../../../../store/store";
 
 export interface SnippetsProps {
   data: [any];
@@ -88,14 +88,14 @@ const Snippets = ({ data, pageName }: SnippetsProps) => {
                 },
               });
             }}
-            title="Bạn muốn xóa thông tin này ?"
-            okText="Xóa"
-            cancelText="Hủy"
+            title='Bạn muốn xóa thông tin này ?'
+            okText='Xóa'
+            cancelText='Hủy'
           >
-            <Button size="small">Xóa</Button>
+            <Button size='small'>Xóa</Button>
           </Popconfirm>
           <Button
-            size="small"
+            size='small'
             onClick={() => {
               setSnippets({
                 key: record.key,
@@ -150,22 +150,22 @@ const Snippets = ({ data, pageName }: SnippetsProps) => {
           labelCol={{ span: 4 }}
         >
           <Form.Item
-            label="Tên Khối dữ liệu"
+            label='Tên Khối dữ liệu'
             rules={[
               { required: true, message: "Không được bỏ trống trường này!" },
             ]}
-            name="snippet_name"
+            name='snippet_name'
           >
-            <Input placeholder="Tên Khối dữ liệu" type="text" />
+            <Input placeholder='Tên Khối dữ liệu' type='text' />
           </Form.Item>
           <Form.Item
-            label="Chọn kiểu khối"
+            label='Chọn kiểu khối'
             rules={[
               { required: true, message: "Không được bỏ trống trường này!" },
             ]}
-            name="key"
+            name='key'
           >
-            <Select placeholder="Chọn kiểu khối">
+            <Select placeholder='Chọn kiểu khối'>
               {snipArr?.map((snip) => (
                 <Select.Option value={snip.key}>
                   {snippetMap[snip.key]}
@@ -174,7 +174,7 @@ const Snippets = ({ data, pageName }: SnippetsProps) => {
             </Select>
           </Form.Item>
           <Form.Item>
-            <Button htmlType="submit" type="primary">
+            <Button htmlType='submit' type='primary'>
               Xác Nhận
             </Button>
           </Form.Item>
@@ -228,7 +228,7 @@ const Snippets = ({ data, pageName }: SnippetsProps) => {
         Tạo khối nội dung
       </Button>
       <Modal
-        width="70vw"
+        width='70vw'
         open={isModalOpen}
         onCancel={() => {
           setIsModalOpen(false);

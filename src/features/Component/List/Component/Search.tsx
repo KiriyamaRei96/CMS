@@ -2,8 +2,8 @@ import React, { memo, useState } from "react";
 import clsx from "clsx";
 import style from "../style.module.scss";
 import { Button, Form, Input, Select } from "antd";
-import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
-import { selectData } from "../../../../app/store";
+import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
+import { selectData } from "../../../../store/store";
 import { setLocate } from "../slice/slice";
 
 export interface SearchProps {

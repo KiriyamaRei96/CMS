@@ -4,7 +4,7 @@ import clsx from "clsx";
 import style from "../style.module.scss";
 
 import { userInfoSelector } from "../../Login/slice/UserSlice";
-import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 
 export interface ChangePassProps {}
 
@@ -18,7 +18,7 @@ export function ChangePass(props: ChangePassProps) {
   };
   return (
     <div className={clsx(style.form)}>
-      <Form form={form} onFinish={onFinish} layout="vertical">
+      <Form form={form} onFinish={onFinish} layout='vertical'>
         <Form.Item
           style={{ margin: "10px" }}
           rules={[
@@ -44,10 +44,10 @@ export function ChangePass(props: ChangePassProps) {
               },
             }),
           ]}
-          name="current_password"
-          label="Mật khẩu hiện tại"
+          name='current_password'
+          label='Mật khẩu hiện tại'
         >
-          <Input type="text" />
+          <Input type='text' />
         </Form.Item>
         <Form.Item
           style={{ margin: "10px" }}
@@ -64,9 +64,9 @@ export function ChangePass(props: ChangePassProps) {
               },
             }),
           ]}
-          name="new_password"
+          name='new_password'
           hasFeedback
-          label="Mật khẩu mới"
+          label='Mật khẩu mới'
         >
           <Input.Password />
         </Form.Item>
@@ -96,15 +96,15 @@ export function ChangePass(props: ChangePassProps) {
               },
             }),
           ]}
-          name="confirm_password"
+          name='confirm_password'
           hasFeedback
-          label="Nhập lại mật khẩu"
+          label='Nhập lại mật khẩu'
         >
           <Input.Password />
         </Form.Item>
 
         <Form.Item style={{ margin: "10px" }}>
-          <Button htmlType="submit" type="primary">
+          <Button htmlType='submit' type='primary'>
             Xác Nhận
           </Button>
         </Form.Item>

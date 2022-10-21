@@ -2,8 +2,8 @@ import { Select } from "antd";
 import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
 import { callApi } from "../../../../Api/Axios";
-import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
-import { selectData } from "../../../../app/store";
+import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
+import { selectData } from "../../../../store/store";
 import clsx from "clsx";
 import style from "../style.module.scss";
 export interface LanguageProps {}
