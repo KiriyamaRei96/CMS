@@ -11,9 +11,10 @@ export interface PermissionsProps {
 
 const Permissions = ({ id }: PermissionsProps) => {
   const [option, setOption] = useState<any>();
-  useEffect(() => {
-    const cookie = Cookies.get("token");
+  const [permission, setPermission] = useState<any>();
+  const cookie = Cookies.get("token");
 
+  useEffect(() => {
     (async () => {
       if (!option) {
         const permissionsArr = await callApi
@@ -47,12 +48,41 @@ const Permissions = ({ id }: PermissionsProps) => {
         )
         .then((res) => res.data)
         .catch((err) => console.error(err));
-      console.log(currentPermis);
+      if (currentPermis.status === 1) {
+        setPermission(Object.keys(currentPermis.data));
+      }
     })();
   }, [id]);
+
   return (
     <div>
-      <Select mode='multiple'>{option}</Select>
+      <Select
+        onChange={async (value) => {
+          const permissionData = {};
+
+          value.forEach((item) => {
+            permissionData[`permissions[${item}]`] = true;
+          });
+          if (Object.keys(permissionData).length === 0) {
+            permissionData["permission[null]"] = null;
+          }
+          const changepermis = await callApi
+            .put(
+              `v1/system/permission/update`,
+              { ...id, ...permissionData },
+              { headers: { Authorization: cookie } }
+            )
+            .then((res) => res.data)
+            .catch((err) => console.error(err));
+          if (changepermis.status === 1) {
+            setPermission(value);
+          }
+        }}
+        value={permission}
+        mode="multiple"
+      >
+        {option}
+      </Select>
     </div>
   );
 };

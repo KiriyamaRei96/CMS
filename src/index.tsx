@@ -23,41 +23,41 @@ root.render(
     {/* <React.StrictMode> */}
     <Provider store={store}>
       <Routes>
-        <Route path='login' element={<Login />} />
+        <Route path="login" element={<Login />} />
         <Route element={<App />}>
           <Route index element={<DashBroad />} />
-          <Route path='UserInfo' element={<UserInfo />}>
+          <Route path="UserInfo" element={<UserInfo />}>
             <Route index element={<Info />} />
-            <Route path='/UserInfo/updateInfo' element={<UpdateInfo />} />
-            <Route path='/UserInfo/changePass' element={<ChangePass />} />
+            <Route path="/UserInfo/updateInfo" element={<UpdateInfo />} />
+            <Route path="/UserInfo/changePass" element={<ChangePass />} />
           </Route>
-          <Route path='Statistic/businessUnit' element={<DashBroad />} />
+          <Route path="Statistic/businessUnit" element={<DashBroad />} />
 
-          <Route path='Statistic/placeInfo' element={<DashBroad />} />
+          <Route path="Statistic/placeInfo" element={<DashBroad />} />
           {/* quản lý người dùng  */}
-          <Route path='UserManager/userList' element={<List />} />
-          <Route path='UserManager/roleList' element={<List />} />
+          <Route path="UserManager/userList" element={<List />} />
+          <Route path="UserManager/roleList" element={<List />} />
 
           {/* quản lý chung  */}
-          <Route path='Manage/newsCategory' element={<List />} />
-          <Route path='Manage/utilitiesType' element={<List />} />
-          <Route path='Manage/System' element={<System />} />
+          <Route path="Manage/newsCategory" element={<List />} />
+          <Route path="Manage/utilitiesType" element={<List />} />
+          <Route path="Manage/System" element={<System />} />
 
           {/* quảng lý nội dung  */}
-          <Route path='ContentManage/CityList' element={<DashBroad />} />
-          <Route path='ContentManage/utilities' element={<List />} />
-          <Route path='ContentManage/placeList' element={<List />} />
-          <Route path='ContentManage/news' element={<List />} />
-          <Route path='ContentManage/events' element={<List />} />
-          <Route path='ContentManage/placeType' element={<List />} />
-          <Route path='Pages' element={<List />} />
+          <Route path="ContentManage/CityList" element={<List />} />
+          <Route path="ContentManage/utilities" element={<List />} />
+          <Route path="ContentManage/placeList" element={<List />} />
+          <Route path="ContentManage/news" element={<List />} />
+          <Route path="ContentManage/events" element={<List />} />
+          <Route path="ContentManage/placeType" element={<List />} />
+          <Route path="Pages" element={<List />} />
 
-          <Route path='ContentManage/hotelType' element={<List />} />
-          <Route path='ContentManage/hotelList' element={<List />} />
-          <Route path='ContentManage/restaurantType' element={<List />} />
-          <Route path='ContentManage/restaurantList' element={<List />} />
-          <Route path='ContentManage/tour' element={<List />} />
-          <Route path='ContentManage/travelCompanies' element={<List />} />
+          <Route path="ContentManage/hotelType" element={<List />} />
+          <Route path="ContentManage/hotelList" element={<List />} />
+          <Route path="ContentManage/restaurantType" element={<List />} />
+          <Route path="ContentManage/restaurantList" element={<List />} />
+          <Route path="ContentManage/tour" element={<List />} />
+          <Route path="ContentManage/travelCompanies" element={<List />} />
         </Route>
       </Routes>
     </Provider>

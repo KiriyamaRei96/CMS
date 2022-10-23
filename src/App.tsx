@@ -10,10 +10,12 @@ import {
 import { useEffect } from "react";
 import getCookie from "./Api/getCookie";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
+import { selectData } from "./store/store";
 
 function App() {
   const loginState = useAppSelector(userInfoSelector).isLogin;
   const UserState = useAppSelector(userInfoSelector).info;
+  const parentID = useAppSelector(selectData).parentID;
 
   const navigate = useNavigate();
 
@@ -40,11 +42,11 @@ function App() {
     dispatch({
       type: "GET_LOCALE_REQUESTED",
     });
-  }, []);
+  }, [parentID]);
   return (
-    <div className='App d-flex'>
+    <div className="App d-flex">
       <Header></Header>
-      <div className='Cotainer '>
+      <div className="Cotainer ">
         <SideBar></SideBar>
         <Outlet></Outlet>
       </div>

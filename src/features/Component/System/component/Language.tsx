@@ -27,7 +27,7 @@ const Language = (props: LanguageProps) => {
               <img
                 className={clsx(style.icon)}
                 src={result.data[key]?.icon}
-                alt=''
+                alt=""
               />
               <span>{result.data[key]?.title}</span>
             </>
@@ -49,8 +49,8 @@ const Language = (props: LanguageProps) => {
           })
         }
         className={clsx(style.select)}
-        size='large'
-        mode='multiple'
+        size="large"
+        mode="multiple"
         value={Object.keys(localeArr).map((key) => key)}
       >
         {languages}

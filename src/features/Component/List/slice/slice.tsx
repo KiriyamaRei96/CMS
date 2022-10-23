@@ -17,12 +17,14 @@ export interface InitSate {
   pagination?: Object;
   actionApi?: string;
   localeArr?: Object;
+  parentID?: string | number | null;
   locale: string;
 }
 const initialState: InitSate = {
   infoArray: [],
   localeArr: {},
   locale: "vi",
+  parentID: null,
 };
 export const Fetcher = createSlice({
   name: "Fetcher",
@@ -30,6 +32,12 @@ export const Fetcher = createSlice({
   reducers: {
     setLocate: (state, action) => {
       state.locale = action.payload;
+    },
+    setParentID: (state, action) => {
+      state.parentID = action.payload;
+    },
+    setActionApi: (state, action) => {
+      state.actionApi = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -67,7 +75,7 @@ export const Fetcher = createSlice({
         state.storeState = "success";
         state.infoArray = action.payload.itemArray;
         state.pagination = action.payload.pagination;
-        state.actionApi = action.payload.actionApi;
+
         return state;
       })
       .addCase("SEARCH-SUCCESS", (state, action: any) => {
@@ -81,4 +89,4 @@ export const Fetcher = createSlice({
       });
   },
 });
-export const { setLocate } = Fetcher.actions;
+export const { setLocate, setParentID, setActionApi } = Fetcher.actions;

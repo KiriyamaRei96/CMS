@@ -1,8 +1,9 @@
-import { call, put, take, takeLatest } from "redux-saga/effects";
+import { call, put, select, take, takeLatest } from "redux-saga/effects";
 
 import Cookies from "js-cookie";
 import { callApi } from "../../../../Api/Axios";
 import openNotificationWithIcon from "../../../function/toast";
+import { selectData } from "../../../../store/store";
 
 const headers = { Authorization: Cookies.get("token") };
 
@@ -10,6 +11,7 @@ function* fetchItem(action) {
   yield put({ type: "TABLE_LOADING" });
   try {
     const cookie = Cookies.get("token");
+
     const result = yield callApi
       .get(action.payload.getApi, { headers: { Authorization: cookie } })
       .then((response) => response.data)
@@ -33,11 +35,15 @@ function* fetchItem(action) {
   }
 }
 function* getLocale(action) {
+  const State = yield select(selectData);
   yield put({ type: "TABLE_LOADING" });
   try {
     const cookie = Cookies.get("token");
     const result = yield callApi
-      .get("/v1/languages/user-get", { headers: { Authorization: cookie } })
+      .get(`/v1/languages/user-get`, {
+        headers: { Authorization: cookie },
+        data: { parentUser: State.parentID },
+      })
       .then((response) => response.data)
       .catch((err) => console.log(err));
 
@@ -55,8 +61,12 @@ function* getLocale(action) {
   }
 }
 function* deleteRow(action) {
+  const State = yield select(selectData);
   try {
-    const deleteID = new URLSearchParams(action.payload).toString();
+    const deleteID = new URLSearchParams({
+      ...action.payload,
+      parentUser: State.parentID,
+    }).toString();
 
     const res = yield callApi({
       method: "DELETE",
@@ -72,6 +82,7 @@ function* deleteRow(action) {
   }
 }
 function* getRow(action) {
+  const State = yield select(selectData);
   try {
     const getID = new URLSearchParams(action.payload.ID).toString();
     const cookie = Cookies.get("token");
@@ -82,7 +93,9 @@ function* getRow(action) {
         "/get?" +
         getID +
         "&locale=" +
-        action.payload.locale,
+        action.payload.locale +
+        "&parentUser=" +
+        State.parentID,
       headers: { Authorization: cookie },
     })
       .then((res) => res.data)
@@ -101,12 +114,13 @@ function* getRow(action) {
 function* searchRow(action) {
   yield put({ type: "TABLE_LOADING" });
   const cookie = Cookies.get("token");
+  const State = yield select(selectData);
   try {
     const res = yield callApi({
       method: "GET",
       url:
         action.payload.action +
-        `/gets?limit=${action.payload.limit}&page=${action.payload.page}&locale=${action.payload.locale}&search=${action.payload.search}`,
+        `/gets?limit=${action.payload.limit}&page=${action.payload.page}&locale=${action.payload.locale}&search=${action.payload.search}&parentUser=${State.parentID}`,
       headers: { Authorization: cookie },
     })
       .then((res) => res.data)
@@ -125,7 +139,11 @@ function* searchRow(action) {
   }
 }
 function* addRow(action) {
-  const createTile = new URLSearchParams(action.payload.title).toString();
+  const State = yield select(selectData);
+  const createTile = new URLSearchParams({
+    ...action.payload.title,
+    parentUser: State.parentID,
+  }).toString();
   yield put({ type: "TABLE_LOADING" });
   const cookie = Cookies.get("token");
   try {
@@ -148,7 +166,11 @@ function* addRow(action) {
   }
 }
 function* updateRow(action) {
-  const createInfo = new URLSearchParams(action.payload.info).toString();
+  const State = yield select(selectData);
+  const createInfo = new URLSearchParams({
+    ...action.payload.info,
+    parentUser: State.parentID,
+  }).toString();
   yield put({ type: "TABLE_LOADING" });
   try {
     const res = yield callApi({
@@ -175,7 +197,11 @@ function* updateRow(action) {
   }
 }
 function* deleteSnippets(action) {
-  const data = new URLSearchParams(action.payload.data).toString();
+  const State = yield select(selectData);
+  const data = new URLSearchParams({
+    ...action.payload.data,
+    parentUser: State.parentID,
+  }).toString();
   const cookie = Cookies.get("token");
   yield put({ type: "TABLE_LOADING" });
   try {
@@ -202,7 +228,11 @@ function* deleteSnippets(action) {
   }
 }
 function* updateSnippets(action) {
-  const data = new URLSearchParams(action.payload.data).toString();
+  const State = yield select(selectData);
+  const data = new URLSearchParams({
+    ...action.payload.data,
+    parentUser: State.parentID,
+  }).toString();
   yield put({ type: "TABLE_LOADING" });
   try {
     const res = yield callApi({
@@ -233,15 +263,17 @@ function* updateSnippets(action) {
   }
 }
 function* setLocate(action) {
+  const State = yield select(selectData);
   const langArr = new URLSearchParams();
   // yield put({ type: "TABLE_LOADING" });
+  const cookie = Cookies.get("token");
   action.payload.forEach((lang) => langArr.append("languages[]", lang));
-
+  langArr.append("parentUser", State.parentID);
   try {
     const res = yield callApi({
       method: "PUT",
       url: "/v1/languages/change",
-      headers,
+      headers: { Authorization: cookie },
       data: langArr,
     })
       .then((res) => res.data)

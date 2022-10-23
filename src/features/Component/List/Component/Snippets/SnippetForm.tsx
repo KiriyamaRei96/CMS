@@ -32,6 +32,7 @@ const SnippetsForm = ({
   const [fileList, setFileList] = useState<any>();
   const [collums, setCollums] = useState<any>([]);
   const [info, setInfo] = useState<any>();
+  const parentID = useAppSelector(selectData).parentID;
 
   const dispatch = useAppDispatch();
   const actionApi = useAppSelector(selectData).actionApi;
@@ -68,7 +69,7 @@ const SnippetsForm = ({
           key: uuid(),
           render: (img) =>
             img ? (
-              <img className={clsx(style.img)} alt='' src={img.path}></img>
+              <img className={clsx(style.img)} alt="" src={img.path}></img>
             ) : (
               <span>không có hình ảnh</span>
             ),
@@ -153,7 +154,7 @@ const SnippetsForm = ({
       >
         <Input
           placeholder={snippets?.title ? snippets?.title : "Tiêu đề dữ liệu"}
-          type='text'
+          type="text"
         ></Input>
       </Form.Item>
 
@@ -165,8 +166,11 @@ const SnippetsForm = ({
           <Upload
             action={`${process.env.REACT_APP_CMS_API}/v1/asset/upload`}
             headers={{ Authorization: getCookie("token") }}
-            listType='picture-card'
+            listType="picture-card"
             fileList={fileList}
+            data={(file) => {
+              return { parentUser: parentID };
+            }}
             onChange={(e) => {
               setFileList(e.fileList);
 
@@ -213,11 +217,11 @@ const SnippetsForm = ({
                             prv.filter((item) => item.id !== record.id)
                           );
                         }}
-                        title='Bạn muốn xóa thông tin này ?'
-                        okText='Xóa'
-                        cancelText='Hủy'
+                        title="Bạn muốn xóa thông tin này ?"
+                        okText="Xóa"
+                        cancelText="Hủy"
                       >
-                        <Button size='small'>Xóa</Button>
+                        <Button size="small">Xóa</Button>
                       </Popconfirm>
                     </div>
                   ),
@@ -231,20 +235,6 @@ const SnippetsForm = ({
             label={"Lựa chọn nhóm thông tin"}
           >
             <Table
-              // rowSelection={{
-              //   type: "checkbox",
-              //   onChange: (selectedRowKeys: React.Key[], selectedRows) => {
-              //     const idList = fileList.map((item) => item.id);
-
-              //     if (selectedRows.length > 0) {
-              //       selectedRows.forEach((item) => {
-              //         if (!idList.includes(item.id)) {
-              //           setFileList((prv) => [item, ...prv]);
-              //         }
-              //       });
-              //     }
-              //   },
-              // }}
               pagination={{ pageSize: 5 }}
               dataSource={info?.map((item) => {
                 item.key = item.id;
@@ -257,7 +247,7 @@ const SnippetsForm = ({
                   key: "action",
                   render: (_, record) => (
                     <Button
-                      size='small'
+                      size="small"
                       onClick={() => {
                         const idList = fileList.map((item) => item.id);
                         if (!idList.includes(record.id)) {
@@ -277,7 +267,7 @@ const SnippetsForm = ({
         false
       )}
       <Form.Item>
-        <Button htmlType='submit' type='primary'>
+        <Button htmlType="submit" type="primary">
           Xác Nhận
         </Button>
       </Form.Item>

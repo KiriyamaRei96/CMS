@@ -6,14 +6,17 @@ import TableItems from "./Component/Table";
 
 import { useLocation } from "react-router-dom";
 import getCookie from "../../../Api/getCookie";
-import { Button, Modal, Popconfirm, Tag } from "antd";
+import { Select, Tag } from "antd";
 import { v4 as uuid } from "uuid";
 import { selectData } from "../../../store/store";
 import { userInfoSelector } from "../Login/slice/UserSlice";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import CreateForm from "./Component/CreateForm";
+
 import { titleMap } from "./titleMap";
-import { setLocate } from "./slice/slice";
+import { setActionApi, setLocate } from "./slice/slice";
+import Cookies from "js-cookie";
+import { callApi } from "../../../Api/Axios";
+import openNotificationWithIcon from "../../function/toast";
 
 export interface ListProps {}
 
@@ -24,11 +27,77 @@ const List = memo((props: ListProps) => {
   const infoArray = useAppSelector(selectData).infoArray;
   const actionApi = useAppSelector(selectData).actionApi;
   const locale = useAppSelector(selectData).locale;
+  const parentID = useAppSelector(selectData).parentID;
+  const infoRole = useAppSelector(userInfoSelector).info?.role;
 
   const [name, setName] = useState("");
   const [columns, setColumns] = useState(Array<any>);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [ID, setID] = useState();
+
+  const [typeOption, setTypeOption] = useState<any>();
+  const [city, setCity] = useState<any>();
+
+  useEffect(() => {
+    if (actionApi?.includes("news")) {
+      getSelectList(
+        `v1/category/gets?limit=1000&page=1&search=&parentUser=${parentID}`
+      );
+    } else if (actionApi?.includes("point")) {
+      getSelectList(
+        `v1/point-type/gets?limit=1000&page=1&search=&parentUser=${parentID}`
+      );
+    } else if (actionApi?.includes("hotel")) {
+      getSelectList(
+        `v1/hotel-type/gets?limit=1000&page=1&search=&parentUser=${parentID}`
+      );
+    } else if (actionApi?.includes("utilities")) {
+      getSelectList(
+        `v1/utilities-type/gets?limit=1000&page=1&search=&parentUser=${parentID}`
+      );
+    } else if (actionApi?.includes("restaurant")) {
+      getSelectList(
+        `v1/restaurant-type/gets?limit=1000&page=1&search=&parentUser=${parentID}`
+      );
+    }
+    if (actionApi?.includes("system")) {
+      getSelectList(
+        `/v1/system/role/gets?limit=1000&page=1&search=&parentUser=${parentID}`
+      );
+    }
+  }, [actionApi]);
+
+  const getSelectList = async (getApi, city = false) => {
+    try {
+      const cookie = Cookies.get("token");
+      const result = await callApi
+        .get(getApi, { headers: { Authorization: cookie } })
+        .then((response) => response.data)
+        .catch((err) => console.log(err));
+
+      const option = result.data.map((obj) => {
+        if (obj?.title || obj?.name) {
+          return (
+            <Select.Option key={uuid()} value={obj.id}>
+              {obj?.title ? obj?.title : obj?.name}
+            </Select.Option>
+          );
+        }
+        if (city && obj?.username) {
+          return (
+            <Select.Option key={uuid()} value={obj.id}>
+              {obj?.username}
+            </Select.Option>
+          );
+        }
+      });
+
+      if (city) {
+        setCity(option);
+      }
+      if (!city) {
+        setTypeOption(option);
+      }
+    } catch (err) {}
+  };
 
   useEffect(() => {
     if (infoArray.length > 0) {
@@ -51,7 +120,7 @@ const List = memo((props: ListProps) => {
               title: titleMap[key],
               dataIndex: key,
               key: key,
-              render: (value) => <span color='green'>{value?.name}</span>,
+              render: (value) => <span color="green">{value?.name}</span>,
             };
           }
           if (
@@ -72,11 +141,11 @@ const List = memo((props: ListProps) => {
               key: key,
               render: (value) =>
                 value ? (
-                  <Tag key={uuid()} color='green'>
+                  <Tag key={uuid()} color="green">
                     Đã phát hành
                   </Tag>
                 ) : (
-                  <Tag key={uuid()} color='red'>
+                  <Tag key={uuid()} color="red">
                     Chưa phát hành
                   </Tag>
                 ),
@@ -90,7 +159,7 @@ const List = memo((props: ListProps) => {
               render: (value) => (
                 <img
                   className={clsx(style.img)}
-                  alt=''
+                  alt=""
                   src={value?.["path_150px"]}
                 ></img>
               ),
@@ -104,11 +173,11 @@ const List = memo((props: ListProps) => {
               key: key,
               render: (value) =>
                 value?.published ? (
-                  <Tag key={uuid()} color='green'>
+                  <Tag key={uuid()} color="green">
                     {value?.title}
                   </Tag>
                 ) : (
-                  <Tag key={uuid()} color='red'>
+                  <Tag key={uuid()} color="red">
                     {value?.title ? value?.title : `Chưa có ${titleMap[key]}`}
                   </Tag>
                 ),
@@ -119,48 +188,7 @@ const List = memo((props: ListProps) => {
         }
       });
 
-      setColumns([
-        ...menu,
-        {
-          title: "Chức Năng",
-          key: "action",
-          fixed: "right",
-          render: (_, record) => (
-            <div key={uuid()}>
-              <Popconfirm
-                onConfirm={() => {
-                  dispatch({
-                    type: "DELETE_REQUESTED",
-                    payload: {
-                      id: record.id ? record.id : record.name,
-                      name: record?.name,
-                      action: actionApi,
-                    },
-                  });
-                }}
-                title='Bạn muốn xóa thông tin này ?'
-                okText='Xóa'
-                cancelText='Hủy'
-              >
-                <Button size='small' key={uuid()}>
-                  Xóa
-                </Button>
-              </Popconfirm>
-
-              <Button
-                size='small'
-                onClick={() => {
-                  setID(record.id ? record.id : record.name);
-                  setIsModalOpen(true);
-                }}
-                key={uuid()}
-              >
-                Sửa
-              </Button>
-            </div>
-          ),
-        },
-      ]);
+      setColumns(menu);
     }
   }, [infoArray]);
   useEffect(() => {
@@ -178,14 +206,24 @@ const List = memo((props: ListProps) => {
 
           break;
         case "/ContentManage/CityList":
+          dispatch(setActionApi("v1/system/city"));
+          dispatch({
+            type: "USER_FETCH_REQUESTED",
+            payload: {
+              getApi: `v1/system/city/gets?limit=10&page=1&search=&parentUser=${parentID}`,
+              actionApi: "v1/system/city",
+            },
+          });
+
           setName("Quản lý thành phố");
 
           break;
         case "/ContentManage/placeList":
+          dispatch(setActionApi("v1/point"));
           dispatch({
             type: "USER_FETCH_REQUESTED",
             payload: {
-              getApi: "v1/point/gets?limit=10&page=1&search=",
+              getApi: `v1/point/gets?limit=10&page=1&search=&parentUser=${parentID}`,
               actionApi: "v1/point",
             },
           });
@@ -193,10 +231,11 @@ const List = memo((props: ListProps) => {
 
           break;
         case "/ContentManage/utilities":
+          dispatch(setActionApi("v1/utilities"));
           dispatch({
             type: "USER_FETCH_REQUESTED",
             payload: {
-              getApi: "v1/utilities/gets?limit=10&page=1&search=",
+              getApi: `v1/utilities/gets?limit=10&page=1&search=&parentUser=${parentID}`,
               actionApi: "v1/utilities",
             },
           });
@@ -204,10 +243,11 @@ const List = memo((props: ListProps) => {
 
           break;
         case "/ContentManage/news":
+          dispatch(setActionApi("v1/news"));
           dispatch({
             type: "USER_FETCH_REQUESTED",
             payload: {
-              getApi: "v1/news/gets?limit=10&page=1&search=",
+              getApi: `v1/news/gets?limit=10&page=1&search=&parentUser=${parentID}`,
               actionApi: "v1/news",
             },
           });
@@ -215,10 +255,11 @@ const List = memo((props: ListProps) => {
 
           break;
         case "/ContentManage/events":
+          dispatch(setActionApi("v1/event"));
           dispatch({
             type: "USER_FETCH_REQUESTED",
             payload: {
-              getApi: "v1/event/gets?limit=10&page=1&search=",
+              getApi: `v1/event/gets?limit=10&page=1&search=&parentUser=${parentID}`,
               actionApi: "v1/event",
             },
           });
@@ -227,10 +268,11 @@ const List = memo((props: ListProps) => {
 
           break;
         case "/ContentManage/placeType":
+          dispatch(setActionApi("v1/point-type"));
           dispatch({
             type: "USER_FETCH_REQUESTED",
             payload: {
-              getApi: "v1/point-type/gets?limit=10&page=1&search=",
+              getApi: `v1/point-type/gets?limit=10&page=1&search=&parentUser=${parentID}`,
               actionApi: "v1/point-type",
             },
           });
@@ -238,10 +280,11 @@ const List = memo((props: ListProps) => {
 
           break;
         case "/Manage/newsCategory":
+          dispatch(setActionApi("v1/category"));
           dispatch({
             type: "USER_FETCH_REQUESTED",
             payload: {
-              getApi: "v1/category/gets?limit=10&page=1&search=",
+              getApi: `v1/category/gets?limit=10&page=1&search=&parentUser=${parentID}`,
               actionApi: "v1/category",
             },
           });
@@ -249,10 +292,11 @@ const List = memo((props: ListProps) => {
 
           break;
         case "/ContentManage/hotelType":
+          dispatch(setActionApi("v1/hotel-type"));
           dispatch({
             type: "USER_FETCH_REQUESTED",
             payload: {
-              getApi: "v1/hotel-type/gets?limit=10&page=1&search=",
+              getApi: `v1/hotel-type/gets?limit=10&page=1&search=&parentUser=${parentID}`,
               actionApi: "v1/hotel-type",
             },
           });
@@ -260,10 +304,11 @@ const List = memo((props: ListProps) => {
 
           break;
         case "/ContentManage/hotelList":
+          dispatch(setActionApi("v1/hotel"));
           dispatch({
             type: "USER_FETCH_REQUESTED",
             payload: {
-              getApi: "v1/hotel/gets?limit=10&page=1&search=",
+              getApi: `v1/hotel/gets?limit=10&page=1&search=&parentUser=${parentID}`,
               actionApi: "v1/hotel",
             },
           });
@@ -271,10 +316,11 @@ const List = memo((props: ListProps) => {
 
           break;
         case "/Manage/utilitiesType":
+          dispatch(setActionApi("v1/utilities-type"));
           dispatch({
             type: "USER_FETCH_REQUESTED",
             payload: {
-              getApi: "v1/utilities-type/gets?limit=10&page=1&search=",
+              getApi: `v1/utilities-type/gets?limit=10&page=1&search=&parentUser=${parentID}`,
               actionApi: "v1/utilities-type",
             },
           });
@@ -282,10 +328,11 @@ const List = memo((props: ListProps) => {
 
           break;
         case "/ContentManage/restaurantType":
+          dispatch(setActionApi("v1/restaurant-type"));
           dispatch({
             type: "USER_FETCH_REQUESTED",
             payload: {
-              getApi: "v1/restaurant-type/gets?limit=10&page=1&search=",
+              getApi: `v1/restaurant-type/gets?limit=10&page=1&search=&parentUser=${parentID}`,
               actionApi: "v1/restaurant-type",
             },
           });
@@ -293,10 +340,11 @@ const List = memo((props: ListProps) => {
 
           break;
         case "/ContentManage/restaurantList":
+          dispatch(setActionApi("v1/restaurant"));
           dispatch({
             type: "USER_FETCH_REQUESTED",
             payload: {
-              getApi: "v1/restaurant/gets?limit=10&page=1&search=",
+              getApi: `v1/restaurant/gets?limit=10&page=1&search=&parentUser=${parentID}`,
               actionApi: "v1/restaurant",
             },
           });
@@ -304,10 +352,11 @@ const List = memo((props: ListProps) => {
 
           break;
         case "/ContentManage/tour":
+          dispatch(setActionApi("v1/tour"));
           dispatch({
             type: "USER_FETCH_REQUESTED",
             payload: {
-              getApi: "v1/tour/gets?limit=10&page=1&search=",
+              getApi: `v1/tour/gets?limit=10&page=1&search=&parentUser=${parentID}`,
               actionApi: "v1/tour",
             },
           });
@@ -315,10 +364,11 @@ const List = memo((props: ListProps) => {
 
           break;
         case "/ContentManage/travelCompanies":
+          dispatch(setActionApi("v1/travel-companies"));
           dispatch({
             type: "USER_FETCH_REQUESTED",
             payload: {
-              getApi: "v1/travel-companies/gets?limit=10&page=1&search=",
+              getApi: `v1/travel-companies/gets?limit=10&page=1&search=&parentUser=${parentID}`,
               actionApi: "v1/travel-companies",
             },
           });
@@ -326,10 +376,11 @@ const List = memo((props: ListProps) => {
 
           break;
         case "/Pages":
+          dispatch(setActionApi("v1/page"));
           dispatch({
             type: "USER_FETCH_REQUESTED",
             payload: {
-              getApi: "v1/page/gets?limit=10&page=1&search=",
+              getApi: `v1/page/gets?limit=10&page=1&search=&parentUser=${parentID}`,
               actionApi: "v1/page",
             },
           });
@@ -338,10 +389,11 @@ const List = memo((props: ListProps) => {
           break;
 
         case "/UserManager/roleList":
+          dispatch(setActionApi("v1/system/role"));
           dispatch({
             type: "USER_FETCH_REQUESTED",
             payload: {
-              getApi: "v1/system/role/gets?limit=10&page=1&search=",
+              getApi: `v1/system/role/gets?limit=10&page=1&search=&parentUser=${parentID}`,
               actionApi: "v1/system/role",
             },
           });
@@ -349,10 +401,11 @@ const List = memo((props: ListProps) => {
 
           break;
         case "/UserManager/userList":
+          dispatch(setActionApi("v1/system/user"));
           dispatch({
             type: "USER_FETCH_REQUESTED",
             payload: {
-              getApi: "v1/system/user/gets?limit=10&page=1&search=",
+              getApi: `v1/system/user/gets?limit=10&page=1&search=&parentUser=${parentID}`,
               actionApi: "v1/system/user",
             },
           });
@@ -362,28 +415,25 @@ const List = memo((props: ListProps) => {
       }
     }
   }, [location, loginSate]);
-
+  useEffect(() => {
+    if (infoRole?.id !== "2" && infoRole?.parentUser === null) {
+      getSelectList(`/v1/system/city/gets?limit=1000&page=1&search=`, true);
+      openNotificationWithIcon(
+        "warning",
+        "Bạn đang truy cập với tài khoản trị",
+        "Bạn hãy chọn thành phố trước khi xem thông tin"
+      );
+    }
+  }, [infoRole]);
   return (
     <div className={clsx("content", "d-flex")}>
       <div className={clsx(style.header)}>
         <h3>{name}</h3>
       </div>
       <div className={clsx(style.main, "d-flex")}>
-        <Search locale={locale} />
-        <TableItems columns={columns} />
+        <Search city={city} locale={locale} />
+        <TableItems typeOption={typeOption} columns={columns} />
       </div>
-      <Modal
-        centered={true}
-        open={isModalOpen}
-        width='70vw'
-        onCancel={() => {
-          setIsModalOpen(false);
-        }}
-        footer={false}
-        title={"Sửa thông tin"}
-      >
-        <CreateForm id={ID} setIsModalOpen={setIsModalOpen} />
-      </Modal>
     </div>
   );
 });

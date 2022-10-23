@@ -10,7 +10,7 @@ import {
   Upload,
 } from "antd";
 import ReactQuill from "react-quill";
-import React, { useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { selectData } from "../../../../store/store";
 import { v4 as uuid } from "uuid";
@@ -20,105 +20,66 @@ import clsx from "clsx";
 import { callApi } from "../../../../Api/Axios";
 import Cookies from "js-cookie";
 import moment, { now } from "moment";
-import { UploadOutlined } from "@ant-design/icons";
+import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import { RcFile } from "antd/lib/upload";
 import getCookie from "../../../../Api/getCookie";
 import GoogleMapReact from "google-map-react";
 import Snippets from "./Snippets";
 import { useLocation } from "react-router-dom";
 import Permissions from "./Permissions";
+import { env } from "process";
+import openNotificationWithIcon from "../../../function/toast";
 export interface CreateFormProps {
   setIsModalOpen?: any;
   setCurrent?: any;
   id?: number | string;
+  typeOption?: Array<ReactElement>;
+  data: any;
 }
 
 const Marker = ({ child, lat, lng }) => <div>{child}</div>;
-
+const uploadButton = (
+  <div>
+    <PlusOutlined />
+    <div style={{ marginTop: 8 }}>Upload</div>
+  </div>
+);
 const CreateForm = ({
   setCurrent,
   setIsModalOpen,
   id = 0,
+  typeOption,
+  data,
 }: CreateFormProps) => {
-  const dataItem: any = useAppSelector(selectData).infoArray;
   const storeSate = useAppSelector(selectData).storeState;
   const actionApi = useAppSelector(selectData).actionApi;
   const locale = useAppSelector(selectData).locale;
   const localeArr = useAppSelector(selectData).localeArr;
+  const parentID = useAppSelector(selectData).parentID;
+
   const location = useLocation().pathname;
+  const [point, setPoint] = useState<any>();
+  const [fileList, setFileList] = useState<any>();
+  const [content, setContent] = useState<any>();
 
   const dispatch = useAppDispatch();
-  const [data, setData] = useState<any>();
-  const [typeOption, setTypeOption] = useState<any>();
 
   useEffect(() => {
-    if (id) {
-      dispatch({
-        type: "GET_ROW_REQUESTED",
-        payload: {
-          ID: { id: id, name: id },
-          action: actionApi,
-          locale,
+    if (data?.featureImage !== null && data?.featureImage !== undefined) {
+      setFileList([
+        {
+          name: data?.featureImage.name,
+          status: "done",
+          id: data?.featureImage.id,
+          url: data?.featureImage.path,
         },
-      });
+      ]);
+    } else setFileList(undefined);
+    if (data?.content !== null) {
+      setContent(data?.content);
     }
-  }, [id]);
-  useEffect(() => {
-    if (data?.category !== undefined) {
-      getSelectList("v1/category/gets?limit=1000&page=1&search=");
-    } else if (data?.pointType !== undefined) {
-      getSelectList("v1/point-type/gets?limit=1000&page=1&search=");
-    } else if (data?.hotelType !== undefined) {
-      getSelectList("v1/hotel-type/gets?limit=1000&page=1&search=");
-    } else if (data?.utilitiesType !== undefined) {
-      getSelectList("v1/utilities-type/gets?limit=1000&page=1&search=");
-    } else if (data?.restaurantType !== undefined) {
-      getSelectList("v1/restaurant-type/gets?limit=1000&page=1&search=");
-    }
-    if (data?.role !== undefined) {
-      getSelectList("/v1/system/role/gets?limit=1000&page=1&search=");
-    }
-  }, [data, typeOption, id]);
-
-  useEffect(() => {
-    setTypeOption(false);
-
-    if (storeSate !== "loading") {
-      if (id) {
-        dataItem[dataItem.findIndex((obj) => obj.id === id)]
-          ? setData(dataItem[dataItem.findIndex((obj) => obj.id === id)])
-          : setData(dataItem[dataItem.findIndex((obj) => obj.name === id)]);
-      }
-
-      if (!id) {
-        setData(dataItem[id]);
-      }
-    }
-  }, [dataItem, storeSate, id, locale]);
-  const getSelectList = async (getApi) => {
-    if (!typeOption)
-      try {
-        const cookie = Cookies.get("token");
-        const result = await callApi
-          .get(getApi, { headers: { Authorization: cookie } })
-          .then((response) => response.data)
-          .catch((err) => console.log(err));
-        console.log(result.data);
-        const option = result.data.map((obj) => {
-          if (obj?.title || obj?.name) {
-            return (
-              <Select.Option key={uuid()} value={obj.id}>
-                {obj?.title ? obj?.title : obj?.name}
-              </Select.Option>
-            );
-          }
-        });
-        setTypeOption(option);
-      } catch (err) {
-        console.log(err);
-      }
-  };
-
+    setPoint({ lat: data?.lat, lng: data?.lng });
+  }, [data]);
   const key = process.env.REACT_APP_GOOGLE_KEY;
   return (
     <>
@@ -136,9 +97,20 @@ const CreateForm = ({
               info.date = moment();
             }
             info.date = moment(info.date, "DD-MM-YYYY").format("YYYY-MM-DD");
-            if (info.featureImage !== undefined && info.featureImage !== null) {
-              info.featureImage = data.featureImage.id;
+            if (fileList) {
+              info.featureImage = fileList.map((img) => img.id);
             }
+            if (content) {
+              info.content = content;
+            }
+
+            if (point.lat) {
+              info.lat = point?.lat;
+              info.lng = point?.lng;
+            }
+            delete info.role;
+            delete info.username;
+
             info.locale = locale;
 
             dispatch({
@@ -156,9 +128,9 @@ const CreateForm = ({
               setIsModalOpen(false);
             }
           }}
-          layout='inline'
+          layout="inline"
         >
-          <div className='d-flex'>
+          <div className="d-flex flex-wrap">
             {data.id ? (
               <Form.Item key={uuid()} label={titleMap.id}>
                 <span key={uuid()}>{data.id}</span>
@@ -184,6 +156,7 @@ const CreateForm = ({
                         id: data.id,
                         published: e.target.checked ? 1 : 0,
                         name: data.name,
+                        parentUser: parentID,
                       },
                     });
                   }}
@@ -203,7 +176,6 @@ const CreateForm = ({
                     data?.category?.id ? data?.category?.id : undefined
                   }
                   placeholder={"Chọn danh mục"}
-                  loading={!typeOption}
                 >
                   {typeOption}
                 </Select>
@@ -224,7 +196,6 @@ const CreateForm = ({
                       : undefined
                   }
                   placeholder={"Chọn loại địa điểm"}
-                  loading={!typeOption}
                 >
                   {typeOption}
                 </Select>
@@ -245,7 +216,6 @@ const CreateForm = ({
                       : undefined
                   }
                   placeholder={"Chọn loại nhà hàng"}
-                  loading={!typeOption}
                 >
                   {typeOption}
                 </Select>
@@ -266,7 +236,6 @@ const CreateForm = ({
                       : undefined
                   }
                   placeholder={"Chọn loại khách sạn"}
-                  loading={!typeOption}
                 >
                   {typeOption}
                 </Select>
@@ -287,7 +256,6 @@ const CreateForm = ({
                       : undefined
                   }
                   placeholder={"Chọn loại tiện ích"}
-                  loading={!typeOption}
                 >
                   {typeOption}
                 </Select>
@@ -299,7 +267,7 @@ const CreateForm = ({
               <Form.Item
                 key={uuid()}
                 name={"date"}
-                label='Thời gian cập nhật cuối'
+                label="Thời gian cập nhật cuối"
               >
                 <DatePicker key={uuid()}></DatePicker>
               </Form.Item>
@@ -313,9 +281,9 @@ const CreateForm = ({
                   return (
                     <Select.Option value={key}>
                       <img
-                        className='icon'
+                        className="icon"
                         src={localeArr[key].icon}
-                        alt=''
+                        alt=""
                       ></img>
                     </Select.Option>
                   );
@@ -343,7 +311,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"address"}
-                label='Địa chỉ'
+                label="Địa chỉ"
               >
                 <Input placeholder={data?.address}></Input>
               </Form.Item>
@@ -355,7 +323,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"description"}
-                label='Mô tả'
+                label="Mô tả"
               >
                 <Input placeholder={data?.description}></Input>
               </Form.Item>
@@ -368,25 +336,41 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"featureImage"}
-                label='Ảnh'
+                label="Ảnh"
               >
                 <Upload
                   action={`${process.env.REACT_APP_CMS_API}/v1/asset/upload`}
                   headers={{ Authorization: getCookie("token") }}
                   maxCount={1}
+                  listType="picture-card"
+                  fileList={fileList}
+                  data={(file) => {
+                    return { parentUser: parentID };
+                  }}
                   onChange={(e: any) => {
+                    if (e.fileList.length === 0) {
+                      setFileList(undefined);
+                    }
+                    if (e.file.status === "uploading" && fileList) {
+                      openNotificationWithIcon(
+                        "warning",
+                        "Cập nhật hình ảnh không thành công",
+                        "Bạn đã có hình ảnh cũ thông tin chỉ cho phép 1 hình ảnh, vui lòng xóa hình ảnh cũ trước khi cập nhật mới"
+                      );
+                    }
                     if (e.file.status === "done") {
-                      setData({
-                        ...data,
-                        featureImage: {
-                          img: e.file?.response?.data["path_150px"],
-                          id: e.file?.response?.data.id,
+                      setFileList([
+                        {
+                          name: e.file.response.data.name,
+                          status: "done",
+                          id: e.file.response.data.id,
+                          url: e.file.response.data.path,
                         },
-                      });
+                      ]);
                     }
                   }}
                 >
-                  <Button icon={<UploadOutlined />}>Click để Upload</Button>
+                  {uploadButton}
                 </Upload>
               </Form.Item>
             ) : data?.featureImage?.img !== undefined ? (
@@ -394,9 +378,9 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"featureImage"}
-                label='Ảnh'
+                label="Ảnh"
               >
-                <img src={data.featureImage.img} alt='example'></img>
+                <img src={data.featureImage.img} alt="example"></img>
               </Form.Item>
             ) : (
               false
@@ -406,7 +390,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"ar"}
-                label='AR'
+                label="AR"
               >
                 <Input placeholder={data?.ar}></Input>
               </Form.Item>
@@ -418,7 +402,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"vr"}
-                label='VR'
+                label="VR"
               >
                 <Input placeholder={data?.vr}></Input>
               </Form.Item>
@@ -430,7 +414,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"name"}
-                label='Định danh'
+                label="Định danh"
               >
                 <Input placeholder={data?.name}></Input>
               </Form.Item>
@@ -441,7 +425,7 @@ const CreateForm = ({
               <Form.Item
                 className={clsx(style.formDes)}
                 key={uuid()}
-                label='Tên tài khoản'
+                label="Tên tài khoản"
               >
                 <span>{data?.username}</span>
               </Form.Item>
@@ -452,9 +436,9 @@ const CreateForm = ({
               <Form.Item
                 className={clsx(style.formDes)}
                 key={uuid()}
-                label='Họ và tên'
+                label="Họ và tên"
               >
-                <div className='d-flex'>
+                <div className="d-flex">
                   <Form.Item
                     name={"firstname"}
                     style={{
@@ -465,7 +449,7 @@ const CreateForm = ({
                     <Input placeholder={data.firstname} />
                   </Form.Item>
                   <Form.Item
-                    name='lastname'
+                    name="lastname"
                     style={{
                       display: "inline-block",
                       width: "calc(50% - 8px)",
@@ -483,7 +467,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"email"}
-                label='Email'
+                label="Email"
               >
                 <Input placeholder={data?.email}></Input>
               </Form.Item>
@@ -494,8 +478,8 @@ const CreateForm = ({
               <Form.Item
                 className={clsx(style.formDes)}
                 key={uuid()}
-                name={"content"}
-                label='Số điện thoại'
+                name={"phone"}
+                label="Số điện thoại"
               >
                 <Input placeholder={data?.phone}></Input>
               </Form.Item>
@@ -507,7 +491,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"password"}
-                label='Mật khẩu'
+                label="Mật khẩu"
               >
                 <Input></Input>
               </Form.Item>
@@ -526,7 +510,6 @@ const CreateForm = ({
                     data?.role?.id !== null ? data?.role?.id : undefined
                   }
                   placeholder={"Chọn Nhóm quyền"}
-                  loading={!typeOption}
                 >
                   {typeOption}
                 </Select>
@@ -537,19 +520,17 @@ const CreateForm = ({
           </div>
 
           {data.content !== undefined ? (
-            <Form.Item
-              className={clsx(style.formItem)}
-              key={uuid()}
-              name={"content"}
-              label='Nội dung'
-              initialValue={data.content}
-            >
+            <>
+              <label>Nội dung:</label>
               <ReactQuill
-                theme='snow'
+                onChange={(value) => {
+                  setContent(value);
+                }}
+                value={content}
+                theme="snow"
                 className={clsx(style.quill)}
-                value='react'
               ></ReactQuill>
-            </Form.Item>
+            </>
           ) : (
             false
           )}
@@ -558,8 +539,7 @@ const CreateForm = ({
             <Form.Item
               className={clsx(style.formItem)}
               key={uuid()}
-              name={"content"}
-              label='Chọn vị trí trên bản đồ '
+              label="Chọn vị trí trên bản đồ "
             >
               <div style={{ width: "100%", height: "500px" }}>
                 <GoogleMapReact
@@ -567,29 +547,20 @@ const CreateForm = ({
                     key: key ? key : "",
                   }}
                   defaultCenter={{
-                    lat: Number(data?.lat)
-                      ? Number(data?.lat)
-                      : 21.028344147220377,
-                    lng: Number(data?.lng)
-                      ? Number(data?.lng)
-                      : 105.83696287966175,
+                    lat: Number(point?.lat ? point?.lat : 21.027105947174572),
+                    lng: Number(point?.lng ? point?.lng : 105.8380794988938),
                   }}
                   defaultZoom={15}
                   onClick={(e) =>
-                    setData({
-                      ...data,
+                    setPoint({
                       lat: e.lat.toString(),
                       lng: e.lng.toString(),
                     })
                   }
                 >
                   <Marker
-                    lat={
-                      Number(data?.lat) ? Number(data?.lat) : 21.028344147220377
-                    }
-                    lng={
-                      Number(data?.lng) ? Number(data?.lng) : 105.83696287966175
-                    }
+                    lat={Number(point?.lat ? point?.lat : 21.027105947174572)}
+                    lng={Number(point?.lng ? point?.lng : 105.8380794988938)}
                     child={
                       <i
                         className={clsx(
@@ -609,8 +580,7 @@ const CreateForm = ({
             <Form.Item
               className={clsx(style.formItem)}
               key={uuid()}
-              name={"content"}
-              label='Khối nội dung'
+              label="Khối nội dung"
             >
               <Snippets data={data?.snippets} pageName={data?.name}></Snippets>
             </Form.Item>
@@ -621,7 +591,7 @@ const CreateForm = ({
             <Form.Item
               className={clsx(style.formItem)}
               key={uuid()}
-              label='Chọn quyền truy cập'
+              label="Chọn quyền truy cập"
             >
               <Permissions
                 id={
@@ -640,8 +610,8 @@ const CreateForm = ({
             <Button
               className={clsx(style.submit)}
               key={uuid()}
-              htmlType='submit'
-              type='primary'
+              htmlType="submit"
+              type="primary"
             >
               Xác Nhận
             </Button>
