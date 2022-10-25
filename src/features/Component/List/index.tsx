@@ -120,7 +120,7 @@ const List = memo((props: ListProps) => {
               title: titleMap[key],
               dataIndex: key,
               key: key,
-              render: (value) => <span color="green">{value?.name}</span>,
+              render: (value) => <span color='green'>{value?.name}</span>,
             };
           }
           if (
@@ -141,11 +141,11 @@ const List = memo((props: ListProps) => {
               key: key,
               render: (value) =>
                 value ? (
-                  <Tag key={uuid()} color="green">
+                  <Tag key={uuid()} color='green'>
                     Đã phát hành
                   </Tag>
                 ) : (
-                  <Tag key={uuid()} color="red">
+                  <Tag key={uuid()} color='red'>
                     Chưa phát hành
                   </Tag>
                 ),
@@ -159,7 +159,7 @@ const List = memo((props: ListProps) => {
               render: (value) => (
                 <img
                   className={clsx(style.img)}
-                  alt=""
+                  alt=''
                   src={value?.["path_150px"]}
                 ></img>
               ),
@@ -173,11 +173,11 @@ const List = memo((props: ListProps) => {
               key: key,
               render: (value) =>
                 value?.published ? (
-                  <Tag key={uuid()} color="green">
+                  <Tag key={uuid()} color='green'>
                     {value?.title}
                   </Tag>
                 ) : (
-                  <Tag key={uuid()} color="red">
+                  <Tag key={uuid()} color='red'>
                     {value?.title ? value?.title : `Chưa có ${titleMap[key]}`}
                   </Tag>
                 ),
@@ -418,11 +418,13 @@ const List = memo((props: ListProps) => {
   useEffect(() => {
     if (infoRole?.id !== "2" && infoRole?.parentUser === null) {
       getSelectList(`/v1/system/city/gets?limit=1000&page=1&search=`, true);
-      openNotificationWithIcon(
-        "warning",
-        "Bạn đang truy cập với tài khoản trị",
-        "Bạn hãy chọn thành phố trước khi xem thông tin"
-      );
+      if (!actionApi?.includes("system")) {
+        openNotificationWithIcon(
+          "warning",
+          "Bạn đang truy cập với tài khoản trị",
+          "Bạn hãy chọn thành phố trước khi xem thông tin"
+        );
+      }
     }
   }, [infoRole]);
   return (

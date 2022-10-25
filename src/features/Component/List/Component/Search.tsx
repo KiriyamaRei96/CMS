@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { selectData } from "../../../../store/store";
 import { setLocate, setParentID } from "../slice/slice";
 import { userInfoSelector } from "../../Login/slice/UserSlice";
+import { useLocation } from "react-router-dom";
 
 export interface SearchProps {
   locale: string;
@@ -24,7 +25,7 @@ const Search = ({ locale, city = undefined }: SearchProps) => {
   const option = Object.keys(localeArr).map((key) => {
     return (
       <Select.Option value={key}>
-        <img className="icon" src={localeArr[key].icon} alt=""></img>
+        <img className='icon' src={localeArr[key].icon} alt=''></img>
       </Select.Option>
     );
   });
@@ -44,7 +45,7 @@ const Search = ({ locale, city = undefined }: SearchProps) => {
 
   return (
     <div className={clsx(style.Search)}>
-      <Form onFinish={onFinish} form={form} layout="inline">
+      <Form onFinish={onFinish} form={form} layout='inline'>
         <Form.Item label={"Tìm kiếm theo tiêu đề"} name={"search"}>
           <Input
             allowClear={{
@@ -62,16 +63,16 @@ const Search = ({ locale, city = undefined }: SearchProps) => {
                       },
                     })
                   }
-                  className="fa-regular fa-circle-xmark"
+                  className='fa-regular fa-circle-xmark'
                 ></i>
               ),
             }}
-            placeholder="Nhập tiêu đề"
+            placeholder='Nhập tiêu đề'
           />
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit">
+          <Button type='primary' htmlType='submit'>
             Tìm kiếm
           </Button>
         </Form.Item>
@@ -95,10 +96,12 @@ const Search = ({ locale, city = undefined }: SearchProps) => {
             {option}
           </Select>
         </Form.Item>
-        {infoRole?.id !== "2" && infoRole?.parentUser === null ? (
+        {infoRole?.id !== "2" &&
+        infoRole?.parentUser === null &&
+        !actionApi?.includes("system") ? (
           <Form.Item label={"Thành phố"}>
             <Select
-              placeholder="Thành phố"
+              placeholder='Thành phố'
               onChange={(value) => {
                 dispatch(setParentID(value));
                 dispatch({

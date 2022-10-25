@@ -36,13 +36,14 @@ function* fetchItem(action) {
 }
 function* getLocale(action) {
   const State = yield select(selectData);
+  const data = new URLSearchParams({ parentUser: String(State.parentID) });
   yield put({ type: "TABLE_LOADING" });
   try {
     const cookie = Cookies.get("token");
     const result = yield callApi
       .get(`/v1/languages/user-get`, {
         headers: { Authorization: cookie },
-        data: { parentUser: State.parentID },
+        data: data,
       })
       .then((response) => response.data)
       .catch((err) => console.log(err));
@@ -167,6 +168,7 @@ function* addRow(action) {
 }
 function* updateRow(action) {
   const State = yield select(selectData);
+  const cookie = Cookies.get("token");
   const createInfo = new URLSearchParams({
     ...action.payload.info,
     parentUser: State.parentID,
@@ -176,7 +178,7 @@ function* updateRow(action) {
     const res = yield callApi({
       method: "PUT",
       url: action.payload.action + "/update",
-      headers,
+      headers: { Authorization: cookie },
       data: createInfo,
     })
       .then((res) => res.data)

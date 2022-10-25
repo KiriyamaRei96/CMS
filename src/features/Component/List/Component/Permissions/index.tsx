@@ -3,12 +3,22 @@ import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
 import { callApi } from "../../../../../Api/Axios";
 import { v4 as uuid } from "uuid";
+import permitMap from "./permitMap";
 
 const { Option, OptGroup } = Select;
 export interface PermissionsProps {
   id: object;
 }
-
+const functionMap = {
+  ".create": "Thêm",
+  ".select": "Tra cứu",
+  ".update": "Sửa",
+  ".delete": "Xóa",
+  ".change": "Thay đổi",
+  ".published": "Phát hành",
+  ".upload": "Tải lên",
+  ".active": "thay đổi trạng thái tài khoản",
+};
 const Permissions = ({ id }: PermissionsProps) => {
   const [option, setOption] = useState<any>();
   const [permission, setPermission] = useState<any>();
@@ -26,10 +36,10 @@ const Permissions = ({ id }: PermissionsProps) => {
 
         setOption(
           Object.keys(permissionsArr).map((key) => (
-            <OptGroup key={uuid()} label={key}>
+            <OptGroup key={uuid()} label={permitMap[key]}>
               {permissionsArr[key].map((value) => (
                 <Option key={uuid()} value={value}>
-                  {value}
+                  {functionMap[value.replace(key, "")]}
                 </Option>
               ))}
             </OptGroup>
@@ -79,7 +89,7 @@ const Permissions = ({ id }: PermissionsProps) => {
           }
         }}
         value={permission}
-        mode="multiple"
+        mode='multiple'
       >
         {option}
       </Select>
