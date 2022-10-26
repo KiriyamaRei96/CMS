@@ -21,14 +21,15 @@ import { callApi } from "../../../../Api/Axios";
 import Cookies from "js-cookie";
 import moment, { now } from "moment";
 import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
-import { RcFile } from "antd/lib/upload";
+
 import getCookie from "../../../../Api/getCookie";
 import GoogleMapReact from "google-map-react";
 import Snippets from "./Snippets";
 import { useLocation } from "react-router-dom";
 import Permissions from "./Permissions";
-import { env } from "process";
+import { env, title } from "process";
 import openNotificationWithIcon from "../../../function/toast";
+
 export interface CreateFormProps {
   setIsModalOpen?: any;
   setCurrent?: any;
@@ -60,8 +61,8 @@ const CreateForm = ({
   const location = useLocation().pathname;
   const [point, setPoint] = useState<any>();
   const [fileList, setFileList] = useState<any>();
-  const [content, setContent] = useState<any>();
 
+  const [form] = Form.useForm();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -75,16 +76,32 @@ const CreateForm = ({
         },
       ]);
     } else setFileList(undefined);
-    if (data?.content !== null) {
-      setContent(data?.content);
-    }
+
     setPoint({ lat: data?.lat, lng: data?.lng });
   }, [data]);
+  useEffect(() => {
+    const formData = {};
+    if (data) {
+      Object.keys(data).forEach((key) => {
+        if (data["date"]) {
+          formData["date"] = moment();
+        }
+        if (data[key]?.id) {
+          formData[key] = data[key]?.id;
+        } else {
+          formData[key] = data[key];
+        }
+      });
+    }
+
+    form.setFieldsValue(formData);
+  }, [data, form]);
   const key = process.env.REACT_APP_GOOGLE_KEY;
   return (
     <>
       {storeSate !== "loading" && data ? (
         <Form
+          form={form}
           className={clsx(style.form)}
           onFinish={(value) => {
             Object.keys(value).forEach((key) => {
@@ -100,15 +117,12 @@ const CreateForm = ({
             if (fileList) {
               info.featureImage = fileList.map((img) => img.id);
             }
-            if (content) {
-              info.content = content;
-            }
 
             if (point.lat) {
               info.lat = point?.lat;
               info.lng = point?.lng;
             }
-            delete info.role;
+
             delete info.username;
 
             info.locale = locale;
@@ -128,9 +142,9 @@ const CreateForm = ({
               setIsModalOpen(false);
             }
           }}
-          layout="inline"
+          layout='inline'
         >
-          <div className="d-flex flex-wrap">
+          <div className='d-flex flex-wrap'>
             {data.id ? (
               <Form.Item key={uuid()} label={titleMap.id}>
                 <span key={uuid()}>{data.id}</span>
@@ -267,7 +281,7 @@ const CreateForm = ({
               <Form.Item
                 key={uuid()}
                 name={"date"}
-                label="Thời gian cập nhật cuối"
+                label='Thời gian cập nhật cuối'
               >
                 <DatePicker key={uuid()}></DatePicker>
               </Form.Item>
@@ -281,9 +295,9 @@ const CreateForm = ({
                   return (
                     <Select.Option value={key}>
                       <img
-                        className="icon"
+                        className='icon'
                         src={localeArr[key].icon}
-                        alt=""
+                        alt=''
                       ></img>
                     </Select.Option>
                   );
@@ -299,9 +313,7 @@ const CreateForm = ({
                 label={"Tiêu đề"}
                 name={"title"}
               >
-                <Input
-                  placeholder={data?.title ? data?.title : "Chưa nhập tiêu đề"}
-                ></Input>
+                <Input></Input>
               </Form.Item>
             ) : (
               false
@@ -311,7 +323,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"address"}
-                label="Địa chỉ"
+                label='Địa chỉ'
               >
                 <Input placeholder={data?.address}></Input>
               </Form.Item>
@@ -323,7 +335,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"description"}
-                label="Mô tả"
+                label='Mô tả'
               >
                 <Input placeholder={data?.description}></Input>
               </Form.Item>
@@ -336,13 +348,13 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"featureImage"}
-                label="Ảnh"
+                label='Ảnh'
               >
                 <Upload
                   action={`${process.env.REACT_APP_CMS_API}/v1/asset/upload`}
                   headers={{ Authorization: getCookie("token") }}
                   maxCount={1}
-                  listType="picture-card"
+                  listType='picture-card'
                   fileList={fileList}
                   data={(file) => {
                     return { parentUser: parentID };
@@ -378,9 +390,9 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"featureImage"}
-                label="Ảnh"
+                label='Ảnh'
               >
-                <img src={data.featureImage.img} alt="example"></img>
+                <img src={data.featureImage.img} alt='example'></img>
               </Form.Item>
             ) : (
               false
@@ -390,7 +402,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"ar"}
-                label="AR"
+                label='AR'
               >
                 <Input placeholder={data?.ar}></Input>
               </Form.Item>
@@ -402,7 +414,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"vr"}
-                label="VR"
+                label='VR'
               >
                 <Input placeholder={data?.vr}></Input>
               </Form.Item>
@@ -414,7 +426,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"name"}
-                label="Định danh"
+                label='Định danh'
               >
                 <Input placeholder={data?.name}></Input>
               </Form.Item>
@@ -425,7 +437,7 @@ const CreateForm = ({
               <Form.Item
                 className={clsx(style.formDes)}
                 key={uuid()}
-                label="Tên tài khoản"
+                label='Tên tài khoản'
               >
                 <span>{data?.username}</span>
               </Form.Item>
@@ -436,9 +448,9 @@ const CreateForm = ({
               <Form.Item
                 className={clsx(style.formDes)}
                 key={uuid()}
-                label="Họ và tên"
+                label='Họ và tên'
               >
-                <div className="d-flex">
+                <div className='d-flex'>
                   <Form.Item
                     name={"firstname"}
                     style={{
@@ -449,7 +461,7 @@ const CreateForm = ({
                     <Input placeholder={data.firstname} />
                   </Form.Item>
                   <Form.Item
-                    name="lastname"
+                    name='lastname'
                     style={{
                       display: "inline-block",
                       width: "calc(50% - 8px)",
@@ -467,7 +479,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"email"}
-                label="Email"
+                label='Email'
               >
                 <Input placeholder={data?.email}></Input>
               </Form.Item>
@@ -479,7 +491,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"phone"}
-                label="Số điện thoại"
+                label='Số điện thoại'
               >
                 <Input placeholder={data?.phone}></Input>
               </Form.Item>
@@ -491,7 +503,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"password"}
-                label="Mật khẩu"
+                label='Mật khẩu'
               >
                 <Input></Input>
               </Form.Item>
@@ -520,18 +532,22 @@ const CreateForm = ({
           </div>
 
           {data.content !== undefined ? (
-            <>
-              <label>Nội dung:</label>
+            <Form.Item
+              className={clsx(style.formItem)}
+              key={uuid()}
+              label='Chọn vị trí trên bản đồ '
+              name='content'
+            >
               <ReactQuill
-                onChange={(value) => {
-                  setContent(value);
-                }}
-                value={content}
-                theme="snow"
+                theme='snow'
                 className={clsx(style.quill)}
               ></ReactQuill>
-            </>
+            </Form.Item>
           ) : (
+            // <>
+            //   <label>Nội dung:</label>
+
+            // </>
             false
           )}
 
@@ -539,7 +555,7 @@ const CreateForm = ({
             <Form.Item
               className={clsx(style.formItem)}
               key={uuid()}
-              label="Chọn vị trí trên bản đồ "
+              label='Chọn vị trí trên bản đồ '
             >
               <div style={{ width: "100%", height: "500px" }}>
                 <GoogleMapReact
@@ -580,7 +596,7 @@ const CreateForm = ({
             <Form.Item
               className={clsx(style.formItem)}
               key={uuid()}
-              label="Khối nội dung"
+              label='Khối nội dung'
             >
               <Snippets data={data?.snippets} pageName={data?.name}></Snippets>
             </Form.Item>
@@ -591,7 +607,7 @@ const CreateForm = ({
             <Form.Item
               className={clsx(style.formItem)}
               key={uuid()}
-              label="Chọn quyền truy cập"
+              label='Chọn quyền truy cập'
             >
               <Permissions
                 id={
@@ -610,8 +626,8 @@ const CreateForm = ({
             <Button
               className={clsx(style.submit)}
               key={uuid()}
-              htmlType="submit"
-              type="primary"
+              htmlType='submit'
+              type='primary'
             >
               Xác Nhận
             </Button>

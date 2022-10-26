@@ -96,33 +96,6 @@ const Search = ({ locale, city = undefined }: SearchProps) => {
             {option}
           </Select>
         </Form.Item>
-        {infoRole?.id !== "2" &&
-        infoRole?.parentUser === null &&
-        !actionApi?.includes("system") ? (
-          <Form.Item label={"Thành phố"}>
-            <Select
-              placeholder='Thành phố'
-              onChange={(value) => {
-                dispatch(setParentID(value));
-                dispatch({
-                  type: "SEARCH_ROW_REQUESTED",
-                  payload: {
-                    action: actionApi,
-                    limit: 10,
-                    page: 1,
-                    search: "",
-                    locale: locale,
-                  },
-                });
-              }}
-              value={parentID}
-            >
-              {city}
-            </Select>
-          </Form.Item>
-        ) : (
-          false
-        )}
       </Form>
     </div>
   );

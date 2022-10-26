@@ -58,9 +58,9 @@ const List = memo((props: ListProps) => {
         `v1/restaurant-type/gets?limit=1000&page=1&search=&parentUser=${parentID}`
       );
     }
-    if (actionApi?.includes("system")) {
+    if (actionApi?.includes("city")) {
       getSelectList(
-        `/v1/system/role/gets?limit=1000&page=1&search=&parentUser=${parentID}`
+        `/v1/city/role/gets?limit=1000&page=1&search=&parentUser=${parentID}`
       );
     }
   }, [actionApi]);
@@ -389,24 +389,24 @@ const List = memo((props: ListProps) => {
           break;
 
         case "/UserManager/roleList":
-          dispatch(setActionApi("v1/system/role"));
+          dispatch(setActionApi("v1/city/role"));
           dispatch({
             type: "USER_FETCH_REQUESTED",
             payload: {
-              getApi: `v1/system/role/gets?limit=10&page=1&search=&parentUser=${parentID}`,
-              actionApi: "v1/system/role",
+              getApi: `v1/city/role/gets?limit=10&page=1&search=&parentUser=${parentID}`,
+              actionApi: "v1/city/role",
             },
           });
-          setName("Quản quyền truy cập");
+          setName("Quản lý quyền truy cập");
 
           break;
         case "/UserManager/userList":
-          dispatch(setActionApi("v1/system/user"));
+          dispatch(setActionApi("v1/city/user"));
           dispatch({
             type: "USER_FETCH_REQUESTED",
             payload: {
-              getApi: `v1/system/user/gets?limit=10&page=1&search=&parentUser=${parentID}`,
-              actionApi: "v1/system/user",
+              getApi: `v1/city/user/gets?limit=10&page=1&search=&parentUser=${parentID}`,
+              actionApi: "v1/city/user",
             },
           });
           setName("Danh sách người dùng");
@@ -415,18 +415,18 @@ const List = memo((props: ListProps) => {
       }
     }
   }, [location, loginSate]);
-  useEffect(() => {
-    if (infoRole?.id !== "2" && infoRole?.parentUser === null) {
-      getSelectList(`/v1/system/city/gets?limit=1000&page=1&search=`, true);
-      if (!actionApi?.includes("system")) {
-        openNotificationWithIcon(
-          "warning",
-          "Bạn đang truy cập với tài khoản trị",
-          "Bạn hãy chọn thành phố trước khi xem thông tin"
-        );
-      }
-    }
-  }, [infoRole]);
+  // useEffect(() => {
+  //   if (infoRole?.id !== "2" && infoRole?.parentUser === null) {
+  //     getSelectList(`/v1/system/city/gets?limit=1000&page=1&search=`, true);
+  //     if (!actionApi?.includes("system")) {
+  //       openNotificationWithIcon(
+  //         "warning",
+  //         "Bạn đang truy cập với tài khoản trị",
+  //         "Bạn hãy chọn thành phố trước khi xem thông tin"
+  //       );
+  //     }
+  //   }
+  // }, [infoRole]);
   return (
     <div className={clsx("content", "d-flex")}>
       <div className={clsx(style.header)}>

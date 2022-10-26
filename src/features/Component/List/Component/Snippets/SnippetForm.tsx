@@ -30,6 +30,8 @@ const SnippetsForm = ({
   setCurrent,
 }: SnippetsFormProps) => {
   const [fileList, setFileList] = useState<any>();
+  const [dataList, setDataList] = useState<any>();
+
   const [collums, setCollums] = useState<any>([]);
   const [info, setInfo] = useState<any>();
   const parentID = useAppSelector(selectData).parentID;
@@ -40,14 +42,14 @@ const SnippetsForm = ({
 
   useEffect(() => {
     if (snippets?.key === "SnippetGalleries") {
-      setFileList(
-        snippets?.data?.map((item) => ({
+      setFileList([
+        ...snippets?.data?.map((item) => ({
           name: item.name,
           status: "done",
           id: item.id,
           url: item.path,
-        }))
-      );
+        })),
+      ]);
     }
     if (snippets?.key === "SnippetObject") {
       setCollums([
@@ -69,13 +71,14 @@ const SnippetsForm = ({
           key: uuid(),
           render: (img) =>
             img ? (
-              <img className={clsx(style.img)} alt="" src={img.path}></img>
+              <img className={clsx(style.img)} alt='' src={img.path}></img>
             ) : (
               <span>không có hình ảnh</span>
             ),
         },
       ]);
-      setFileList(snippets.data);
+
+      setDataList(snippets.data);
     }
   }, [snippets?.key, snippets?.data]);
 
@@ -87,21 +90,46 @@ const SnippetsForm = ({
         if (!value.title) {
           value.title = snippets?.title;
         }
-        if (!fileList || fileList.length === 0) {
-          openNotificationWithIcon(
-            "error",
-            "Cập nhật khối dữ thông tin không thành công",
-            "Không thể bỏ trống khối dữ liệu"
-          );
-        }
-        value.relations = fileList.map((file) => file.id);
+        if (snippets?.key === "SnippetObject") {
+          if (!dataList || dataList.length === 0) {
+            setIsModalOpen(false);
+            setCurrent(false);
+            return;
+          }
+          value.relations = dataList.map((file) => file.id);
 
-        dispatch({
-          type: "UPDATE_SNIPPETS_REQUESTED",
-          payload: { data: value, actionApi, name: snippets?.pageName, locale },
-        });
-        setIsModalOpen(false);
-        setCurrent(false);
+          dispatch({
+            type: "UPDATE_SNIPPETS_REQUESTED",
+            payload: {
+              data: value,
+              actionApi,
+              name: snippets?.pageName,
+              locale,
+            },
+          });
+          setIsModalOpen(false);
+          setCurrent(false);
+        }
+        if (snippets?.key === "SnippetGalleries") {
+          if (!fileList || fileList.length === 0) {
+            setIsModalOpen(false);
+            setCurrent(false);
+            return;
+          }
+          value.relations = fileList.map((file) => file.id);
+
+          dispatch({
+            type: "UPDATE_SNIPPETS_REQUESTED",
+            payload: {
+              data: value,
+              actionApi,
+              name: snippets?.pageName,
+              locale,
+            },
+          });
+          setIsModalOpen(false);
+          setCurrent(false);
+        }
       }}
       className={clsx(style.form)}
     >
@@ -154,7 +182,7 @@ const SnippetsForm = ({
       >
         <Input
           placeholder={snippets?.title ? snippets?.title : "Tiêu đề dữ liệu"}
-          type="text"
+          type='text'
         ></Input>
       </Form.Item>
 
@@ -166,7 +194,7 @@ const SnippetsForm = ({
           <Upload
             action={`${process.env.REACT_APP_CMS_API}/v1/asset/upload`}
             headers={{ Authorization: getCookie("token") }}
-            listType="picture-card"
+            listType='picture-card'
             fileList={fileList}
             data={(file) => {
               return { parentUser: parentID };
@@ -213,21 +241,21 @@ const SnippetsForm = ({
                     <div>
                       <Popconfirm
                         onConfirm={() => {
-                          setFileList((prv) =>
+                          setDataList((prv) =>
                             prv.filter((item) => item.id !== record.id)
                           );
                         }}
-                        title="Bạn muốn xóa thông tin này ?"
-                        okText="Xóa"
-                        cancelText="Hủy"
+                        title='Bạn muốn xóa thông tin này ?'
+                        okText='Xóa'
+                        cancelText='Hủy'
                       >
-                        <Button size="small">Xóa</Button>
+                        <Button size='small'>Xóa</Button>
                       </Popconfirm>
                     </div>
                   ),
                 },
               ]}
-              dataSource={fileList}
+              dataSource={dataList}
             ></Table>
           </Form.Item>
           <Form.Item
@@ -247,11 +275,11 @@ const SnippetsForm = ({
                   key: "action",
                   render: (_, record) => (
                     <Button
-                      size="small"
+                      size='small'
                       onClick={() => {
-                        const idList = fileList.map((item) => item.id);
+                        const idList = dataList.map((item) => item.id);
                         if (!idList.includes(record.id)) {
-                          setFileList((prv) => [record, ...prv]);
+                          setDataList((prv) => [record, ...prv]);
                         }
                       }}
                     >
@@ -267,7 +295,7 @@ const SnippetsForm = ({
         false
       )}
       <Form.Item>
-        <Button htmlType="submit" type="primary">
+        <Button htmlType='submit' type='primary'>
           Xác Nhận
         </Button>
       </Form.Item>

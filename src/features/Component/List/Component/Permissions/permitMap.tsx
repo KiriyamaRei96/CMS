@@ -1,8 +1,8 @@
 const permitMap = {
-  "system.user": "Quản lý tài khoản hệ thống",
-  "system.role": "Quản lý nhóm quyền",
-  "system.permission": "Quản lý chức năng ",
-  "system.city": "Quản lý tài khoản thành phố",
+  "city.user": "Quản lý tài khoản hệ thống",
+  "city.role": "Quản lý nhóm quyền",
+  "city.permission": "Quản lý chức năng ",
+
   languages: "Quản lý ngôn ngữ",
   media: "Quản lý đa phương tiện",
   page: "Quản lý trang",

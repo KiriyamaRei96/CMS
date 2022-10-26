@@ -70,35 +70,36 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
     {
       title: "Tạo tiêu đề thông tin",
       content: (
-        <Form key={uuid()} onFinish={addRow} layout="inline">
-          {!actionApi?.includes("system") ? (
+        <Form key={uuid()} onFinish={addRow} layout='inline'>
+          {!actionApi?.includes("system") && !actionApi?.includes("city") ? (
             <Form.Item
-              label="Tiêu đề thông tin"
+              label='Tiêu đề thông tin'
               rules={[
                 { required: true, message: "Không được bỏ trống trường này!" },
               ]}
-              name="title"
+              name='title'
             >
-              <Input type="text" />
+              <Input type='text' />
             </Form.Item>
           ) : (
             false
           )}
 
-          {actionApi === "v1/page" ? (
+          {actionApi === "v1/page" || actionApi?.includes("city/role") ? (
             <Form.Item
-              label="Định danh "
+              label='Định danh '
               rules={[
                 { required: true, message: "Không được bỏ trống trường này!" },
               ]}
-              name="name"
+              name='name'
             >
-              <Input type="text" />
+              <Input type='text' />
             </Form.Item>
           ) : (
             false
           )}
-          {actionApi?.includes("system") ? (
+          {actionApi?.includes("system/city") ||
+          actionApi?.includes("city/user") ? (
             <div>
               <Form.Item
                 rules={[
@@ -108,13 +109,13 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
                   },
                 ]}
                 key={uuid()}
-                label="Tên tài khoản"
-                name="username"
+                label='Tên tài khoản'
+                name='username'
               >
                 <Input placeholder={"Tên tài khoản"} />
               </Form.Item>
-              <Form.Item key={uuid()} label="Họ và tên">
-                <div className="d-flex">
+              <Form.Item key={uuid()} label='Họ và tên'>
+                <div className='d-flex'>
                   <Form.Item
                     rules={[
                       {
@@ -137,7 +138,7 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
                         message: "Không được bỏ trống trường này!",
                       },
                     ]}
-                    name="lastname"
+                    name='lastname'
                     style={{
                       display: "inline-block",
                       width: "calc(50% - 8px)",
@@ -156,7 +157,7 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
                   },
                 ]}
                 name={"email"}
-                label="Email"
+                label='Email'
               >
                 <Input placeholder={"Email"}></Input>
               </Form.Item>
@@ -169,7 +170,7 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
                   },
                 ]}
                 name={"content"}
-                label="Số điện thoại"
+                label='Số điện thoại'
               >
                 <Input placeholder={"Số điện thoại"}></Input>
               </Form.Item>
@@ -182,25 +183,49 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
                   },
                 ]}
                 name={"password"}
-                label="Mật khẩu"
+                label='Mật khẩu'
               >
                 <Input placeholder={"Mật khẩu"}></Input>
               </Form.Item>
-              <Form.Item key={uuid()} name={"role"} label={"Nhóm quyền"}>
-                <Select placeholder={"Chọn Nhóm quyền"} loading={!typeOption}>
-                  {typeOption}
-                </Select>
+              {!actionApi?.includes("system/city") ? (
+                <Form.Item
+                  rules={[
+                    {
+                      required: true,
+                      message: "Không được bỏ trống trường này!",
+                    },
+                  ]}
+                  key={uuid()}
+                  name={"role"}
+                  label={"Nhóm quyền"}
+                >
+                  <Select placeholder={"Chọn Nhóm quyền"} loading={!typeOption}>
+                    {typeOption}
+                  </Select>
+                </Form.Item>
+              ) : (
+                false
+              )}
+
+              <Form.Item>
+                <Button htmlType='submit' type='primary'>
+                  Xác Nhận
+                </Button>
               </Form.Item>
             </div>
           ) : (
             false
           )}
-
-          <Form.Item>
-            <Button htmlType="submit" type="primary">
-              Xác Nhận
-            </Button>
-          </Form.Item>
+          {!actionApi?.includes("system/city") &&
+          !actionApi?.includes("city/user") ? (
+            <Form.Item>
+              <Button htmlType='submit' type='primary'>
+                Xác Nhận
+              </Button>
+            </Form.Item>
+          ) : (
+            false
+          )}
         </Form>
       ),
     },
@@ -226,7 +251,7 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
               setModal("create");
               setIsModalOpen(true);
             }}
-            type="primary"
+            type='primary'
           >
             Thêm thông tin
           </Button>
@@ -254,17 +279,17 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
                           },
                         });
                       }}
-                      title="Bạn muốn xóa thông tin này ?"
-                      okText="Xóa"
-                      cancelText="Hủy"
+                      title='Bạn muốn xóa thông tin này ?'
+                      okText='Xóa'
+                      cancelText='Hủy'
                     >
-                      <Button size="small" key={uuid()}>
+                      <Button size='small' key={uuid()}>
                         Xóa
                       </Button>
                     </Popconfirm>
 
                     <Button
-                      size="small"
+                      size='small'
                       onClick={() => {
                         dispatch({
                           type: "GET_ROW_REQUESTED",
@@ -313,7 +338,7 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
         />
       </div>
       <Modal
-        width="70vw"
+        width='70vw'
         open={isModalOpen}
         onCancel={() => {
           setIsModalOpen(false);
