@@ -7,6 +7,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
 
 import { userInfoSelector } from "../Component/Login/slice/UserSlice";
+import { spawn } from "child_process";
 interface SideBarProps {}
 
 const SideBar = memo((props: SideBarProps) => {
@@ -14,34 +15,161 @@ const SideBar = memo((props: SideBarProps) => {
   const cityMenu = [
     {
       key: uuid(),
-      icon: <i className='fa-solid fa-gauge'></i>,
-      title: "Tổng quan",
-      label: <Link to='/'>Tổng quan</Link>,
-    },
-    {
-      key: "Báo cáo - thống kê",
-      title: "Báo cáo - thống kê",
-      icon: <i className='fa-solid fa-chart-simple'></i>,
-      label: <span>Báo cáo - thống kê</span>,
+      icon: <i className='fa-solid fa-bars-progress'></i>,
+      title: "Quản trị cấu hình thông tin cổng",
+      label: <span>Cấu hình thông tin cổng</span>,
       children: [
         {
           key: uuid(),
-          title: "Thống kê các đơn vị kinh doanh trên địa bàn",
+          title: "Quản lý chung",
+          icon: <i className='fa-solid fa-gear'></i>,
+          label: <span>Quản lý chung</span>,
+          children: [
+            {
+              key: uuid(),
+              title: "Quản lý ngôn ngữ ",
+              label: <Link to='Manage/System'>Quản lý ngôn ngữ</Link>,
+            },
+            {
+              key: uuid(),
+              title: "Quản lý category tin tức",
+              label: (
+                <Link to='Manage/newsCategory'>Quản lý danh mục tin tức</Link>
+              ),
+            },
+            {
+              key: uuid(),
+              title:
+                "Danh mục loại tiện ích (địa điểm tiện ích dùng để hiển thị bản đồ)",
+              label: (
+                <Link to='Manage/utilitiesType'>
+                  Quản lý danh mục loại tiện ích
+                </Link>
+              ),
+            },
+          ],
+        },
+        {
+          key: uuid(),
+          title: "Quản lý danh mục lưu trú",
+          label: <span>Quản lý danh mục lưu trú</span>,
+          icon: <i className='fa-solid fa-hotel'></i>,
+          children: [
+            {
+              key: uuid(),
+              title: "Quản lý loại khách sạn",
+              label: (
+                <Link to='ContentManage/hotelType'>Quản lý loại khách sạn</Link>
+              ),
+            },
+          ],
+        },
+        {
+          key: uuid(),
+          icon: <i className='fa-solid fa-utensils'></i>,
+          title: "Quản lý danh mục ẩm thực",
+          label: <span>Quản lý danh mục ẩm thực</span>,
+          children: [
+            {
+              key: uuid(),
+              title: "Quản lý loại nhà hàng",
+              label: (
+                <Link to='ContentManage/restaurantType'>
+                  Quản lý loại nhà hàng
+                </Link>
+              ),
+            },
+          ],
+        },
+        {
+          key: uuid(),
+          icon: <i className='fa-solid fa-map-location-dot'></i>,
+          title: "Quản lý danh mục địa điểm",
+          label: <span>Quản lý danh mục địa điểm</span>,
+          children: [
+            {
+              key: uuid(),
+              title: "Quản lý loại địa điểm",
+              label: (
+                <Link to='ContentManage/placeType'>Quản lý loại địa điểm</Link>
+              ),
+            },
+          ],
+        },
+        {
+          key: uuid(),
+          icon: <i className='fa-solid fa-plane'></i>,
+          title: "Quản lý danh mục lữ hành",
+          label: <span>Quản lý danh mục lữ hành</span>,
+          children: [
+            {
+              key: uuid(),
+              title: "Quản lý công ty lữ hành",
+              label: (
+                <Link to='ContentManage/travelCompanies'>
+                  Quản lý công ty lữ hành
+                </Link>
+              ),
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      key: uuid(),
+      title: "Quản lý trang",
+      icon: <i className='fa-solid  fa-folder-open'></i>,
+      label: <Link to='Pages'>Quản lý trang</Link>,
+    },
+    {
+      key: uuid(),
+      title: "Quản lý nội dung",
+      icon: <i className='fa-solid fa-folder'></i>,
+      label: <span>Quản lý nội dung</span>,
+      children: [
+        {
+          key: uuid(),
+          title: "Quản lý địa điểm",
+          label: <Link to='ContentManage/placeList'>Quản lý địa điểm</Link>,
+        },
+        {
+          key: uuid(),
+          title: "Quản lý điểm lưu trú",
+          label: <Link to='ContentManage/hotelList'>Quản lý điểm lưu trú</Link>,
+        },
+        {
+          key: uuid(),
+          title: "Quản lý điểm ẩm thực",
           label: (
-            <Link to='Statistic/businessUnit'>
-              Thống kê các đơn vị kinh doanh
-            </Link>
+            <Link to='ContentManage/restaurantList'>Quản lý điểm ẩm thực</Link>
           ),
         },
         {
           key: uuid(),
-          title: "Thống kê thông tin địa điểm",
-          label: (
-            <Link to='Statistic/placeInfo'>Thống kê thông tin địa điểm</Link>
-          ),
+          title: "Quản lý tour lữ hành",
+          label: <Link to='ContentManage/tour'>Quản lý tour lữ hành</Link>,
+        },
+
+        {
+          key: uuid(),
+          title: "Quản lý tin tức",
+          label: <Link to='ContentManage/news'>Quản lý tin tức</Link>,
+        },
+        {
+          key: uuid(),
+          title: "Quản lý sự kiện",
+          label: <Link to='ContentManage/events'>Quản lý sự kiện</Link>,
+        },
+        {
+          key: uuid(),
+          title:
+            "Quản lý các tiện ích (địa điểm tiện ích dùng để hiển thị bản đồ)",
+          label: <Link to='ContentManage/utilities'>Quản lý tiện ích</Link>,
         },
       ],
     },
+
     {
       key: "Quản trị người dùng",
       title: "Quản trị người dùng",
@@ -60,123 +188,34 @@ const SideBar = memo((props: SideBarProps) => {
         },
       ],
     },
+
     {
-      key: uuid(),
-      title: "Quản lý chung",
-      icon: <i className='fa-solid fa-gear'></i>,
-      label: <span>Quản lý chung</span>,
+      key: "Báo cáo - thống kê",
+      title: "Báo cáo - thống kê",
+      icon: <i className='fa-solid fa-chart-simple'></i>,
+      label: <span>Báo cáo - thống kê</span>,
       children: [
         {
           key: uuid(),
-          title: "Quản lý category tin tức",
-          label: <Link to='Manage/newsCategory'>Quản lý danh mục tin tức</Link>,
+          icon: <i className='fa-solid fa-gauge'></i>,
+          title: "Tổng quan",
+          label: <Link to='/'>Tổng quan</Link>,
         },
         {
           key: uuid(),
-          title:
-            "Danh mục loại tiện ích (địa điểm tiện ích dùng để hiển thị bản đồ)",
+          title: "Thống kê các đơn vị kinh doanh trên địa bàn",
           label: (
-            <Link to='Manage/utilitiesType'>
-              Quản lý danh mục loại tiện ích
+            <Link to='Statistic/businessUnit'>
+              Thống kê các đơn vị kinh doanh
             </Link>
           ),
         },
         {
           key: uuid(),
-          title: "Quản lý hệ thống ",
-          label: <Link to='Manage/System'>Quản lý hệ thống</Link>,
-        },
-      ],
-    },
-    {
-      key: uuid(),
-      title: "Quản lý trang",
-      icon: <i className='fa-solid  fa-folder-open'></i>,
-      label: <Link to='Pages'>Quản lý trang</Link>,
-    },
-    {
-      key: uuid(),
-      title: "Quản lý nội dung",
-      icon: <i className='fa-solid fa-folder'></i>,
-      label: <span>Quản lý nội dung</span>,
-      children: [
-        {
-          key: uuid(),
-          title: "Quản lý địa điểm du lịch",
+          title: "Thống kê thông tin địa điểm",
           label: (
-            <Link to='ContentManage/placeList'>Quản lý địa điểm du lịch</Link>
+            <Link to='Statistic/placeInfo'>Thống kê thông tin địa điểm</Link>
           ),
-          children: [
-            {
-              key: uuid(),
-              title: "Quản lý loại địa điểm",
-              label: (
-                <Link to='ContentManage/placeType'>Quản lý loại địa điểm</Link>
-              ),
-            },
-          ],
-        },
-        {
-          key: uuid(),
-          title: "Quản lý khách sạn",
-          label: <Link to='ContentManage/hotelList'>Quản lý khách sạn</Link>,
-          children: [
-            {
-              key: uuid(),
-              title: "Quản lý loại khách sạn",
-              label: (
-                <Link to='ContentManage/hotelType'>Quản lý loại khách sạn</Link>
-              ),
-            },
-          ],
-        },
-        {
-          key: uuid(),
-          title: "Quản lý nhà hàng",
-          label: (
-            <Link to='ContentManage/restaurantList'>Quản lý nhà hàng</Link>
-          ),
-          children: [
-            {
-              key: uuid(),
-              title: "Quản lý loại nhà hàng",
-              label: (
-                <Link to='ContentManage/restaurantType'>
-                  Quản lý loại nhà hàng
-                </Link>
-              ),
-            },
-          ],
-        },
-        {
-          key: uuid(),
-          title: "Quản lý Tour du lịch",
-          label: <Link to='ContentManage/tour'>Quản lý Tour du lịch</Link>,
-        },
-        {
-          key: uuid(),
-          title: "Quản lý công ty lữ hành",
-          label: (
-            <Link to='ContentManage/travelCompanies'>
-              Quản lý công ty lữ hành
-            </Link>
-          ),
-        },
-        {
-          key: uuid(),
-          title:
-            "Quản lý các tiện ích (địa điểm tiện ích dùng để hiển thị bản đồ)",
-          label: <Link to='ContentManage/utilities'>Quản lý các tiện ích</Link>,
-        },
-        {
-          key: uuid(),
-          title: "Quản lý tin tức",
-          label: <Link to='ContentManage/news'>Quản lý tin tức</Link>,
-        },
-        {
-          key: uuid(),
-          title: "Quản lý sự kiện",
-          label: <Link to='ContentManage/events'>Quản lý sự kiện</Link>,
         },
       ],
     },
