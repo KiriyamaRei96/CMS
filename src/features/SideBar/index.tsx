@@ -32,6 +32,11 @@ const SideBar = memo((props: SideBarProps) => {
             },
             {
               key: uuid(),
+              title: "Quản lý Quận/Huyện",
+              label: <Link to='Manage/district'>Quản lý Quận/Huyện</Link>,
+            },
+            {
+              key: uuid(),
               title: "Quản lý category tin tức",
               label: (
                 <Link to='Manage/newsCategory'>Quản lý danh mục tin tức</Link>
@@ -79,6 +84,13 @@ const SideBar = memo((props: SideBarProps) => {
                 </Link>
               ),
             },
+            {
+              key: uuid(),
+              title: "Quản lý kiểu ẩm thực",
+              label: (
+                <Link to='Manage/RestaurantCategory'>Quản lý kiểu ẩm thực</Link>
+              ),
+            },
           ],
         },
         {
@@ -92,6 +104,15 @@ const SideBar = memo((props: SideBarProps) => {
               title: "Quản lý loại địa điểm",
               label: (
                 <Link to='ContentManage/placeType'>Quản lý loại địa điểm</Link>
+              ),
+            },
+            {
+              key: uuid(),
+              title: "Quản lý danh mục loại hình tour",
+              label: (
+                <Link to='Manage/TourType'>
+                  Quản lý danh mục loại hình tour
+                </Link>
               ),
             },
           ],

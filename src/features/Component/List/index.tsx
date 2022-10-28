@@ -412,6 +412,42 @@ const List = memo((props: ListProps) => {
           setName("Danh sách người dùng");
 
           break;
+        case "/Manage/district":
+          dispatch(setActionApi("v1/district"));
+          dispatch({
+            type: "USER_FETCH_REQUESTED",
+            payload: {
+              getApi: `v1/district/gets?limit=10&page=1&search=&parentUser=${parentID}`,
+              actionApi: "v1/district",
+            },
+          });
+          setName("Quản lý Quận/Huyện");
+
+          break;
+        case "/Manage/RestaurantCategory":
+          dispatch(setActionApi("/v1/restaurant-category"));
+          dispatch({
+            type: "USER_FETCH_REQUESTED",
+            payload: {
+              getApi: `/v1/restaurant-category/gets?limit=10&page=1&search=&parentUser=${parentID}`,
+              actionApi: "/v1/restaurant-category",
+            },
+          });
+          setName("Quản lý kiểu ẩm thực");
+
+          break;
+        case "/Manage/TourType":
+          dispatch(setActionApi("/v1/tour-type"));
+          dispatch({
+            type: "USER_FETCH_REQUESTED",
+            payload: {
+              getApi: `/v1/tour-type/gets?limit=10&page=1&search=&parentUser=${parentID}`,
+              actionApi: "/v1/tour-type",
+            },
+          });
+          setName("Quản lý danh mục loại hình tour");
+
+          break;
       }
     }
   }, [location, loginSate]);
