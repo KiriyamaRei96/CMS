@@ -4,10 +4,19 @@ import Cookies from "js-cookie";
 import { callApi } from "../../../../Api/Axios";
 import openNotificationWithIcon from "../../../function/toast";
 import { selectData } from "../../../../store/store";
+import { setSucces } from "./slice";
 
 const headers = { Authorization: Cookies.get("token") };
+function* waitFor(selector) {
+  if (yield select(selector)) return; // (1)
 
+  while (true) {
+    yield take("SET-SUCCESS"); // (1a)
+    if (yield select(selector)) return; // (1b)
+  }
+}
 function* fetchItem(action) {
+  const State = yield select(selectData);
   yield put({ type: "TABLE_LOADING" });
   try {
     const cookie = Cookies.get("token");
@@ -26,6 +35,7 @@ function* fetchItem(action) {
           actionApi: action.payload.actionApi,
         },
       });
+      yield put({ type: "SET-SUCCESS" });
     }
     if (result.status === 0) {
       yield put({ type: "FETCH_FAILED" });
@@ -33,6 +43,9 @@ function* fetchItem(action) {
   } catch (e) {
     console.log(e);
   }
+  // yield take("SET-SUCCESS");
+  yield call(waitFor, (state) => selectData(state) != null);
+  yield put({ type: "SET-IDLE" });
 }
 function* getLocale(action) {
   const State = yield select(selectData);
@@ -53,6 +66,7 @@ function* getLocale(action) {
         type: "GET_LOCALE",
         payload: result.data,
       });
+      yield put({ type: "SET-SUCCESS" });
     }
     if (result.status === 0) {
       yield put({ type: "FETCH_FAILED" });
@@ -60,6 +74,9 @@ function* getLocale(action) {
   } catch (e) {
     console.log(e);
   }
+  // yield take("SET-SUCCESS");
+  yield call(waitFor, (state) => selectData(state) != null);
+  yield put({ type: "SET-IDLE" });
 }
 function* deleteRow(action) {
   const State = yield select(selectData);
@@ -78,9 +95,13 @@ function* deleteRow(action) {
       .then((res) => res.data)
       .catch((err) => console.log(err));
     yield put({ type: "DELETE_ROW", payload: action.payload.id });
+    yield put({ type: "SET-SUCCESS" });
   } catch (e) {
     console.log(e);
   }
+  // yield take("SET-SUCCESS");
+  yield call(waitFor, (state) => selectData(state) != null);
+  yield put({ type: "SET-IDLE" });
 }
 function* getRow(action) {
   const State = yield select(selectData);
@@ -107,10 +128,14 @@ function* getRow(action) {
         type: "UPDATE_ROW",
         payload: res.data,
       });
+      yield put({ type: "SET-SUCCESS" });
     }
   } catch (e) {
     console.log(e);
   }
+  // yield take("SET-SUCCESS");
+  yield call(waitFor, (state) => selectData(state) != null);
+  yield put({ type: "SET-IDLE" });
 }
 function* searchRow(action) {
   yield put({ type: "TABLE_LOADING" });
@@ -121,7 +146,11 @@ function* searchRow(action) {
       method: "GET",
       url:
         action.payload.action +
-        `/gets?limit=${action.payload.limit}&page=${action.payload.page}&locale=${action.payload.locale}&search=${action.payload.search}&parentUser=${State.parentID}`,
+        `/gets?limit=${action.payload.limit}&page=${
+          action.payload.page
+        }&locale=${action.payload.locale}&search=${
+          action.payload.search ? action.payload.search : ""
+        }&parentUser=${State.parentID}`,
       headers: { Authorization: cookie },
     })
       .then((res) => res.data)
@@ -134,10 +163,14 @@ function* searchRow(action) {
           pagination: res.paginationVariables,
         },
       });
+      yield put({ type: "SET-SUCCESS" });
     }
   } catch (e) {
     console.log(e);
   }
+  // yield take("SET-SUCCESS");
+  yield call(waitFor, (state) => selectData(state) != null);
+  yield put({ type: "SET-IDLE" });
 }
 function* addRow(action) {
   const State = yield select(selectData);
@@ -161,10 +194,20 @@ function* addRow(action) {
         type: "ADD_ROW",
         payload: res.data,
       });
+      yield put({ type: "SET-SUCCESS" });
+    }
+    if (res.status === 0) {
+      yield put({
+        type: "ADD_ROW_FAILED",
+        payload: res.errors ? res.errors : res.error,
+      });
     }
   } catch (e) {
     console.log(e);
   }
+  // yield take("SET-SUCCESS");
+  // yield call(waitFor, (state) => selectData(state) != null);
+  // yield put({ type: "SET-IDLE" });
 }
 function* updateRow(action) {
   const State = yield select(selectData);
@@ -193,10 +236,14 @@ function* updateRow(action) {
         type: "UPDATE_ROW",
         payload: res.data,
       });
+      yield put({ type: "SET-SUCCESS" });
     }
   } catch (e) {
     console.log(e);
   }
+  // yield take("SET-SUCCESS");
+  yield call(waitFor, (state) => selectData(state) != null);
+  yield put({ type: "SET-IDLE" });
 }
 function* deleteSnippets(action) {
   const State = yield select(selectData);
@@ -224,10 +271,14 @@ function* deleteSnippets(action) {
           locale: action.payload.locale,
         },
       });
+      yield put({ type: "SET-SUCCESS" });
     }
   } catch (e) {
     console.log(e);
   }
+  // yield take("SET-SUCCESS");
+  yield call(waitFor, (state) => selectData(state) != null);
+  yield put({ type: "SET-IDLE" });
 }
 function* updateSnippets(action) {
   const State = yield select(selectData);
@@ -259,10 +310,14 @@ function* updateSnippets(action) {
           locale: action.payload.locale,
         },
       });
+      yield put({ type: "SET-SUCCESS" });
     }
   } catch (e) {
     console.log(e);
   }
+  // yield take("SET-SUCCESS");
+  yield call(waitFor, (state) => selectData(state) != null);
+  yield put({ type: "SET-IDLE" });
 }
 function* setLocate(action) {
   const State = yield select(selectData);
@@ -284,10 +339,14 @@ function* setLocate(action) {
       yield put({
         type: "GET_LOCALE_REQUESTED",
       });
+      yield put({ type: "SET-SUCCESS" });
     }
   } catch (e) {
     console.log(e);
   }
+  // yield take("SET-SUCCESS");
+  yield call(waitFor, (state) => selectData(state) != null);
+  yield put({ type: "SET-IDLE" });
 }
 function* listSaga() {
   yield takeLatest("USER_FETCH_REQUESTED", fetchItem);

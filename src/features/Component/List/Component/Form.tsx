@@ -142,9 +142,9 @@ const CreateForm = ({
               setIsModalOpen(false);
             }
           }}
-          layout='inline'
+          layout="inline"
         >
-          <div className='d-flex flex-wrap'>
+          <div className="d-flex flex-wrap">
             {data.id ? (
               <Form.Item key={uuid()} label={titleMap.id}>
                 <span key={uuid()}>{data.id}</span>
@@ -226,7 +226,7 @@ const CreateForm = ({
                 <Select
                   defaultValue={
                     data?.restaurantType?.id !== null
-                      ? data?.restaurantType.id
+                      ? data?.restaurantType?.id
                       : undefined
                   }
                   placeholder={"Chọn loại nhà hàng"}
@@ -281,7 +281,7 @@ const CreateForm = ({
               <Form.Item
                 key={uuid()}
                 name={"date"}
-                label='Thời gian cập nhật cuối'
+                label="Thời gian cập nhật cuối"
               >
                 <DatePicker key={uuid()}></DatePicker>
               </Form.Item>
@@ -295,9 +295,9 @@ const CreateForm = ({
                   return (
                     <Select.Option value={key}>
                       <img
-                        className='icon'
+                        className="icon"
                         src={localeArr[key].icon}
-                        alt=''
+                        alt=""
                       ></img>
                     </Select.Option>
                   );
@@ -323,7 +323,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"address"}
-                label='Địa chỉ'
+                label="Địa chỉ"
               >
                 <Input placeholder={data?.address}></Input>
               </Form.Item>
@@ -335,7 +335,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"description"}
-                label='Mô tả'
+                label="Mô tả"
               >
                 <Input placeholder={data?.description}></Input>
               </Form.Item>
@@ -348,13 +348,13 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"featureImage"}
-                label='Ảnh'
+                label="Ảnh"
               >
                 <Upload
                   action={`${process.env.REACT_APP_CMS_API}/v1/asset/upload`}
                   headers={{ Authorization: getCookie("token") }}
                   maxCount={1}
-                  listType='picture-card'
+                  listType="picture-card"
                   fileList={fileList}
                   data={(file) => {
                     return { parentUser: parentID };
@@ -390,9 +390,9 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"featureImage"}
-                label='Ảnh'
+                label="Ảnh"
               >
-                <img src={data.featureImage.img} alt='example'></img>
+                <img src={data.featureImage.img} alt="example"></img>
               </Form.Item>
             ) : (
               false
@@ -402,7 +402,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"ar"}
-                label='AR'
+                label="AR"
               >
                 <Input placeholder={data?.ar}></Input>
               </Form.Item>
@@ -414,7 +414,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"vr"}
-                label='VR'
+                label="VR"
               >
                 <Input placeholder={data?.vr}></Input>
               </Form.Item>
@@ -426,7 +426,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"name"}
-                label='Định danh'
+                label="Định danh"
               >
                 <Input placeholder={data?.name}></Input>
               </Form.Item>
@@ -437,7 +437,7 @@ const CreateForm = ({
               <Form.Item
                 className={clsx(style.formDes)}
                 key={uuid()}
-                label='Tên tài khoản'
+                label="Tên tài khoản"
               >
                 <span>{data?.username}</span>
               </Form.Item>
@@ -448,9 +448,9 @@ const CreateForm = ({
               <Form.Item
                 className={clsx(style.formDes)}
                 key={uuid()}
-                label='Họ và tên'
+                label="Họ và tên"
               >
-                <div className='d-flex'>
+                <div className="d-flex">
                   <Form.Item
                     name={"firstname"}
                     style={{
@@ -461,7 +461,7 @@ const CreateForm = ({
                     <Input placeholder={data.firstname} />
                   </Form.Item>
                   <Form.Item
-                    name='lastname'
+                    name="lastname"
                     style={{
                       display: "inline-block",
                       width: "calc(50% - 8px)",
@@ -479,7 +479,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"email"}
-                label='Email'
+                label="Email"
               >
                 <Input placeholder={data?.email}></Input>
               </Form.Item>
@@ -491,7 +491,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"phone"}
-                label='Số điện thoại'
+                label="Số điện thoại"
               >
                 <Input placeholder={data?.phone}></Input>
               </Form.Item>
@@ -503,7 +503,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"password"}
-                label='Mật khẩu'
+                label="Mật khẩu"
               >
                 <Input></Input>
               </Form.Item>
@@ -535,11 +535,11 @@ const CreateForm = ({
             <Form.Item
               className={clsx(style.formItem)}
               key={uuid()}
-              label='Chọn vị trí trên bản đồ '
-              name='content'
+              label="Nội dung"
+              name="content"
             >
               <ReactQuill
-                theme='snow'
+                theme="snow"
                 className={clsx(style.quill)}
               ></ReactQuill>
             </Form.Item>
@@ -555,7 +555,7 @@ const CreateForm = ({
             <Form.Item
               className={clsx(style.formItem)}
               key={uuid()}
-              label='Chọn vị trí trên bản đồ '
+              label="Chọn vị trí trên bản đồ "
             >
               <div style={{ width: "100%", height: "500px" }}>
                 <GoogleMapReact
@@ -596,7 +596,7 @@ const CreateForm = ({
             <Form.Item
               className={clsx(style.formItem)}
               key={uuid()}
-              label='Khối nội dung'
+              label="Khối nội dung"
             >
               <Snippets data={data?.snippets} pageName={data?.name}></Snippets>
             </Form.Item>
@@ -607,7 +607,7 @@ const CreateForm = ({
             <Form.Item
               className={clsx(style.formItem)}
               key={uuid()}
-              label='Chọn quyền truy cập'
+              label="Chọn quyền truy cập"
             >
               <Permissions
                 id={
@@ -626,8 +626,8 @@ const CreateForm = ({
             <Button
               className={clsx(style.submit)}
               key={uuid()}
-              htmlType='submit'
-              type='primary'
+              htmlType="submit"
+              type="primary"
             >
               Xác Nhận
             </Button>
