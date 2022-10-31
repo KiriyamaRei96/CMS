@@ -32,6 +32,7 @@ import { env, title } from "process";
 import openNotificationWithIcon from "../../../function/toast";
 import { setLocate } from "../slice/slice";
 import { info } from "console";
+import Galleries from "./Galleries";
 
 export interface CreateFormProps {
   setIsModalOpen?: any;
@@ -64,44 +65,13 @@ const CreateForm = ({
   const location = useLocation().pathname;
   const [point, setPoint] = useState<any>();
   const [avatar, setAvatar] = useState<any>();
-  const [fileList, setFileList] = useState<any>([
-    {
-      uid: "-1",
-      name: "image1.png",
-      status: "done",
-      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-    {
-      uid: "-2",
-      name: "image2.png",
-      status: "done",
-      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-    {
-      uid: "-3",
-      name: "image3.png",
-      status: "done",
-      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-    {
-      uid: "-4",
-      name: "image4.png",
-      status: "done",
-      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-    {
-      uid: "-5",
-      name: "image.png",
-      status: "error",
-    },
-  ]);
 
   const [district, setDistrict] = useState<any>();
   const [tag, setTag] = useState<string[]>();
 
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
-  console.log(fileList);
+
   useEffect(() => {
     if (data?.featureImage !== null && data?.featureImage !== undefined) {
       setAvatar([
@@ -698,7 +668,8 @@ const CreateForm = ({
               name={"galleries"}
               label='Thư viện ảnh'
             >
-              <Upload
+              <Galleries />
+              {/* <Upload
                 key={uuid()}
                 action={`${process.env.REACT_APP_CMS_API}/v1/asset/upload`}
                 headers={{ Authorization: getCookie("token") }}
@@ -710,7 +681,7 @@ const CreateForm = ({
                 }}
               >
                 {uploadButton}
-              </Upload>
+              </Upload> */}
             </Form.Item>
           ) : (
             false
