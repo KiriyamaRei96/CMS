@@ -7,6 +7,7 @@ import {
   Input,
   Select,
   Skeleton,
+  Tag,
   Upload,
 } from "antd";
 import ReactQuill from "react-quill";
@@ -29,6 +30,8 @@ import { useLocation } from "react-router-dom";
 import Permissions from "./Permissions";
 import { env, title } from "process";
 import openNotificationWithIcon from "../../../function/toast";
+import { setLocate } from "../slice/slice";
+import { info } from "console";
 
 export interface CreateFormProps {
   setIsModalOpen?: any;
@@ -60,14 +63,48 @@ const CreateForm = ({
 
   const location = useLocation().pathname;
   const [point, setPoint] = useState<any>();
-  const [fileList, setFileList] = useState<any>();
+  const [avatar, setAvatar] = useState<any>();
+  const [fileList, setFileList] = useState<any>([
+    {
+      uid: "-1",
+      name: "image1.png",
+      status: "done",
+      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+    },
+    {
+      uid: "-2",
+      name: "image2.png",
+      status: "done",
+      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+    },
+    {
+      uid: "-3",
+      name: "image3.png",
+      status: "done",
+      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+    },
+    {
+      uid: "-4",
+      name: "image4.png",
+      status: "done",
+      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+    },
+    {
+      uid: "-5",
+      name: "image.png",
+      status: "error",
+    },
+  ]);
+
+  const [district, setDistrict] = useState<any>();
+  const [tag, setTag] = useState<string[]>();
 
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
-
+  console.log(fileList);
   useEffect(() => {
     if (data?.featureImage !== null && data?.featureImage !== undefined) {
-      setFileList([
+      setAvatar([
         {
           name: data?.featureImage.name,
           status: "done",
@@ -75,12 +112,38 @@ const CreateForm = ({
           url: data?.featureImage.path,
         },
       ]);
-    } else setFileList(undefined);
+    } else setAvatar(undefined);
 
     setPoint({ lat: data?.lat, lng: data?.lng });
   }, [data]);
+  const getSelectList = async (getApi) => {
+    try {
+      const cookie = Cookies.get("token");
+      const result = await callApi
+        .get(getApi, { headers: { Authorization: cookie } })
+        .then((response) => response.data)
+        .catch((err) => console.log(err));
+
+      const option = result.data.map((obj) => {
+        if (obj?.title !== undefined || obj?.name !== undefined) {
+          return (
+            <Select.Option key={uuid()} value={obj.id}>
+              {obj?.title
+                ? obj?.title
+                : obj?.name
+                ? obj?.name
+                : "Chưa cớ tiêu đề"}
+            </Select.Option>
+          );
+        }
+      });
+
+      setDistrict(option);
+    } catch (err) {}
+  };
   useEffect(() => {
     const formData = {};
+    console.log(data);
     if (data) {
       Object.keys(data).forEach((key) => {
         if (data["date"]) {
@@ -91,9 +154,19 @@ const CreateForm = ({
         } else {
           formData[key] = data[key];
         }
+        if (Array.isArray(data[key])) {
+          formData[key] = data[key].map((item) => (item.id ? item.id : item));
+        }
       });
     }
-
+    if (data?.tag !== undefined) {
+      setTag(data?.tag);
+    }
+    if (data?.district !== undefined) {
+      getSelectList(
+        `/v1/district/gets?limit=1000&page=1&locale=${locale}&search=`
+      );
+    }
     form.setFieldsValue(formData);
   }, [data, form]);
   const key = process.env.REACT_APP_GOOGLE_KEY;
@@ -114,10 +187,16 @@ const CreateForm = ({
               info.date = moment();
             }
             info.date = moment(info.date, "DD-MM-YYYY").format("YYYY-MM-DD");
-            if (fileList) {
-              info.featureImage = fileList.map((img) => img.id);
+            if (avatar) {
+              info.featureImage = avatar.map((img) => img.id);
             }
 
+            if (value.galleries) {
+              info.galleries = value.galleries.fileList.map(
+                (img) => img.response.data.id
+              );
+            }
+            console.log(info.galleries);
             if (point.lat) {
               info.lat = point?.lat;
               info.lng = point?.lng;
@@ -142,9 +221,9 @@ const CreateForm = ({
               setIsModalOpen(false);
             }
           }}
-          layout="inline"
+          layout='inline'
         >
-          <div className="d-flex flex-wrap">
+          <div className='d-flex flex-wrap'>
             {data.id ? (
               <Form.Item key={uuid()} label={titleMap.id}>
                 <span key={uuid()}>{data.id}</span>
@@ -179,18 +258,66 @@ const CreateForm = ({
             ) : (
               false
             )}
+
+            {data.district !== undefined ? (
+              <Form.Item key={uuid()} name={"district"} label={"Quận huyện"}>
+                <Select placeholder={"Chọn Quận huyện"}>{district}</Select>
+              </Form.Item>
+            ) : (
+              false
+            )}
+
+            {data.date !== undefined ? (
+              <Form.Item
+                key={uuid()}
+                name={"date"}
+                label='Thời gian cập nhật cuối'
+              >
+                <DatePicker key={uuid()}></DatePicker>
+              </Form.Item>
+            ) : (
+              false
+            )}
+
+            <Form.Item key={uuid()} name={"locale"} label={"Ngôn ngữ"}>
+              <Select
+                defaultValue={locale}
+                onChange={(value) => {
+                  dispatch({
+                    type: "GET_ROW_REQUESTED",
+                    payload: {
+                      ID: { id: id, name: id },
+                      action: actionApi,
+                      locale: value,
+                    },
+                  });
+                  dispatch(setLocate(value));
+                }}
+                placeholder={"Chọn Ngôn ngữ"}
+              >
+                {Object.keys(localeArr).map((key) => {
+                  return (
+                    <Select.Option value={key}>
+                      <img
+                        className='icon'
+                        src={localeArr[key].icon}
+                        alt=''
+                      ></img>
+                    </Select.Option>
+                  );
+                })}
+              </Select>
+            </Form.Item>
+          </div>
+          <div className={clsx(style.titleWraper, "d-flex")}>
             {data.category !== undefined ? (
               <Form.Item
+                className={clsx(style.formDes)}
                 key={uuid()}
                 name={"category"}
                 label={titleMap.category}
               >
-                <Select
-                  defaultValue={
-                    data?.category?.id ? data?.category?.id : undefined
-                  }
-                  placeholder={"Chọn danh mục"}
-                >
+                <Select mode='multiple' placeholder={"Chọn danh mục"}>
                   {typeOption}
                 </Select>
               </Form.Item>
@@ -199,16 +326,16 @@ const CreateForm = ({
             )}
             {data.pointType !== undefined ? (
               <Form.Item
+                className={clsx(style.formDes)}
                 key={uuid()}
                 name={"pointType"}
                 label={"Loại địa điểm"}
               >
                 <Select
-                  defaultValue={
-                    data?.pointType?.id !== null
-                      ? data?.pointType?.id
-                      : undefined
-                  }
+                  onChange={(e) => {
+                    console.log(e);
+                  }}
+                  mode='multiple'
                   placeholder={"Chọn loại địa điểm"}
                 >
                   {typeOption}
@@ -219,18 +346,12 @@ const CreateForm = ({
             )}
             {data.restaurantType !== undefined ? (
               <Form.Item
+                className={clsx(style.formDes)}
                 key={uuid()}
                 name={"restaurantType"}
                 label={"Loại nhà hàng"}
               >
-                <Select
-                  defaultValue={
-                    data?.restaurantType?.id !== null
-                      ? data?.restaurantType?.id
-                      : undefined
-                  }
-                  placeholder={"Chọn loại nhà hàng"}
-                >
+                <Select mode='multiple' placeholder={"Chọn loại nhà hàng"}>
                   {typeOption}
                 </Select>
               </Form.Item>
@@ -239,18 +360,12 @@ const CreateForm = ({
             )}
             {data.hotelType !== undefined ? (
               <Form.Item
+                className={clsx(style.formDes)}
                 key={uuid()}
                 name={"hotelType"}
                 label={"Loại khách sạn"}
               >
-                <Select
-                  defaultValue={
-                    data?.hotelType?.id !== null
-                      ? data?.hotelType?.id
-                      : undefined
-                  }
-                  placeholder={"Chọn loại khách sạn"}
-                >
+                <Select mode='multiple' placeholder={"Chọn loại khách sạn"}>
                   {typeOption}
                 </Select>
               </Form.Item>
@@ -259,53 +374,18 @@ const CreateForm = ({
             )}
             {data.utilitiesType !== undefined ? (
               <Form.Item
+                className={clsx(style.formDes)}
                 key={uuid()}
                 name={"utilitiesType"}
                 label={"Loại tiện ích"}
               >
-                <Select
-                  defaultValue={
-                    data?.utilitiesType?.id !== null
-                      ? data?.utilitiesType?.id
-                      : undefined
-                  }
-                  placeholder={"Chọn loại tiện ích"}
-                >
+                <Select mode='multiple' placeholder={"Chọn loại tiện ích"}>
                   {typeOption}
                 </Select>
               </Form.Item>
             ) : (
               false
             )}
-            {data.date !== undefined ? (
-              <Form.Item
-                key={uuid()}
-                name={"date"}
-                label="Thời gian cập nhật cuối"
-              >
-                <DatePicker key={uuid()}></DatePicker>
-              </Form.Item>
-            ) : (
-              false
-            )}
-
-            <Form.Item key={uuid()} name={"locale"} label={"Ngôn ngữ"}>
-              <Select defaultValue={locale} placeholder={"Chọn Ngôn ngữ"}>
-                {Object.keys(localeArr).map((key) => {
-                  return (
-                    <Select.Option value={key}>
-                      <img
-                        className="icon"
-                        src={localeArr[key].icon}
-                        alt=""
-                      ></img>
-                    </Select.Option>
-                  );
-                })}
-              </Select>
-            </Form.Item>
-          </div>
-          <div className={clsx(style.titleWraper, "d-flex")}>
             {data.title !== undefined ? (
               <Form.Item
                 className={clsx(style.formDes)}
@@ -323,7 +403,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"address"}
-                label="Địa chỉ"
+                label='Địa chỉ'
               >
                 <Input placeholder={data?.address}></Input>
               </Form.Item>
@@ -335,74 +415,56 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"description"}
-                label="Mô tả"
+                label='Mô tả'
               >
                 <Input placeholder={data?.description}></Input>
               </Form.Item>
             ) : (
               false
             )}
-            {data.featureImage !== undefined &&
-            data?.featureImage?.img === undefined ? (
+            {data.highlights !== undefined ? (
               <Form.Item
                 className={clsx(style.formDes)}
                 key={uuid()}
-                name={"featureImage"}
-                label="Ảnh"
+                name={"highlights"}
+                label='Điểm nổi bật'
               >
-                <Upload
-                  action={`${process.env.REACT_APP_CMS_API}/v1/asset/upload`}
-                  headers={{ Authorization: getCookie("token") }}
-                  maxCount={1}
-                  listType="picture-card"
-                  fileList={fileList}
-                  data={(file) => {
-                    return { parentUser: parentID };
-                  }}
-                  onChange={(e: any) => {
-                    if (e.fileList.length === 0) {
-                      setFileList(undefined);
-                    }
-                    if (e.file.status === "uploading" && fileList) {
-                      openNotificationWithIcon(
-                        "warning",
-                        "Cập nhật hình ảnh không thành công",
-                        "Bạn đã có hình ảnh cũ thông tin chỉ cho phép 1 hình ảnh, vui lòng xóa hình ảnh cũ trước khi cập nhật mới"
-                      );
-                    }
-                    if (e.file.status === "done") {
-                      setFileList([
-                        {
-                          name: e.file.response.data.name,
-                          status: "done",
-                          id: e.file.response.data.id,
-                          url: e.file.response.data.path,
-                        },
-                      ]);
-                    }
-                  }}
-                >
-                  {uploadButton}
-                </Upload>
-              </Form.Item>
-            ) : data?.featureImage?.img !== undefined ? (
-              <Form.Item
-                className={clsx(style.formDes)}
-                key={uuid()}
-                name={"featureImage"}
-                label="Ảnh"
-              >
-                <img src={data.featureImage.img} alt="example"></img>
+                <Input></Input>
               </Form.Item>
             ) : (
               false
             )}
+            {data.open !== undefined ? (
+              <Form.Item
+                className={clsx(style.formDes)}
+                key={uuid()}
+                name={"open"}
+                label='Thời gian mở cửa'
+              >
+                <Input></Input>
+              </Form.Item>
+            ) : (
+              false
+            )}
+            {data.close !== undefined ? (
+              <Form.Item
+                className={clsx(style.formDes)}
+                key={uuid()}
+                name={"close"}
+                label='Thời gian đóng cửa'
+              >
+                <Input></Input>
+              </Form.Item>
+            ) : (
+              false
+            )}
+
             {data.ar !== undefined ? (
               <Form.Item
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"ar"}
-                label="AR"
+                label='AR'
               >
                 <Input placeholder={data?.ar}></Input>
               </Form.Item>
@@ -414,19 +476,118 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"vr"}
-                label="VR"
+                label='VR'
               >
                 <Input placeholder={data?.vr}></Input>
               </Form.Item>
             ) : (
               false
             )}
+
+            {data.sort !== undefined ? (
+              <Form.Item
+                className={clsx(style.formDes)}
+                key={uuid()}
+                name={"sort"}
+                label='Sắp xếp thứ tự'
+              >
+                <Select placeholder={"Nhập thông tin tag"}>
+                  <Select.Option value='1'>{"1"}</Select.Option>
+                  <Select.Option value='2'>{"2"}</Select.Option>
+                  <Select.Option value='3'>{"3"}</Select.Option>
+                  <Select.Option value='4'>{"4"}</Select.Option>
+                  <Select.Option value='5'>{"5"}</Select.Option>
+                </Select>
+              </Form.Item>
+            ) : (
+              false
+            )}
+            {data.contact !== undefined ? (
+              <Form.Item
+                className={clsx(style.formDes)}
+                key={uuid()}
+                name={"contact"}
+                label='Liên hệ'
+              >
+                <Input placeholder={data?.tag}></Input>
+              </Form.Item>
+            ) : (
+              false
+            )}
+            {data.price !== undefined ? (
+              <Form.Item
+                className={clsx(style.formDes)}
+                key={uuid()}
+                name={"price"}
+                label='Giá cả'
+              >
+                <Input placeholder={data?.price}></Input>
+              </Form.Item>
+            ) : (
+              false
+            )}
+            {data.tag !== undefined ? (
+              <Form.Item
+                className={clsx(style.formDes)}
+                key={uuid()}
+                name={"tag"}
+                label='Tag'
+              >
+                <Select mode='tags' placeholder={"Nhập thông tin tag"}>
+                  {tag}
+                </Select>
+              </Form.Item>
+            ) : (
+              false
+            )}
+
+            {data.featureImage !== undefined &&
+            data?.featureImage?.img === undefined ? (
+              <Form.Item
+                className={clsx(style.formDes)}
+                key={uuid()}
+                name={"featureImage"}
+                label='Ảnh đại diện'
+              >
+                <Upload
+                  action={`${process.env.REACT_APP_CMS_API}/v1/asset/upload`}
+                  headers={{ Authorization: getCookie("token") }}
+                  maxCount={1}
+                  listType='picture-card'
+                  fileList={avatar}
+                  data={(file) => {
+                    return { parentUser: parentID };
+                  }}
+                  onChange={(e: any) => {
+                    if (e.fileList.length === 0) {
+                      setAvatar(undefined);
+                    }
+
+                    if (e.file.status === "done") {
+                      setAvatar([
+                        {
+                          name: e.file.response.data.name,
+                          status: "done",
+                          id: e.file.response.data.id,
+                          url: e.file.response.data.path,
+                        },
+                      ]);
+                    }
+                  }}
+                >
+                  {!avatar ? uploadButton : false}
+                </Upload>
+              </Form.Item>
+            ) : (
+              false
+            )}
+
             {data.name !== undefined ? (
               <Form.Item
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"name"}
-                label="Định danh"
+                label='Định danh'
               >
                 <Input placeholder={data?.name}></Input>
               </Form.Item>
@@ -437,7 +598,7 @@ const CreateForm = ({
               <Form.Item
                 className={clsx(style.formDes)}
                 key={uuid()}
-                label="Tên tài khoản"
+                label='Tên tài khoản'
               >
                 <span>{data?.username}</span>
               </Form.Item>
@@ -448,9 +609,9 @@ const CreateForm = ({
               <Form.Item
                 className={clsx(style.formDes)}
                 key={uuid()}
-                label="Họ và tên"
+                label='Họ và tên'
               >
-                <div className="d-flex">
+                <div className='d-flex'>
                   <Form.Item
                     name={"firstname"}
                     style={{
@@ -461,7 +622,7 @@ const CreateForm = ({
                     <Input placeholder={data.firstname} />
                   </Form.Item>
                   <Form.Item
-                    name="lastname"
+                    name='lastname'
                     style={{
                       display: "inline-block",
                       width: "calc(50% - 8px)",
@@ -479,7 +640,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"email"}
-                label="Email"
+                label='Email'
               >
                 <Input placeholder={data?.email}></Input>
               </Form.Item>
@@ -491,7 +652,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"phone"}
-                label="Số điện thoại"
+                label='Số điện thoại'
               >
                 <Input placeholder={data?.phone}></Input>
               </Form.Item>
@@ -503,7 +664,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"password"}
-                label="Mật khẩu"
+                label='Mật khẩu'
               >
                 <Input></Input>
               </Form.Item>
@@ -530,16 +691,39 @@ const CreateForm = ({
               false
             )}
           </div>
-
+          {data.galleries ? (
+            <Form.Item
+              className={clsx(style.formItem)}
+              key={uuid()}
+              name={"galleries"}
+              label='Thư viện ảnh'
+            >
+              <Upload
+                key={uuid()}
+                action={`${process.env.REACT_APP_CMS_API}/v1/asset/upload`}
+                headers={{ Authorization: getCookie("token") }}
+                listType='picture-card'
+                fileList={fileList}
+                onChange={({ fileList: newFileList }) => {
+                  console.log(newFileList);
+                  setFileList(newFileList);
+                }}
+              >
+                {uploadButton}
+              </Upload>
+            </Form.Item>
+          ) : (
+            false
+          )}
           {data.content !== undefined ? (
             <Form.Item
               className={clsx(style.formItem)}
               key={uuid()}
-              label="Nội dung"
-              name="content"
+              label='Nội dung'
+              name='content'
             >
               <ReactQuill
-                theme="snow"
+                theme='snow'
                 className={clsx(style.quill)}
               ></ReactQuill>
             </Form.Item>
@@ -555,7 +739,7 @@ const CreateForm = ({
             <Form.Item
               className={clsx(style.formItem)}
               key={uuid()}
-              label="Chọn vị trí trên bản đồ "
+              label='Chọn vị trí trên bản đồ '
             >
               <div style={{ width: "100%", height: "500px" }}>
                 <GoogleMapReact
@@ -596,7 +780,7 @@ const CreateForm = ({
             <Form.Item
               className={clsx(style.formItem)}
               key={uuid()}
-              label="Khối nội dung"
+              label='Khối nội dung'
             >
               <Snippets data={data?.snippets} pageName={data?.name}></Snippets>
             </Form.Item>
@@ -607,7 +791,7 @@ const CreateForm = ({
             <Form.Item
               className={clsx(style.formItem)}
               key={uuid()}
-              label="Chọn quyền truy cập"
+              label='Chọn quyền truy cập'
             >
               <Permissions
                 id={
@@ -626,8 +810,8 @@ const CreateForm = ({
             <Button
               className={clsx(style.submit)}
               key={uuid()}
-              htmlType="submit"
-              type="primary"
+              htmlType='submit'
+              type='primary'
             >
               Xác Nhận
             </Button>

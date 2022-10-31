@@ -196,9 +196,6 @@ const SnippetsForm = ({
             headers={{ Authorization: getCookie("token") }}
             listType='picture-card'
             fileList={fileList}
-            data={(file) => {
-              return { parentUser: parentID };
-            }}
             onChange={(e) => {
               setFileList(e.fileList);
 

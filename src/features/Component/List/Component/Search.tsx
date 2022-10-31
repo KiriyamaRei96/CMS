@@ -10,10 +10,9 @@ import { useLocation } from "react-router-dom";
 
 export interface SearchProps {
   locale: string;
-  city: Array<ReactElement> | undefined;
 }
 
-const Search = ({ locale, city = undefined }: SearchProps) => {
+const Search = ({ locale }: SearchProps) => {
   const [form] = Form.useForm();
   const localeArr = useAppSelector(selectData).localeArr;
   const actionApi = useAppSelector(selectData).actionApi;
@@ -76,7 +75,7 @@ const Search = ({ locale, city = undefined }: SearchProps) => {
             Tìm kiếm
           </Button>
         </Form.Item>
-        <Form.Item label={"Ngôn ngữ"}>
+        {/* <Form.Item label={"Ngôn ngữ"}>
           <Select
             onChange={(value) => {
               dispatch(setLocate(value));
@@ -95,7 +94,7 @@ const Search = ({ locale, city = undefined }: SearchProps) => {
           >
             {option}
           </Select>
-        </Form.Item>
+        </Form.Item> */}
       </Form>
     </div>
   );

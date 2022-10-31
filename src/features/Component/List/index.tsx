@@ -34,38 +34,32 @@ const List = memo((props: ListProps) => {
   const [columns, setColumns] = useState(Array<any>);
 
   const [typeOption, setTypeOption] = useState<any>();
-  const [city, setCity] = useState<any>();
 
   useEffect(() => {
     if (actionApi?.includes("news")) {
       getSelectList(
-        `v1/category/gets?limit=1000&page=1&search=&parentUser=${parentID}`
+        `v1/category/gets?limit=1000&page=1&locale=${locale}&search=`
       );
     } else if (actionApi?.includes("point")) {
       getSelectList(
-        `v1/point-type/gets?limit=1000&page=1&search=&parentUser=${parentID}`
+        `v1/point-type/gets?limit=1000&page=1&locale=${locale}&search=`
       );
     } else if (actionApi?.includes("hotel")) {
       getSelectList(
-        `v1/hotel-type/gets?limit=1000&page=1&search=&parentUser=${parentID}`
+        `v1/hotel-type/gets?limit=1000&page=1&locale=${locale}&search=`
       );
     } else if (actionApi?.includes("utilities")) {
       getSelectList(
-        `v1/utilities-type/gets?limit=1000&page=1&search=&parentUser=${parentID}`
+        `v1/utilities-type/gets?limit=1000&page=1&locale=${locale}&search=`
       );
     } else if (actionApi?.includes("restaurant")) {
       getSelectList(
-        `v1/restaurant-type/gets?limit=1000&page=1&search=&parentUser=${parentID}`
+        `v1/restaurant-type/gets?limit=1000&page=1&locale=${locale}&search=`
       );
     }
-    if (actionApi?.includes("city")) {
-      getSelectList(
-        `/v1/city/role/gets?limit=1000&page=1&search=&parentUser=${parentID}`
-      );
-    }
-  }, [actionApi]);
+  }, [actionApi, locale]);
 
-  const getSelectList = async (getApi, city = false) => {
+  const getSelectList = async (getApi) => {
     try {
       const cookie = Cookies.get("token");
       const result = await callApi
@@ -74,28 +68,20 @@ const List = memo((props: ListProps) => {
         .catch((err) => console.log(err));
 
       const option = result.data.map((obj) => {
-        if (obj?.title || obj?.name) {
+        if (obj?.title !== undefined || obj?.name !== undefined) {
           return (
             <Select.Option key={uuid()} value={obj.id}>
-              {obj?.title ? obj?.title : obj?.name}
-            </Select.Option>
-          );
-        }
-        if (city && obj?.username) {
-          return (
-            <Select.Option key={uuid()} value={obj.id}>
-              {obj?.username}
+              {obj?.title
+                ? obj?.title
+                : obj?.name
+                ? obj?.name
+                : "Chưa cớ tiêu đề"}
             </Select.Option>
           );
         }
       });
 
-      if (city) {
-        setCity(option);
-      }
-      if (!city) {
-        setTypeOption(option);
-      }
+      setTypeOption(option);
     } catch (err) {}
   };
 
@@ -451,25 +437,14 @@ const List = memo((props: ListProps) => {
       }
     }
   }, [location, loginSate]);
-  // useEffect(() => {
-  //   if (infoRole?.id !== "2" && infoRole?.parentUser === null) {
-  //     getSelectList(`/v1/system/city/gets?limit=1000&page=1&search=`, true);
-  //     if (!actionApi?.includes("system")) {
-  //       openNotificationWithIcon(
-  //         "warning",
-  //         "Bạn đang truy cập với tài khoản trị",
-  //         "Bạn hãy chọn thành phố trước khi xem thông tin"
-  //       );
-  //     }
-  //   }
-  // }, [infoRole]);
+
   return (
     <div className={clsx("content", "d-flex")}>
       <div className={clsx(style.header)}>
         <h3>{name}</h3>
       </div>
       <div className={clsx(style.main, "d-flex")}>
-        <Search city={city} locale={locale} />
+        <Search locale={locale} />
         <TableItems typeOption={typeOption} columns={columns} />
       </div>
     </div>

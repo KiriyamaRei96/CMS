@@ -14,7 +14,7 @@ import React, { memo, ReactElement, useEffect, useState } from "react";
 import { Table } from "antd";
 import { selectData } from "../../../../store/store";
 
-import { infoObj } from "../slice/slice";
+import { infoObj, setLocate } from "../slice/slice";
 import style from "../style.module.scss";
 import clsx from "clsx";
 import { v4 as uuid } from "uuid";
@@ -48,7 +48,7 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
   const [createModal, setCreateModal] = useState(false);
 
   const [ID, setID] = useState<string | number>();
-  const [modal, setModal] = useState<string>();
+
   const [data, setData] = useState<any>();
 
   useEffect(() => {
@@ -57,192 +57,15 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
       : setData(dataItem[dataItem.findIndex((obj) => obj.name === ID)]);
   }, [ID, dataItem]);
 
-  // const steps = [
-  //   {
-  //     title: "Tạo tiêu đề thông tin",
-  //     content: (
-  //       <Form key={uuid()} onFinish={addRow} layout="inline">
-  //         {!actionApi?.includes("system") && !actionApi?.includes("city") ? (
-  //           <Form.Item
-  //             label="Tiêu đề thông tin"
-  //             rules={[
-  //               { required: true, message: "Không được bỏ trống trường này!" },
-  //             ]}
-  //             name="title"
-  //           >
-  //             <Input type="text" />
-  //           </Form.Item>
-  //         ) : (
-  //           false
-  //         )}
-
-  //         {actionApi === "v1/page" || actionApi?.includes("city/role") ? (
-  //           <Form.Item
-  //             label="Định danh "
-  //             rules={[
-  //               { required: true, message: "Không được bỏ trống trường này!" },
-  //             ]}
-  //             name="name"
-  //           >
-  //             <Input type="text" />
-  //           </Form.Item>
-  //         ) : (
-  //           false
-  //         )}
-  //         {actionApi?.includes("system/city") ||
-  //         actionApi?.includes("city/user") ? (
-  //           <div>
-  //             <Form.Item
-  //               rules={[
-  //                 {
-  //                   required: true,
-  //                   message: "Không được bỏ trống trường này!",
-  //                 },
-  //               ]}
-  //               key={uuid()}
-  //               label="Tên tài khoản"
-  //               name="username"
-  //             >
-  //               <Input placeholder={"Tên tài khoản"} />
-  //             </Form.Item>
-  //             <Form.Item key={uuid()} label="Họ và tên">
-  //               <div className="d-flex">
-  //                 <Form.Item
-  //                   rules={[
-  //                     {
-  //                       required: true,
-  //                       message: "Không được bỏ trống trường này!",
-  //                     },
-  //                   ]}
-  //                   name={"firstname"}
-  //                   style={{
-  //                     display: "inline-block",
-  //                     width: "calc(50% - 8px)",
-  //                   }}
-  //                 >
-  //                   <Input placeholder={"Họ"} />
-  //                 </Form.Item>
-  //                 <Form.Item
-  //                   rules={[
-  //                     {
-  //                       required: true,
-  //                       message: "Không được bỏ trống trường này!",
-  //                     },
-  //                   ]}
-  //                   name="lastname"
-  //                   style={{
-  //                     display: "inline-block",
-  //                     width: "calc(50% - 8px)",
-  //                   }}
-  //                 >
-  //                   <Input placeholder={"Tên"} />
-  //                 </Form.Item>
-  //               </div>
-  //             </Form.Item>
-  //             <Form.Item
-  //               key={uuid()}
-  //               rules={[
-  //                 {
-  //                   required: true,
-  //                   message: "Không được bỏ trống trường này!",
-  //                 },
-  //               ]}
-  //               name={"email"}
-  //               label="Email"
-  //             >
-  //               <Input placeholder={"Email"}></Input>
-  //             </Form.Item>
-  //             <Form.Item
-  //               key={uuid()}
-  //               rules={[
-  //                 {
-  //                   required: true,
-  //                   message: "Không được bỏ trống trường này!",
-  //                 },
-  //               ]}
-  //               name={"content"}
-  //               label="Số điện thoại"
-  //             >
-  //               <Input placeholder={"Số điện thoại"}></Input>
-  //             </Form.Item>
-  //             <Form.Item
-  //               key={uuid()}
-  //               rules={[
-  //                 {
-  //                   required: true,
-  //                   message: "Không được bỏ trống trường này!",
-  //                 },
-  //               ]}
-  //               name={"password"}
-  //               label="Mật khẩu"
-  //             >
-  //               <Input placeholder={"Mật khẩu"}></Input>
-  //             </Form.Item>
-  //             {!actionApi?.includes("system/city") ? (
-  //               <Form.Item
-  //                 rules={[
-  //                   {
-  //                     required: true,
-  //                     message: "Không được bỏ trống trường này!",
-  //                   },
-  //                 ]}
-  //                 key={uuid()}
-  //                 name={"role"}
-  //                 label={"Nhóm quyền"}
-  //               >
-  //                 <Select placeholder={"Chọn Nhóm quyền"} loading={!typeOption}>
-  //                   {typeOption}
-  //                 </Select>
-  //               </Form.Item>
-  //             ) : (
-  //               false
-  //             )}
-
-  //             <Form.Item>
-  //               <Button htmlType="submit" type="primary">
-  //                 Xác Nhận
-  //               </Button>
-  //             </Form.Item>
-  //           </div>
-  //         ) : (
-  //           false
-  //         )}
-  //         {!actionApi?.includes("system/city") &&
-  //         !actionApi?.includes("city/user") ? (
-  //           <Form.Item>
-  //             <Button htmlType="submit" type="primary">
-  //               Xác Nhận
-  //             </Button>
-  //           </Form.Item>
-  //         ) : (
-  //           false
-  //         )}
-  //       </Form>
-  //     ),
-  //   },
-  //   {
-  //     title: "Chỉnh sửa nội dung thông tin",
-  //     content: (
-  //       <CreateForm
-  //         // setCurrent={setCurrent}
-  //         setIsModalOpen={setIsModalOpen}
-  //         key={uuid()}
-  //         typeOption={typeOption}
-  //         data={dataItem[0]}
-  //       />
-  //     ),
-  //   },
-  // ];
   return (
     <>
       <div className={clsx(style.wraper, "d-flex")}>
         <div className={clsx(style.function, "d-flex")}>
           <Button
             onClick={() => {
-              // setModal("create");
               setCreateModal(true);
             }}
-            type="primary"
+            type='primary'
           >
             Thêm thông tin
           </Button>
@@ -270,17 +93,17 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
                           },
                         });
                       }}
-                      title="Bạn muốn xóa thông tin này ?"
-                      okText="Xóa"
-                      cancelText="Hủy"
+                      title='Bạn muốn xóa thông tin này ?'
+                      okText='Xóa'
+                      cancelText='Hủy'
                     >
-                      <Button size="small" key={uuid()}>
+                      <Button size='small' key={uuid()}>
                         Xóa
                       </Button>
                     </Popconfirm>
 
                     <Button
-                      size="small"
+                      size='small'
                       onClick={() => {
                         dispatch({
                           type: "GET_ROW_REQUESTED",
@@ -291,7 +114,7 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
                           },
                         });
                         setID(record.id ? record.id : record.name);
-                        setModal("fix");
+
                         setIsModalOpen(true);
                       }}
                       key={uuid()}
@@ -329,11 +152,13 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
         />
       </div>
       <Modal
-        width="70vw"
+        width='70vw'
         open={isModalOpen}
         onCancel={() => {
+          dispatch(setLocate("vi"));
           setIsModalOpen(false);
         }}
+        destroyOnClose
         footer={false}
         title={"Sửa thông tin"}
       >
@@ -345,9 +170,10 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
         />
       </Modal>
       <Modal
-        width="70vw"
+        width='70vw'
         open={createModal}
         onCancel={() => {
+          dispatch(setLocate("vi"));
           setCreateModal(false);
         }}
         footer={false}
