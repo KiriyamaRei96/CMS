@@ -65,7 +65,7 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
             onClick={() => {
               setCreateModal(true);
             }}
-            type='primary'
+            type="primary"
           >
             Thêm thông tin
           </Button>
@@ -93,17 +93,17 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
                           },
                         });
                       }}
-                      title='Bạn muốn xóa thông tin này ?'
-                      okText='Xóa'
-                      cancelText='Hủy'
+                      title="Bạn muốn xóa thông tin này ?"
+                      okText="Xóa"
+                      cancelText="Hủy"
                     >
-                      <Button size='small' key={uuid()}>
+                      <Button size="small" key={uuid()}>
                         Xóa
                       </Button>
                     </Popconfirm>
 
                     <Button
-                      size='small'
+                      size="small"
                       onClick={() => {
                         dispatch({
                           type: "GET_ROW_REQUESTED",
@@ -152,7 +152,7 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
         />
       </div>
       <Modal
-        width='70vw'
+        width="70vw"
         open={isModalOpen}
         onCancel={() => {
           dispatch(setLocate("vi"));
@@ -162,15 +162,10 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
         footer={false}
         title={"Sửa thông tin"}
       >
-        <CreateForm
-          data={data}
-          typeOption={typeOption}
-          id={ID}
-          setIsModalOpen={setIsModalOpen}
-        />
+        <CreateForm data={data} id={ID} setIsModalOpen={setIsModalOpen} />
       </Modal>
       <Modal
-        width='70vw'
+        width="70vw"
         open={createModal}
         onCancel={() => {
           dispatch(setLocate("vi"));

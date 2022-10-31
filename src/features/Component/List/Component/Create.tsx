@@ -8,6 +8,7 @@ import clsx from "clsx";
 import style from "../style.module.scss";
 import { infoObj } from "../slice/slice";
 import openNotificationWithIcon from "../../../function/toast";
+import SelectCategory from "./Select";
 
 const { Step } = Steps;
 function useIsMounted() {
@@ -204,21 +205,13 @@ const Create = ({ typeOption, setIsModalOpen, modal }: CreateProps) => {
                 <Input placeholder={"Mật khẩu"}></Input>
               </Form.Item>
               {!actionApi?.includes("system/city") ? (
-                <Form.Item
-                  rules={[
-                    {
-                      required: true,
-                      message: "Không được bỏ trống trường này!",
-                    },
-                  ]}
-                  key={uuid()}
-                  name={"role"}
-                  label={"Nhóm quyền"}
-                >
-                  <Select placeholder={"Chọn Nhóm quyền"} loading={!typeOption}>
-                    {typeOption}
-                  </Select>
-                </Form.Item>
+                <SelectCategory
+                  Url={`/v1/city/role/gets?limit=1000&page=1&search=`}
+                  name="role"
+                  label="Chọn nhóm quyền"
+                  locale={"vi"}
+                  mode={undefined}
+                ></SelectCategory>
               ) : (
                 false
               )}
@@ -252,7 +245,6 @@ const Create = ({ typeOption, setIsModalOpen, modal }: CreateProps) => {
           // setCurrent={setCurrent}
           setIsModalOpen={setIsModalOpen}
           key={uuid()}
-          typeOption={typeOption}
           data={dataItem[0]}
         />
       ),

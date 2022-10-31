@@ -33,58 +33,6 @@ const List = memo((props: ListProps) => {
   const [name, setName] = useState("");
   const [columns, setColumns] = useState(Array<any>);
 
-  const [typeOption, setTypeOption] = useState<any>();
-
-  useEffect(() => {
-    if (actionApi?.includes("news")) {
-      getSelectList(
-        `v1/category/gets?limit=1000&page=1&locale=${locale}&search=`
-      );
-    } else if (actionApi?.includes("point")) {
-      getSelectList(
-        `v1/point-type/gets?limit=1000&page=1&locale=${locale}&search=`
-      );
-    } else if (actionApi?.includes("hotel")) {
-      getSelectList(
-        `v1/hotel-type/gets?limit=1000&page=1&locale=${locale}&search=`
-      );
-    } else if (actionApi?.includes("utilities")) {
-      getSelectList(
-        `v1/utilities-type/gets?limit=1000&page=1&locale=${locale}&search=`
-      );
-    } else if (actionApi?.includes("restaurant")) {
-      getSelectList(
-        `v1/restaurant-type/gets?limit=1000&page=1&locale=${locale}&search=`
-      );
-    }
-  }, [actionApi, locale]);
-
-  const getSelectList = async (getApi) => {
-    try {
-      const cookie = Cookies.get("token");
-      const result = await callApi
-        .get(getApi, { headers: { Authorization: cookie } })
-        .then((response) => response.data)
-        .catch((err) => console.log(err));
-
-      const option = result.data.map((obj) => {
-        if (obj?.title !== undefined || obj?.name !== undefined) {
-          return (
-            <Select.Option key={uuid()} value={obj.id}>
-              {obj?.title
-                ? obj?.title
-                : obj?.name
-                ? obj?.name
-                : "Chưa cớ tiêu đề"}
-            </Select.Option>
-          );
-        }
-      });
-
-      setTypeOption(option);
-    } catch (err) {}
-  };
-
   useEffect(() => {
     if (infoArray.length > 0) {
       let menu: any = [];
@@ -106,7 +54,7 @@ const List = memo((props: ListProps) => {
               title: titleMap[key],
               dataIndex: key,
               key: key,
-              render: (value) => <span color='green'>{value?.name}</span>,
+              render: (value) => <span color="green">{value?.name}</span>,
             };
           }
           if (
@@ -127,11 +75,11 @@ const List = memo((props: ListProps) => {
               key: key,
               render: (value) =>
                 value ? (
-                  <Tag key={uuid()} color='green'>
+                  <Tag key={uuid()} color="green">
                     Đã phát hành
                   </Tag>
                 ) : (
-                  <Tag key={uuid()} color='red'>
+                  <Tag key={uuid()} color="red">
                     Chưa phát hành
                   </Tag>
                 ),
@@ -145,7 +93,7 @@ const List = memo((props: ListProps) => {
               render: (value) => (
                 <img
                   className={clsx(style.img)}
-                  alt=''
+                  alt=""
                   src={value?.["path_150px"]}
                 ></img>
               ),
@@ -157,16 +105,41 @@ const List = memo((props: ListProps) => {
               title: titleMap[key],
               dataIndex: key,
               key: key,
-              render: (value) =>
-                value?.published ? (
-                  <Tag key={uuid()} color='green'>
-                    {value?.title}
-                  </Tag>
-                ) : (
-                  <Tag key={uuid()} color='red'>
-                    {value?.title ? value?.title : `Chưa có ${titleMap[key]}`}
-                  </Tag>
-                ),
+              render: (value) => {
+                if (Array.isArray(value) && value.length > 0) {
+                  if (value[0]?.published) {
+                    return (
+                      <Tag key={uuid()} color="green">
+                        {value[0]?.title}
+                      </Tag>
+                    );
+                  } else {
+                    return (
+                      <Tag key={uuid()} color="red">
+                        {value[0]?.title
+                          ? value[0]?.title
+                          : `Chưa có ${titleMap[key]}`}
+                      </Tag>
+                    );
+                  }
+                } else {
+                  if (value?.published) {
+                    return (
+                      <Tag key={uuid()} color="green">
+                        {value?.title}
+                      </Tag>
+                    );
+                  } else {
+                    return (
+                      <Tag key={uuid()} color="red">
+                        {value?.title
+                          ? value?.title
+                          : `Chưa có ${titleMap[key]}`}
+                      </Tag>
+                    );
+                  }
+                }
+              },
             };
           }
 
@@ -334,7 +307,7 @@ const List = memo((props: ListProps) => {
               actionApi: "v1/restaurant",
             },
           });
-          setName("Quản lý khách sạn");
+          setName("Quản lý điểm ẩm thực");
 
           break;
         case "/ContentManage/tour":
@@ -434,6 +407,30 @@ const List = memo((props: ListProps) => {
           setName("Quản lý danh mục loại hình tour");
 
           break;
+        case "/Manage/DestinationsType":
+          dispatch(setActionApi("/v1/destinations-type"));
+          dispatch({
+            type: "USER_FETCH_REQUESTED",
+            payload: {
+              getApi: `/v1/destinations-type/gets?limit=10&page=1&search=&parentUser=${parentID}`,
+              actionApi: "/v1/destinations-type",
+            },
+          });
+          setName("Quản lý danh mục loại hình tour");
+
+          break;
+        case "/Manage/Room":
+          dispatch(setActionApi("/v1/room"));
+          dispatch({
+            type: "USER_FETCH_REQUESTED",
+            payload: {
+              getApi: `/v1/room/gets?limit=10&page=1&search=&parentUser=${parentID}`,
+              actionApi: "/v1/room",
+            },
+          });
+          setName("Quản lý danh mục loại hình tour");
+
+          break;
       }
     }
   }, [location, loginSate]);
@@ -445,7 +442,7 @@ const List = memo((props: ListProps) => {
       </div>
       <div className={clsx(style.main, "d-flex")}>
         <Search locale={locale} />
-        <TableItems typeOption={typeOption} columns={columns} />
+        <TableItems columns={columns} />
       </div>
     </div>
   );

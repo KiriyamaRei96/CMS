@@ -1,60 +1,46 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Upload } from "antd";
-import React, { useState } from "react";
+import { Form, Upload } from "antd";
+import React, { memo, useState } from "react";
 import getCookie from "../../../../Api/getCookie";
-
-export interface GalleriesProps {}
+import style from "../style.module.scss";
+import clsx from "clsx";
+export interface GalleriesProps {
+  galleri: Array<any>;
+}
 const uploadButton = (
   <div>
     <PlusOutlined />
     <div style={{ marginTop: 8 }}>Upload</div>
   </div>
 );
-const Galleries = (props: GalleriesProps) => {
-  const [fileList, setFileList] = useState<any>([
-    {
-      uid: "-1",
-      name: "image1.png",
+const Galleries = ({ galleri }: GalleriesProps) => {
+  const [fileList, setFileList] = useState<any>(
+    galleri?.map((data) => ({
+      name: data?.name,
       status: "done",
-      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-    {
-      uid: "-2",
-      name: "image2.png",
-      status: "done",
-      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-    {
-      uid: "-3",
-      name: "image3.png",
-      status: "done",
-      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-    {
-      uid: "-4",
-      name: "image4.png",
-      status: "done",
-      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-    {
-      uid: "-5",
-      name: "image.png",
-      status: "error",
-    },
-  ]);
+      id: data?.id,
+      url: data?.path,
+    }))
+  );
   return (
-    <Upload
-      action={`${process.env.REACT_APP_CMS_API}/v1/asset/upload`}
-      headers={{ Authorization: getCookie("token") }}
-      listType='picture-card'
-      fileList={fileList}
-      onChange={({ fileList: newFileList }) => {
-        console.log(newFileList);
-        setFileList(newFileList);
-      }}
+    <Form.Item
+      className={clsx(style.formItem)}
+      key={"galleries"}
+      name={"galleries"}
+      label="Thư viện ảnh"
     >
-      {uploadButton}
-    </Upload>
+      <Upload
+        action={`${process.env.REACT_APP_CMS_API}/v1/asset/upload`}
+        headers={{ Authorization: getCookie("token") }}
+        listType="picture-card"
+        fileList={fileList}
+        onChange={({ fileList: newFileList }) => {
+          setFileList(newFileList);
+        }}
+      >
+        {uploadButton}
+      </Upload>
+    </Form.Item>
   );
 };
 export default Galleries;
