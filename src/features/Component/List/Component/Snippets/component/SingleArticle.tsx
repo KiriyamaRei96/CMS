@@ -35,15 +35,14 @@ const SingleArticle = (props: SingleArticleProps) => {
         >
           <Input></Input>
         </Form.Item>
-        <SnipAvatar />
       </div>
       <Form.Item
         className={clsx(style.formItem)}
         key={uuid()}
-        label='Nội dung'
-        name='content'
+        label="Nội dung"
+        name="content"
       >
-        <ReactQuill theme='snow' className={clsx(style.quill)}></ReactQuill>
+        <ReactQuill theme="snow" className={clsx(style.quill)}></ReactQuill>
       </Form.Item>
     </>
   );

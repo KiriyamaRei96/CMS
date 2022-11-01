@@ -291,7 +291,7 @@ function* updateSnippets(action) {
     const res = yield callApi({
       method: "PUT",
       url: "v1/snippet/update",
-      headers,
+      headers: { Authorization: Cookies.get("token") },
       data: data,
     })
       .then((res) => res.data)

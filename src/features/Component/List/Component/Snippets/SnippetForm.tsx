@@ -15,6 +15,7 @@ import { type } from "os";
 import SingleArticle from "./component/SingleArticle";
 import SnipAvatar from "./component/Avatar";
 import ReactQuill from "react-quill";
+import MultiArticle from "./component/MultiArticle";
 
 export interface SnippetsFormProps {
   snippets: any;
@@ -76,7 +77,7 @@ const SnippetsForm = ({
           key: uuid(),
           render: (img) =>
             img ? (
-              <img className={clsx(style.img)} alt='' src={img.path}></img>
+              <img className={clsx(style.img)} alt="" src={img.path}></img>
             ) : (
               <span>không có hình ảnh</span>
             ),
@@ -148,7 +149,7 @@ const SnippetsForm = ({
         }
       }}
       className={clsx(style.form)}
-      layout='inline'
+      layout="inline"
     >
       <div className={clsx(style.snipHeader, "d-flex")}>
         <Form.Item label={"Tên khối dữ liệu"}>
@@ -192,17 +193,28 @@ const SnippetsForm = ({
           false
         )}
       </div>
-      <Form.Item
-        className={clsx(style.formItem)}
-        name={"title"}
-        label={"Đặt tiêu đề cho khối"}
-      >
-        <Input
-          placeholder={snippets?.title ? snippets?.title : "Tiêu đề dữ liệu"}
-          type='text'
-        ></Input>
-      </Form.Item>
-
+      <div className={clsx(style.titleWraper, "d-flex")}>
+        <Form.Item
+          className={clsx(style.formDes)}
+          name={"title"}
+          label={"Đặt tiêu đề cho khối"}
+        >
+          <Input
+            placeholder={snippets?.title ? snippets?.title : "Tiêu đề dữ liệu"}
+            type="text"
+          ></Input>
+        </Form.Item>
+        {snippets?.key === "SnippetGalleries" ? (
+          <SnipAvatar data={snippets.image} />
+        ) : (
+          false
+        )}
+      </div>
+      {snippets?.key === "SnippetMultiArticle" ? (
+        <MultiArticle data={snippets.articles} />
+      ) : (
+        false
+      )}
       {snippets?.key === "SnippetGalleries" ? (
         <Form.Item
           className={clsx(style.formItem)}
@@ -211,7 +223,7 @@ const SnippetsForm = ({
           <Upload
             action={`${process.env.REACT_APP_CMS_API}/v1/asset/upload`}
             headers={{ Authorization: getCookie("token") }}
-            listType='picture-card'
+            listType="picture-card"
             fileList={fileList}
             onChange={(e) => {
               setFileList(e.fileList);
@@ -259,11 +271,11 @@ const SnippetsForm = ({
                             prv.filter((item) => item.id !== record.id)
                           );
                         }}
-                        title='Bạn muốn xóa thông tin này ?'
-                        okText='Xóa'
-                        cancelText='Hủy'
+                        title="Bạn muốn xóa thông tin này ?"
+                        okText="Xóa"
+                        cancelText="Hủy"
                       >
-                        <Button size='small'>Xóa</Button>
+                        <Button size="small">Xóa</Button>
                       </Popconfirm>
                     </div>
                   ),
@@ -289,7 +301,7 @@ const SnippetsForm = ({
                   key: "action",
                   render: (_, record) => (
                     <Button
-                      size='small'
+                      size="small"
                       onClick={() => {
                         const idList = dataList.map((item) => item.id);
                         if (!idList.includes(record.id)) {
@@ -309,22 +321,9 @@ const SnippetsForm = ({
         false
       )}
 
-      {snippets?.key === "SnippetSingleArticle" ? (
-        <SingleArticle />
-      ) : (
-        //   <Form.Item
-        //     className={clsx(style.formItem)}
-        //     key={uuid()}
-        //     label='Nội dung'
-        //     name='content'
-        //   >
-        //     <ReactQuill theme='snow' className={clsx(style.quill)}></ReactQuill>
-        //   </Form.Item>
-        // </>
-        false
-      )}
-      <Form.Item>
-        <Button htmlType='submit' type='primary'>
+      {snippets?.key === "SnippetSingleArticle" ? <SingleArticle /> : false}
+      <Form.Item className={clsx(style.submit)}>
+        <Button htmlType="submit" type="primary">
           Xác Nhận
         </Button>
       </Form.Item>
