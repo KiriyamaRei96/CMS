@@ -41,7 +41,7 @@ const SelectCategory = ({
                 ? obj?.title
                 : obj?.name
                 ? obj?.name
-                : "Chưa cớ tiêu đề"}
+                : "Chưa có tiêu đề"}
             </Select.Option>
           );
         }
@@ -58,7 +58,9 @@ const SelectCategory = ({
       name={name}
       label={label}
     >
-      <Select mode={mode}>{typeOption}</Select>
+      <Select placeholder={label} mode={mode}>
+        {typeOption}
+      </Select>
     </Form.Item>
   );
 };
