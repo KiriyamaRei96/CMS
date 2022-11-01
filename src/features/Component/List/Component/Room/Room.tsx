@@ -21,6 +21,8 @@ const Room = ({ id, data }: RoomProps) => {
   const { Step } = Steps;
   const [createModal, setCreateModal] = useState<boolean>(false);
   const dispatch = useAppDispatch();
+  const locale = useAppSelector(selectData).locale;
+
   useEffect(() => {
     setInputData(data);
   }, [data]);
@@ -87,6 +89,7 @@ const Room = ({ id, data }: RoomProps) => {
                 {
                   ...value,
                   hotel: id,
+                  locale: locale,
                 },
                 {
                   headers: {

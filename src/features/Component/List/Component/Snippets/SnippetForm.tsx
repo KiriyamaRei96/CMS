@@ -12,6 +12,9 @@ import typeMap from "./typeMap";
 import Cookies from "js-cookie";
 import { callApi } from "../../../../../Api/Axios";
 import { type } from "os";
+import SingleArticle from "./component/SingleArticle";
+import SnipAvatar from "./component/Avatar";
+import ReactQuill from "react-quill";
 
 export interface SnippetsFormProps {
   snippets: any;
@@ -39,17 +42,19 @@ const SnippetsForm = ({
   const dispatch = useAppDispatch();
   const actionApi = useAppSelector(selectData).actionApi;
   const locale = useAppSelector(selectData).locale;
-
+  const [form] = Form.useForm();
   useEffect(() => {
     if (snippets?.key === "SnippetGalleries") {
-      setFileList([
-        ...snippets?.data?.map((item) => ({
-          name: item.name,
-          status: "done",
-          id: item.id,
-          url: item.path,
-        })),
-      ]);
+      if (snippets?.data) {
+        setFileList([
+          ...snippets?.data?.map((item) => ({
+            name: item.name,
+            status: "done",
+            id: item.id,
+            url: item.path,
+          })),
+        ]);
+      }
     }
     if (snippets?.key === "SnippetObject") {
       setCollums([
@@ -80,10 +85,13 @@ const SnippetsForm = ({
 
       setDataList(snippets.data);
     }
+    console.log(snippets);
+    form.setFieldsValue(snippets);
   }, [snippets?.key, snippets?.data]);
 
   return (
     <Form
+      form={form}
       onFinish={(value) => {
         value["snippet_name"] = snippets?.name;
         value["page_name"] = snippets?.pageName;
@@ -91,12 +99,9 @@ const SnippetsForm = ({
           value.title = snippets?.title;
         }
         if (snippets?.key === "SnippetObject") {
-          if (!dataList || dataList.length === 0) {
-            setIsModalOpen(false);
-            setCurrent(false);
-            return;
+          if (dataList) {
+            value.relations = dataList.map((file) => file.id);
           }
-          value.relations = dataList.map((file) => file.id);
 
           dispatch({
             type: "UPDATE_SNIPPETS_REQUESTED",
@@ -111,13 +116,24 @@ const SnippetsForm = ({
           setCurrent(false);
         }
         if (snippets?.key === "SnippetGalleries") {
-          if (!fileList || fileList.length === 0) {
-            setIsModalOpen(false);
-            setCurrent(false);
-            return;
+          if (fileList) {
+            value.relations = fileList.map((file) => file.id);
           }
-          value.relations = fileList.map((file) => file.id);
 
+          dispatch({
+            type: "UPDATE_SNIPPETS_REQUESTED",
+            payload: {
+              data: value,
+              actionApi,
+              name: snippets?.pageName,
+              locale,
+            },
+          });
+          setIsModalOpen(false);
+          setCurrent(false);
+        }
+        if (snippets?.key === "SnippetSingleArticle") {
+          value.image = value.image?.file.response.data.id;
           dispatch({
             type: "UPDATE_SNIPPETS_REQUESTED",
             payload: {
@@ -132,6 +148,7 @@ const SnippetsForm = ({
         }
       }}
       className={clsx(style.form)}
+      layout='inline'
     >
       <div className={clsx(style.snipHeader, "d-flex")}>
         <Form.Item label={"Tên khối dữ liệu"}>
@@ -289,6 +306,21 @@ const SnippetsForm = ({
           </Form.Item>
         </>
       ) : (
+        false
+      )}
+
+      {snippets?.key === "SnippetSingleArticle" ? (
+        <SingleArticle />
+      ) : (
+        //   <Form.Item
+        //     className={clsx(style.formItem)}
+        //     key={uuid()}
+        //     label='Nội dung'
+        //     name='content'
+        //   >
+        //     <ReactQuill theme='snow' className={clsx(style.quill)}></ReactQuill>
+        //   </Form.Item>
+        // </>
         false
       )}
       <Form.Item>

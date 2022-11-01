@@ -39,7 +39,9 @@ const Snippets = ({ data, pageName }: SnippetsProps) => {
 
   const snippetMap = {
     SnippetGalleries: "Khối hình ảnh",
-    SnippetObject: "Khối bài viết",
+    SnippetObject: "Khối đối tượng",
+    SnippetMultiArticle: "Khối nhiều bài viết",
+    SnippetSingleArticle: "Khối một bài viết",
   };
 
   const collums = [
@@ -50,7 +52,7 @@ const Snippets = ({ data, pageName }: SnippetsProps) => {
       render: (text) => <span>{text}</span>,
     },
     {
-      title: "Tiêu đề Khối nội dung",
+      title: "Tiêu đề ",
       dataIndex: "title",
       key: uuid(),
       render: (text) => <span>{text}</span>,
@@ -61,12 +63,7 @@ const Snippets = ({ data, pageName }: SnippetsProps) => {
       key: uuid(),
       render: (text) => <span>{snippetMap[text]}</span>,
     },
-    {
-      title: "Số lượng Thông tin trong khối",
-      dataIndex: "relations",
-      key: uuid(),
-      render: (text) => <span>{text.length}</span>,
-    },
+
     {
       title: "Chức năng",
       key: "action",
@@ -98,6 +95,7 @@ const Snippets = ({ data, pageName }: SnippetsProps) => {
             size='small'
             onClick={() => {
               setSnippets({
+                ...record,
                 key: record.key,
                 data: record.relations,
                 title: record.title,
@@ -209,7 +207,7 @@ const Snippets = ({ data, pageName }: SnippetsProps) => {
       })();
     }
   }, []);
-
+  console.log(data);
   return (
     <>
       <Table

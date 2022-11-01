@@ -163,7 +163,7 @@ const CreateForm = ({
               info.featureImage = avatar.map((img) => img.id);
             }
 
-            if (value?.galleries.fileList) {
+            if (value?.galleries?.fileList) {
               info.galleries = value?.galleries?.fileList?.map((item: any) => {
                 if (item.id !== undefined) {
                   return item.id;
