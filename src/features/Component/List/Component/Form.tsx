@@ -114,7 +114,7 @@ const CreateForm = ({
   };
   useEffect(() => {
     const formData = {};
-    console.log(data);
+
     if (data) {
       Object.keys(data).forEach((key) => {
         if (data["date"]) {

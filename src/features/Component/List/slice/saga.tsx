@@ -282,17 +282,18 @@ function* deleteSnippets(action) {
 }
 function* updateSnippets(action) {
   const State = yield select(selectData);
-  const data = new URLSearchParams({
-    ...action.payload.data,
-    parentUser: State.parentID,
-  }).toString();
+  // const data = new URLSearchParams({
+  //   ...action.payload.data,
+  //   parentUser: State.parentID,
+  // }).toString();
+
   yield put({ type: "TABLE_LOADING" });
   try {
     const res = yield callApi({
       method: "PUT",
       url: "v1/snippet/update",
       headers: { Authorization: Cookies.get("token") },
-      data: data,
+      data: action.payload.data,
     })
       .then((res) => res.data)
       .catch((err) => console.log(err));

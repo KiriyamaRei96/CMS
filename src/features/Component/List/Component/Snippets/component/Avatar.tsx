@@ -7,7 +7,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import getCookie from "../../../../../../Api/getCookie";
 
 export interface SnipAvatarProps {
-  data: any;
+  data: any | undefined;
 }
 const uploadButton = (
   <div>
@@ -17,15 +17,18 @@ const uploadButton = (
 );
 const SnipAvatar = ({ data }: SnipAvatarProps) => {
   const [avatar, setAvatar] = useState<any>();
+
   useEffect(() => {
-    setAvatar([
-      {
-        name: data?.name,
-        status: "done",
-        id: data?.id,
-        url: data?.path,
-      },
-    ]);
+    if (data) {
+      setAvatar([
+        {
+          name: data?.name,
+          status: "done",
+          id: data?.id,
+          url: data?.path,
+        },
+      ]);
+    }
   }, [data]);
   return (
     <Form.Item
@@ -38,7 +41,7 @@ const SnipAvatar = ({ data }: SnipAvatarProps) => {
         action={`${process.env.REACT_APP_CMS_API}/v1/asset/upload`}
         headers={{ Authorization: getCookie("token") }}
         maxCount={1}
-        listType="picture-card"
+        listType='picture-card'
         fileList={avatar}
         onChange={(e: any) => {
           if (e.fileList.length === 0) {

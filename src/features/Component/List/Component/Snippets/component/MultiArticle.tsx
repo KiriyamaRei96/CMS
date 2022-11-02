@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import style from "../../../style.module.scss";
-import { Avatar, Button, Form, Input, Popconfirm, Table } from "antd";
+import { Avatar, Button, Form, Input, Modal, Popconfirm, Table } from "antd";
 import { v4 as uuid } from "uuid";
+import ArticleForm from "./ArticleForm";
 
 export interface MultiArticleProps {
   data: Array<object | void>;
 }
 
 const MultiArticle = ({ data }: MultiArticleProps) => {
-  const [arr, setArr] = useState<any>(data);
+  const [arr, setArr] = useState<any>(
+    data.map((item) => ({ id: uuid(), ...item }))
+  );
+  const [form, setForm] = useState<any>();
+  const [modalOpen, setModalOpen] = useState<any>();
   const collumns = [
     {
       title: "Tiêu đề thông tin",
@@ -29,14 +34,21 @@ const MultiArticle = ({ data }: MultiArticleProps) => {
       render: (_, record) => (
         <div>
           <Popconfirm
-            onConfirm={() => {}}
-            title="Bạn muốn xóa thông tin này ?"
-            okText="Xóa"
-            cancelText="Hủy"
+            onConfirm={() => {
+              setArr((prv) => prv.filter((item) => item.id !== record.id));
+            }}
+            title='Bạn muốn xóa thông tin này ?'
+            okText='Xóa'
+            cancelText='Hủy'
           >
-            <Button size="small">Xóa</Button>
+            <Button size='small'>Xóa</Button>
           </Popconfirm>
-          <Button size="small" onClick={() => {}}>
+          <Button
+            size='small'
+            onClick={() => {
+              console.log(record);
+            }}
+          >
             Sửa
           </Button>
         </div>
@@ -65,22 +77,6 @@ const MultiArticle = ({ data }: MultiArticleProps) => {
           <Input></Input>
         </Form.Item>
       </div>
-      <Form.Item
-        className={clsx(style.formItem)}
-        key={uuid()}
-        label={"Danh sách nội dung"}
-        name={"articles"}
-      >
-        <Table
-          columns={collumns}
-          dataSource={arr}
-          pagination={false}
-          rowKey={uuid()}
-        ></Table>
-        <Button onClick={() => {}} className={clsx("d-flex", style.snipFooter)}>
-          Tạo thông tin
-        </Button>
-      </Form.Item>
     </>
   );
 };
