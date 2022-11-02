@@ -11,7 +11,7 @@ export interface MultiArticleProps {
 
 const MultiArticle = ({ data }: MultiArticleProps) => {
   const [arr, setArr] = useState<any>(
-    data.map((item) => ({ id: uuid(), ...item }))
+    data?.map((item) => ({ id: uuid(), ...item }))
   );
   const [form, setForm] = useState<any>();
   const [modalOpen, setModalOpen] = useState<any>();
@@ -37,14 +37,14 @@ const MultiArticle = ({ data }: MultiArticleProps) => {
             onConfirm={() => {
               setArr((prv) => prv.filter((item) => item.id !== record.id));
             }}
-            title='Bạn muốn xóa thông tin này ?'
-            okText='Xóa'
-            cancelText='Hủy'
+            title="Bạn muốn xóa thông tin này ?"
+            okText="Xóa"
+            cancelText="Hủy"
           >
-            <Button size='small'>Xóa</Button>
+            <Button size="small">Xóa</Button>
           </Popconfirm>
           <Button
-            size='small'
+            size="small"
             onClick={() => {
               console.log(record);
             }}

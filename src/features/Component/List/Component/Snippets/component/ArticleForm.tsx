@@ -9,7 +9,7 @@ import { v4 as uuid } from "uuid";
 export interface ArticleFormProps {
   data: any | undefined;
   setArr: Function;
-  arr: Array<any>;
+  arr: Array<any> | Array<void>;
   setModalOpen: Function;
 }
 
@@ -34,7 +34,12 @@ const ArticleForm = ({ arr, data, setArr, setModalOpen }: ArticleFormProps) => {
         }
         if (!data) {
           outPut.id = uuid();
-          setArr("articles", [outPut, ...arr]);
+          if (arr) {
+            setArr("articles", [outPut, ...arr]);
+          }
+          if (!arr) {
+            setArr("articles", [outPut]);
+          }
         }
         if (data) {
           outPut.id = data.id;
@@ -53,23 +58,23 @@ const ArticleForm = ({ arr, data, setArr, setModalOpen }: ArticleFormProps) => {
       }}
       form={form}
       className={clsx(style.form)}
-      layout='inline'
+      layout="inline"
     >
       <div className={clsx(style.titleWraper, "d-flex")}>
-        <Form.Item name='title' label='Tiêu đề' className={clsx(style.formDes)}>
+        <Form.Item name="title" label="Tiêu đề" className={clsx(style.formDes)}>
           <Input />
         </Form.Item>
         <SnipAvatar data={data?.image} />
         <Form.Item
-          name='subTitle'
-          label='Tiêu đề phụ'
+          name="subTitle"
+          label="Tiêu đề phụ"
           className={clsx(style.formDes)}
         >
           <Input />
         </Form.Item>
         <Form.Item
-          name='description'
-          label='Mô tả'
+          name="description"
+          label="Mô tả"
           className={clsx(style.formDes)}
         >
           <Input />
@@ -78,13 +83,13 @@ const ArticleForm = ({ arr, data, setArr, setModalOpen }: ArticleFormProps) => {
       <Form.Item
         className={clsx(style.formItem)}
         key={uuid()}
-        label='Nội dung'
-        name='content'
+        label="Nội dung"
+        name="content"
       >
-        <ReactQuill theme='snow' className={clsx(style.quill)}></ReactQuill>
+        <ReactQuill theme="snow" className={clsx(style.quill)}></ReactQuill>
       </Form.Item>
       <Form.Item className={clsx(style.submit)}>
-        <Button htmlType='submit' type='primary'>
+        <Button htmlType="submit" type="primary">
           Xác Nhận
         </Button>
       </Form.Item>
