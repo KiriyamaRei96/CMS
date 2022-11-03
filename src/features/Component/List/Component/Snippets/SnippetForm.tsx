@@ -23,8 +23,7 @@ import { callApi } from "../../../../../Api/Axios";
 import { arch, type } from "os";
 import SingleArticle from "./component/SingleArticle";
 import SnipAvatar from "./component/Avatar";
-import ReactQuill from "react-quill";
-import MultiArticle from "./component/MultiArticle";
+
 import ArticleForm from "./component/ArticleForm";
 
 export interface SnippetsFormProps {
@@ -203,8 +202,8 @@ const SnippetsForm = ({
           }
           if (snippets?.key === "SnippetSingleArticle") {
             console.log(value.image);
-            value.image = value.image
-              ? value.image.id
+            value.image = value?.image?.id
+              ? value?.image?.id
               : value.image?.file.response.data.id;
             dispatch({
               type: "UPDATE_SNIPPETS_REQUESTED",
@@ -308,12 +307,16 @@ const SnippetsForm = ({
           >
             <Input></Input>
           </Form.Item>
+          <Form.Item
+            className={clsx(style.formDes)}
+            key={uuid()}
+            label={"Link"}
+            name={"link"}
+          >
+            <Input></Input>
+          </Form.Item>
         </div>
-        {snippets?.key === "SnippetMultiArticle" ? (
-          <MultiArticle data={snippets.articles} />
-        ) : (
-          false
-        )}
+
         {snippets?.key === "SnippetGalleries" ? (
           <Form.Item
             className={clsx(style.formItem)}
@@ -402,9 +405,15 @@ const SnippetsForm = ({
                       <Button
                         size='small'
                         onClick={() => {
-                          const idList = dataList.map((item) => item.id);
-                          if (!idList.includes(record.id)) {
-                            setDataList((prv) => [record, ...prv]);
+                          if (dataList) {
+                            const idList = dataList.map((item) => item.id);
+
+                            if (!idList.includes(record.id)) {
+                              setDataList((prv) => [record, ...prv]);
+                            }
+                          }
+                          if (!dataList) {
+                            setDataList([record]);
                           }
                         }}
                       >
