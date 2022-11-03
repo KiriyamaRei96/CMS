@@ -14,24 +14,8 @@ const SingleArticle = (props: SingleArticleProps) => {
         <Form.Item
           className={clsx(style.formDes)}
           key={uuid()}
-          label={"Tiêu đề phụ"}
-          name={"subTitle"}
-        >
-          <Input></Input>
-        </Form.Item>
-        <Form.Item
-          className={clsx(style.formDes)}
-          key={uuid()}
           label={"mô tả"}
           name={"description"}
-        >
-          <Input></Input>
-        </Form.Item>
-        <Form.Item
-          className={clsx(style.formDes)}
-          key={uuid()}
-          label={"Link"}
-          name={"link"}
         >
           <Input></Input>
         </Form.Item>
