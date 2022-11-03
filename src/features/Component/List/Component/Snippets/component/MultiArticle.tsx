@@ -37,14 +37,14 @@ const MultiArticle = ({ data }: MultiArticleProps) => {
             onConfirm={() => {
               setArr((prv) => prv.filter((item) => item.id !== record.id));
             }}
-            title="Bạn muốn xóa thông tin này ?"
-            okText="Xóa"
-            cancelText="Hủy"
+            title='Bạn muốn xóa thông tin này ?'
+            okText='Xóa'
+            cancelText='Hủy'
           >
-            <Button size="small">Xóa</Button>
+            <Button size='small'>Xóa</Button>
           </Popconfirm>
           <Button
-            size="small"
+            size='small'
             onClick={() => {
               console.log(record);
             }}
@@ -59,15 +59,6 @@ const MultiArticle = ({ data }: MultiArticleProps) => {
   return (
     <>
       <div className={clsx(style.titleWraper, "d-flex")}>
-        <Form.Item
-          className={clsx(style.formDes)}
-          key={uuid()}
-          label={"Tiêu đề phụ"}
-          name={"subTitle"}
-        >
-          <Input></Input>
-        </Form.Item>
-
         <Form.Item
           className={clsx(style.formDes)}
           key={uuid()}

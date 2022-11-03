@@ -90,7 +90,7 @@ const SnippetsForm = ({
           key: uuid(),
           render: (img) =>
             img ? (
-              <img className={clsx(style.img)} alt="" src={img.path}></img>
+              <img className={clsx(style.img)} alt='' src={img.path}></img>
             ) : (
               <span>không có hình ảnh</span>
             ),
@@ -123,14 +123,14 @@ const SnippetsForm = ({
                   );
                   setUpdate(uuid());
                 }}
-                title="Bạn muốn xóa thông tin này ?"
-                okText="Xóa"
-                cancelText="Hủy"
+                title='Bạn muốn xóa thông tin này ?'
+                okText='Xóa'
+                cancelText='Hủy'
               >
-                <Button size="small">Xóa</Button>
+                <Button size='small'>Xóa</Button>
               </Popconfirm>
               <Button
-                size="small"
+                size='small'
                 onClick={() => {
                   setUpdate(record);
                   setModalOpen(true);
@@ -238,7 +238,7 @@ const SnippetsForm = ({
           }
         }}
         className={clsx(style.form)}
-        layout="inline"
+        layout='inline'
       >
         <div className={clsx(style.snipHeader, "d-flex")}>
           <Form.Item label={"Tên khối dữ liệu"}>
@@ -292,7 +292,7 @@ const SnippetsForm = ({
               placeholder={
                 snippets?.title ? snippets?.title : "Tiêu đề dữ liệu"
               }
-              type="text"
+              type='text'
             ></Input>
           </Form.Item>
           {snippets?.key === "SnippetSingleArticle" ? (
@@ -300,6 +300,14 @@ const SnippetsForm = ({
           ) : (
             false
           )}
+          <Form.Item
+            className={clsx(style.formDes)}
+            key={uuid()}
+            label={"Tiêu đề phụ"}
+            name={"subTitle"}
+          >
+            <Input></Input>
+          </Form.Item>
         </div>
         {snippets?.key === "SnippetMultiArticle" ? (
           <MultiArticle data={snippets.articles} />
@@ -314,7 +322,7 @@ const SnippetsForm = ({
             <Upload
               action={`${process.env.REACT_APP_CMS_API}/v1/asset/upload`}
               headers={{ Authorization: getCookie("token") }}
-              listType="picture-card"
+              listType='picture-card'
               fileList={fileList}
               onChange={(e) => {
                 setFileList(e.fileList);
@@ -362,11 +370,11 @@ const SnippetsForm = ({
                               prv.filter((item) => item.id !== record.id)
                             );
                           }}
-                          title="Bạn muốn xóa thông tin này ?"
-                          okText="Xóa"
-                          cancelText="Hủy"
+                          title='Bạn muốn xóa thông tin này ?'
+                          okText='Xóa'
+                          cancelText='Hủy'
                         >
-                          <Button size="small">Xóa</Button>
+                          <Button size='small'>Xóa</Button>
                         </Popconfirm>
                       </div>
                     ),
@@ -392,7 +400,7 @@ const SnippetsForm = ({
                     key: "action",
                     render: (_, record) => (
                       <Button
-                        size="small"
+                        size='small'
                         onClick={() => {
                           const idList = dataList.map((item) => item.id);
                           if (!idList.includes(record.id)) {
@@ -440,14 +448,14 @@ const SnippetsForm = ({
           false
         )}
         <Form.Item className={clsx(style.submit)}>
-          <Button htmlType="submit" type="primary">
+          <Button htmlType='submit' type='primary'>
             Xác Nhận
           </Button>
         </Form.Item>
       </Form>
       <Modal
         destroyOnClose
-        width="70vw"
+        width='70vw'
         open={modalOpen}
         onCancel={() => {
           setModalOpen(false);
