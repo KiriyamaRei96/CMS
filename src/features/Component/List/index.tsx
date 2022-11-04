@@ -259,7 +259,7 @@ const List = memo((props: ListProps) => {
               actionApi: "v1/hotel-type",
             },
           });
-          setName(" Quản lý loại khách sạn");
+          setName("Quản lý loại hình lưu trú");
 
           break;
         case "/ContentManage/hotelList":
@@ -295,7 +295,7 @@ const List = memo((props: ListProps) => {
               actionApi: "v1/restaurant-type",
             },
           });
-          setName(" Quản lý loại nhà hàng");
+          setName("Quản lý loại hình ẩm thực");
 
           break;
         case "/ContentManage/restaurantList":
