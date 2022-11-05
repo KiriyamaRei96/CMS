@@ -151,7 +151,7 @@ const List = memo((props: ListProps) => {
           title: "STT",
           dataIndex: "sort",
           key: uuid(),
-          sorter: (a, b) => a - b,
+          sorter: (a, b) => Number(a) - Number(b),
           render: (text) => <span key={uuid()}>{text}</span>,
         });
       }
