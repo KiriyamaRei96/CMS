@@ -146,7 +146,15 @@ const List = memo((props: ListProps) => {
           menu.push(menuObj);
         }
       });
-
+      if (Object.keys(infoArray[infoArray.length - 1]).includes("sort")) {
+        menu.splice(0, 0, {
+          title: "STT",
+          dataIndex: "sort",
+          key: uuid(),
+          sorter: (a, b) => a - b,
+          render: (text) => <span key={uuid()}>{text}</span>,
+        });
+      }
       setColumns(menu);
     }
   }, [infoArray]);
