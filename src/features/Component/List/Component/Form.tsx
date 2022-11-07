@@ -308,7 +308,7 @@ const CreateForm = ({
                 mode='multiple'
                 Url={`v1/point-type/gets?limit=1000&page=1&locale=${locale}&search=`}
                 name='pointType'
-                label='Chọn loại địa điểm'
+                label='Chọn loại hình lưu trú'
                 locale={locale}
               ></SelectCategory>
             ) : (
@@ -330,7 +330,7 @@ const CreateForm = ({
                 mode='multiple'
                 Url={`v1/hotel-type/gets?limit=1000&page=1&locale=${locale}&search=`}
                 name='hotelType'
-                label='Chọn loại điểm lưu trú'
+                label='Chọn loại hình lưu trú'
                 locale={locale}
               ></SelectCategory>
             ) : (
@@ -363,7 +363,7 @@ const CreateForm = ({
                 mode={undefined}
                 Url={`/v1/destinations-type/gets?limit=1000&page=1&locale=${locale}&search=`}
                 name='destinationsType'
-                label='Chọn loại điểm đến'
+                label='Chọn số điểm đến'
                 locale={locale}
               ></SelectCategory>
             ) : (
@@ -479,7 +479,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"plan"}
-                label='Kế hoạch'
+                label='Kế hoạch du lịch'
               >
                 <Input></Input>
               </Form.Item>
@@ -534,14 +534,14 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"star"}
-                label='Sắp xếp thứ hạng sao'
+                label='Xếp hạng sao'
               >
-                <Select placeholder={"Nhập thứ hạng sao"}>
-                  <Select.Option value='1'>{"1"}</Select.Option>
-                  <Select.Option value='2'>{"2"}</Select.Option>
-                  <Select.Option value='3'>{"3"}</Select.Option>
-                  <Select.Option value='4'>{"4"}</Select.Option>
-                  <Select.Option value='5'>{"5"}</Select.Option>
+                <Select placeholder={"Xếp hạng sao"}>
+                  <Select.Option value='1'>{"1 sao"}</Select.Option>
+                  <Select.Option value='2'>{"2 sao"}</Select.Option>
+                  <Select.Option value='3'>{"3 sao"}</Select.Option>
+                  <Select.Option value='4'>{"4 sao"}</Select.Option>
+                  <Select.Option value='5'>{"5 sao"}</Select.Option>
                 </Select>
               </Form.Item>
             ) : (
@@ -564,9 +564,9 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"price"}
-                label='Giá cả'
+                label='Giá trung bình'
               >
-                <Input placeholder={"Giá cả"}></Input>
+                <Input placeholder={"Giá trung bình"}></Input>
               </Form.Item>
             ) : (
               false

@@ -146,7 +146,15 @@ const List = memo((props: ListProps) => {
           menu.push(menuObj);
         }
       });
-
+      if (Object.keys(infoArray[infoArray.length - 1]).includes("sort")) {
+        menu.splice(0, 0, {
+          title: "STT",
+          dataIndex: "sort",
+          key: uuid(),
+          sorter: (a, b) => Number(a) - Number(b),
+          render: (text) => <span key={uuid()}>{text}</span>,
+        });
+      }
       setColumns(menu);
     }
   }, [infoArray]);
@@ -259,7 +267,7 @@ const List = memo((props: ListProps) => {
               actionApi: "v1/hotel-type",
             },
           });
-          setName(" Quản lý loại khách sạn");
+          setName("Quản lý loại hình lưu trú");
 
           break;
         case "/ContentManage/hotelList":
@@ -295,7 +303,7 @@ const List = memo((props: ListProps) => {
               actionApi: "v1/restaurant-type",
             },
           });
-          setName(" Quản lý loại nhà hàng");
+          setName("Quản lý loại hình ẩm thực");
 
           break;
         case "/ContentManage/restaurantList":
