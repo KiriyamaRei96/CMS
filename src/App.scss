@@ -28,6 +28,10 @@
     }
 }
 
+.ck-balloon-panel {
+    z-index: 20000;
+}
+
 .vetical-input {
     .ant-row {
         flex-direction: column;

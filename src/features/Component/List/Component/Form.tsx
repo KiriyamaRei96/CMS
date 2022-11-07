@@ -11,6 +11,8 @@ import {
   Upload,
 } from "antd";
 import ReactQuill from "react-quill";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { selectData } from "../../../../store/store";
@@ -755,10 +757,18 @@ const CreateForm = ({
               label='Nội dung'
               name='content'
             >
-              <ReactQuill
+              <CKEditor
+                data={form.getFieldValue("content")}
+                editor={ClassicEditor}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  form.setFieldValue("content", data);
+                }}
+              />
+              {/* <ReactQuill
                 theme='snow'
                 className={clsx(style.quill)}
-              ></ReactQuill>
+              ></ReactQuill> */}
             </Form.Item>
           ) : (
             false

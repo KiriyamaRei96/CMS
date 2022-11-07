@@ -1,4 +1,4 @@
-import { call, put, take, takeLatest } from "redux-saga/effects";
+import { put, takeLatest } from "redux-saga/effects";
 import { callApi } from "../../../../Api/Axios";
 import getCookie from "../../../../Api/getCookie";
 import Cookies from "js-cookie";
