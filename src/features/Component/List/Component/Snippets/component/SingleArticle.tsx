@@ -6,7 +6,7 @@ import { v4 as uuid } from "uuid";
 import ReactQuill from "react-quill";
 import SnipAvatar from "./Avatar";
 export interface SingleArticleProps {}
-console.log(style);
+
 const SingleArticle = (props: SingleArticleProps) => {
   return (
     <>

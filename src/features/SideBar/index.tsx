@@ -227,21 +227,19 @@ const SideBar = memo((props: SideBarProps) => {
           title: "Tổng quan",
           label: <Link to="/">Tổng quan</Link>,
         },
+        // {
+        //   key: uuid(),
+        //   title: "Thống kê các đơn vị kinh doanh trên địa bàn",
+        //   label: (
+        //     <Link to="Statistic/businessUnit">
+        //       Thống kê các đơn vị kinh doanh
+        //     </Link>
+        //   ),
+        // },
         {
           key: uuid(),
-          title: "Thống kê các đơn vị kinh doanh trên địa bàn",
-          label: (
-            <Link to="Statistic/businessUnit">
-              Thống kê các đơn vị kinh doanh
-            </Link>
-          ),
-        },
-        {
-          key: uuid(),
-          title: "Thống kê thông tin địa điểm",
-          label: (
-            <Link to="Statistic/placeInfo">Thống kê thông tin địa điểm</Link>
-          ),
+          title: "Thống kê điểm đến",
+          label: <Link to="Statistic/placeInfo">Thống kê điểm đến</Link>,
         },
       ],
     },
