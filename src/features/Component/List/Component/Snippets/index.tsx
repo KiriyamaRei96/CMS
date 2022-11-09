@@ -207,7 +207,7 @@ const Snippets = ({ data, pageName }: SnippetsProps) => {
       })();
     }
   }, []);
-  console.log(data);
+
   return (
     <>
       <Table
@@ -227,6 +227,7 @@ const Snippets = ({ data, pageName }: SnippetsProps) => {
       </Button>
       <Modal
         width='70vw'
+        destroyOnClose
         open={isModalOpen}
         onCancel={() => {
           setIsModalOpen(false);

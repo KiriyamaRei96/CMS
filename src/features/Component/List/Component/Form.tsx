@@ -12,6 +12,8 @@ import {
 } from "antd";
 import ReactQuill from "react-quill";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
+// import ImageResize from "@ckeditor/ckeditor5-image/src/imageresize";
+
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
@@ -635,7 +637,8 @@ const CreateForm = ({
                 name={"name"}
                 label='Định danh'
               >
-                <Input placeholder={"Định danh"}></Input>
+                {/* <Input  placeholder={"Định danh"}></Input> */}
+                <span>{data.name}</span>
               </Form.Item>
             ) : (
               false
@@ -757,18 +760,26 @@ const CreateForm = ({
               label='Nội dung'
               name='content'
             >
-              <CKEditor
+              {/* <CKEditor
+                id='#editor'
                 data={form.getFieldValue("content")}
                 editor={ClassicEditor}
+                config={{
+                  image: {
+                    resizeOptions: [
+                      "@ckeditor/ckeditor5-image/src/imageresize",
+                    ],
+                  },
+                }}
                 onChange={(event, editor) => {
                   const data = editor.getData();
                   form.setFieldValue("content", data);
                 }}
-              />
-              {/* <ReactQuill
+              /> */}
+              <ReactQuill
                 theme='snow'
                 className={clsx(style.quill)}
-              ></ReactQuill> */}
+              ></ReactQuill>
             </Form.Item>
           ) : (
             false
