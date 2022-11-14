@@ -1,19 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  infoArray: [],
-  localeArr: {},
-  locale: "vi",
-  parentID: null,
-  storeState: "success",
+  data: {},
 };
 export const settingSlice = createSlice({
   name: "setting",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase("TABLE_LOADING", (state) => {
-      state.storeState = "loading";
+    builder.addCase("SET_SETTING", (state, action: any) => {
+      state.data = action.payload;
     });
   },
 });

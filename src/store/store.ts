@@ -6,13 +6,15 @@ import createSagaMiddleware from "redux-saga";
 import { userInfoSlice } from "../features/Component/Login/slice/UserSlice";
 import rootSaga from "./rootSaga";
 import { dashBroadSlice } from "../features/Component/Dashboard/slice/slice";
+import { settingSlice } from "../features/Component/WebSetting/slice/slice";
 
 const sagaMiddleware = createSagaMiddleware();
 export const store = configureStore({
   reducer: {
     fetch: Fetcher.reducer,
     userInfo:userInfoSlice.reducer,
-    dasbroad:dashBroadSlice.reducer
+    dasbroad:dashBroadSlice.reducer,
+    setting:settingSlice.reducer
   },
   middleware: (getDefaultMiddleware) => [sagaMiddleware],
   
