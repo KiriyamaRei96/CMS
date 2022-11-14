@@ -14,7 +14,7 @@ const SingleArticle = (props: SingleArticleProps) => {
         <Form.Item
           className={clsx(style.formDes)}
           key={uuid()}
-          label={"mô tả"}
+          label={"Mô tả"}
           name={"description"}
         >
           <Input></Input>
@@ -23,10 +23,10 @@ const SingleArticle = (props: SingleArticleProps) => {
       <Form.Item
         className={clsx(style.formItem)}
         key={uuid()}
-        label="Nội dung"
-        name="content"
+        label='Nội dung'
+        name='content'
       >
-        <ReactQuill theme="snow" className={clsx(style.quill)}></ReactQuill>
+        <ReactQuill theme='snow' className={clsx(style.quill)}></ReactQuill>
       </Form.Item>
     </>
   );

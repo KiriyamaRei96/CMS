@@ -64,3 +64,19 @@
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+
+.formAvatar {
+    width: 48%;
+    margin: 0;
+
+
+    &>div {
+        flex-direction: column;
+        display: flex;
+
+        &>:first-child {
+            align-self: flex-start;
+        }
+
+    }
+}

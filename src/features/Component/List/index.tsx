@@ -54,7 +54,7 @@ const List = memo((props: ListProps) => {
               title: titleMap[key],
               dataIndex: key,
               key: key,
-              render: (value) => <span color="green">{value?.name}</span>,
+              render: (value) => <span color='green'>{value?.name}</span>,
             };
           }
           if (
@@ -75,11 +75,11 @@ const List = memo((props: ListProps) => {
               key: key,
               render: (value) =>
                 value ? (
-                  <Tag key={uuid()} color="green">
+                  <Tag key={uuid()} color='green'>
                     Đã phát hành
                   </Tag>
                 ) : (
-                  <Tag key={uuid()} color="red">
+                  <Tag key={uuid()} color='red'>
                     Chưa phát hành
                   </Tag>
                 ),
@@ -93,7 +93,7 @@ const List = memo((props: ListProps) => {
               render: (value) => (
                 <img
                   className={clsx(style.img)}
-                  alt=""
+                  alt=''
                   src={value?.["path_150px"]}
                 ></img>
               ),
@@ -109,13 +109,13 @@ const List = memo((props: ListProps) => {
                 if (Array.isArray(value) && value.length > 0) {
                   if (value[0]?.published) {
                     return (
-                      <Tag key={uuid()} color="green">
+                      <Tag key={uuid()} color='green'>
                         {value[0]?.title}
                       </Tag>
                     );
                   } else {
                     return (
-                      <Tag key={uuid()} color="red">
+                      <Tag key={uuid()} color='red'>
                         {value[0]?.title
                           ? value[0]?.title
                           : `Chưa có ${titleMap[key]}`}
@@ -125,13 +125,13 @@ const List = memo((props: ListProps) => {
                 } else {
                   if (value?.published) {
                     return (
-                      <Tag key={uuid()} color="green">
+                      <Tag key={uuid()} color='green'>
                         {value?.title}
                       </Tag>
                     );
                   } else {
                     return (
-                      <Tag key={uuid()} color="red">
+                      <Tag key={uuid()} color='red'>
                         {value?.title
                           ? value?.title
                           : `Chưa có ${titleMap[key]}`}
@@ -279,7 +279,7 @@ const List = memo((props: ListProps) => {
               actionApi: "v1/hotel",
             },
           });
-          setName("Quản lý khách sạn");
+          setName("Quản lý điểm lưu trú");
 
           break;
         case "/Manage/utilitiesType":
@@ -327,7 +327,7 @@ const List = memo((props: ListProps) => {
               actionApi: "v1/tour",
             },
           });
-          setName("Quản lý Tour du lịch");
+          setName("Quản lý tour lữ hành");
 
           break;
         case "/ContentManage/travelCompanies":

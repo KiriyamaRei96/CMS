@@ -8,6 +8,8 @@ import getCookie from "../../../../../../Api/getCookie";
 
 export interface SnipAvatarProps {
   data: any | undefined;
+  label?: string;
+  name?: string;
 }
 const uploadButton = (
   <div>
@@ -15,7 +17,7 @@ const uploadButton = (
     <div style={{ marginTop: 8 }}>Upload</div>
   </div>
 );
-const SnipAvatar = ({ data }: SnipAvatarProps) => {
+const SnipAvatar = ({ data, label, name }: SnipAvatarProps) => {
   const [avatar, setAvatar] = useState<any>();
 
   useEffect(() => {
@@ -32,10 +34,10 @@ const SnipAvatar = ({ data }: SnipAvatarProps) => {
   }, [data]);
   return (
     <Form.Item
-      className={clsx(style.formDes)}
+      className={"formAvatar"}
       key={uuid()}
-      label={"Ảnh đại diện"}
-      name={"image"}
+      label={label ? label : "Ảnh đại diện"}
+      name={name ? name : "image"}
     >
       <Upload
         action={`${process.env.REACT_APP_CMS_API}/v1/asset/upload`}
@@ -44,6 +46,9 @@ const SnipAvatar = ({ data }: SnipAvatarProps) => {
         listType='picture-card'
         fileList={avatar}
         onChange={(e: any) => {
+          if (e.file.status === "error") {
+            e.file.response = "Tải lên thất bại";
+          }
           if (e.fileList.length === 0) {
             setAvatar(undefined);
           }

@@ -227,11 +227,7 @@ function* updateRow(action) {
       .then((res) => res.data)
       .catch((err) => console.log(err));
     if (res.status === 1) {
-      openNotificationWithIcon(
-        "success",
-        "Cập nhật thông tin thành công",
-        "bạn đã cập nhật thông tin thành công"
-      );
+      openNotificationWithIcon("success", "Cập nhật thông tin thành công", "b");
       yield put({
         type: "UPDATE_ROW",
         payload: res.data,
@@ -298,11 +294,7 @@ function* updateSnippets(action) {
       .then((res) => res.data)
       .catch((err) => console.log(err));
     if (res.status === 1) {
-      openNotificationWithIcon(
-        "success",
-        "Cập nhật thông tin thành công",
-        "bạn đã cập nhật thông tin thành công"
-      );
+      openNotificationWithIcon("success", "Cập nhật thông tin thành công", "");
       yield put({
         type: "GET_ROW_REQUESTED",
         payload: {

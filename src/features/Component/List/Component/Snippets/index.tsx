@@ -46,7 +46,7 @@ const Snippets = ({ data, pageName }: SnippetsProps) => {
 
   const collums = [
     {
-      title: "Tên Khối nội dung",
+      title: "Tên khối nội dung",
       dataIndex: "snippet_name",
       key: uuid(),
       render: (text) => <span>{text}</span>,
@@ -148,13 +148,13 @@ const Snippets = ({ data, pageName }: SnippetsProps) => {
           labelCol={{ span: 4 }}
         >
           <Form.Item
-            label='Tên Khối dữ liệu'
+            label='Tên khối dữ liệu'
             rules={[
               { required: true, message: "Không được bỏ trống trường này!" },
             ]}
             name='snippet_name'
           >
-            <Input placeholder='Tên Khối dữ liệu' type='text' />
+            <Input placeholder='Tên khối dữ liệu' type='text' />
           </Form.Item>
           <Form.Item
             label='Chọn kiểu khối'

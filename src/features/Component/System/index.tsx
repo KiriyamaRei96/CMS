@@ -11,7 +11,7 @@ const System = memo((props: SystemProps) => {
   return (
     <div className={clsx("content", "d-flex")}>
       <div className={clsx(style.header)}>
-        <h3>Quản lý hệ thống</h3>
+        <h3>Quản lý ngôn ngữ</h3>
       </div>
       <div className={clsx(style.tabWraper)}>
         <Tabs
