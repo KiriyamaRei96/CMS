@@ -48,14 +48,14 @@ const WebSetting = (props: WebSettingProps) => {
               );
               setUpdate(uuid());
             }}
-            title="Bạn muốn xóa thông tin này ?"
-            okText="Xóa"
-            cancelText="Hủy"
+            title='Bạn muốn xóa thông tin này ?'
+            okText='Xóa'
+            cancelText='Hủy'
           >
-            <Button size="small">Xóa</Button>
+            <Button size='small'>Xóa</Button>
           </Popconfirm>
           <Button
-            size="small"
+            size='small'
             onClick={() => {
               setUpdate(record);
               setModalOpen(true);
@@ -100,20 +100,17 @@ const WebSetting = (props: WebSettingProps) => {
             value?.logo?.file?.response?.data?.id
               ? (value.logo = value?.logo?.file?.response?.data?.id)
               : (value.logo = data.logo?.id);
+            value?.logoBW?.file?.response?.data?.id
+              ? (value.logoBW = value?.logoBW?.file?.response?.data?.id)
+              : (value.logoBW = data.logoBW?.id);
             dispatch({ type: "UPDATE_SETTING_REQUESTED", payload: value });
           }}
           className={clsx(style.form)}
           form={form}
-          layout="inline"
+          layout='inline'
         >
-          <div className="d-flex">
-            <SnipAvatar
-              name="logo"
-              label="Thay đổi logo"
-              data={form.getFieldValue("logo")}
-            />
+          <div className='d-flex justify-content-between '>
             <Form.Item
-              className={clsx(style.formDes)}
               key={uuid()}
               name={"locale"}
               label={"Ngôn ngữ"}
@@ -129,15 +126,27 @@ const WebSetting = (props: WebSettingProps) => {
                   return (
                     <Select.Option value={key}>
                       <img
-                        className="icon"
+                        className='icon'
                         src={localeArr[key].icon}
-                        alt=""
+                        alt=''
                       ></img>
                     </Select.Option>
                   );
                 })}
               </Select>
             </Form.Item>
+            <SnipAvatar
+              style={{ width: "30%" }}
+              name='logo'
+              label='Thay đổi logo'
+              data={form.getFieldValue("logo")}
+            />
+            <SnipAvatar
+              style={{ width: "30%" }}
+              name='logoBW'
+              label='Thay đổi logo trang chi tiết'
+              data={form.getFieldValue("logoBW")}
+            />
           </div>
 
           <Form.Item
@@ -163,7 +172,7 @@ const WebSetting = (props: WebSettingProps) => {
             </Button>
           </Form.Item>
           <Form.Item className={clsx(style.submit)}>
-            <Button htmlType="submit" type="primary">
+            <Button htmlType='submit' type='primary'>
               Xác Nhận
             </Button>
           </Form.Item>
@@ -171,7 +180,7 @@ const WebSetting = (props: WebSettingProps) => {
       </div>
       <Modal
         destroyOnClose
-        width="70vw"
+        width='70vw'
         open={modalOpen}
         onCancel={() => {
           setModalOpen(false);

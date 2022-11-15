@@ -10,6 +10,7 @@ export interface SnipAvatarProps {
   data: any | undefined;
   label?: string;
   name?: string;
+  style?: any;
 }
 const uploadButton = (
   <div>
@@ -17,7 +18,7 @@ const uploadButton = (
     <div style={{ marginTop: 8 }}>Upload</div>
   </div>
 );
-const SnipAvatar = ({ data, label, name }: SnipAvatarProps) => {
+const SnipAvatar = ({ style, data, label, name }: SnipAvatarProps) => {
   const [avatar, setAvatar] = useState<any>();
 
   useEffect(() => {
@@ -34,6 +35,7 @@ const SnipAvatar = ({ data, label, name }: SnipAvatarProps) => {
   }, [data]);
   return (
     <Form.Item
+      style={style}
       className={"formAvatar"}
       key={uuid()}
       label={label ? label : "Ảnh đại diện"}
