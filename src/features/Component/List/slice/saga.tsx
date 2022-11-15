@@ -80,6 +80,7 @@ function* getLocale(action) {
 }
 function* deleteRow(action) {
   const State = yield select(selectData);
+  const cookie = Cookies.get("token");
   try {
     const deleteID = new URLSearchParams({
       ...action.payload,
@@ -89,7 +90,7 @@ function* deleteRow(action) {
     const res = yield callApi({
       method: "DELETE",
       url: action.payload.action + "/delete",
-      headers,
+      headers: { Authorization: cookie },
       data: deleteID,
     })
       .then((res) => res.data)
