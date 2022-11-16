@@ -38,6 +38,7 @@ import { setLocate } from "../slice/slice";
 import Galleries from "./Galleries";
 import SelectCategory from "./Select";
 import Room from "./Room/Room";
+import ChangePassForm from "./ChangePassForm";
 
 export interface CreateFormProps {
   setIsModalOpen?: any;
@@ -715,7 +716,7 @@ const CreateForm = ({
                 name={"password"}
                 label='Mật khẩu'
               >
-                <Input></Input>
+                <ChangePassForm setField={form.setFieldValue}></ChangePassForm>
               </Form.Item>
             ) : (
               false

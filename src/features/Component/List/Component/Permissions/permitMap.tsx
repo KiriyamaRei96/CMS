@@ -2,7 +2,7 @@ const permitMap = {
   "city.user": "Quản lý tài khoản hệ thống",
   "city.role": "Quản lý nhóm quyền",
   "city.permission": "Quản lý chức năng ",
-
+  district: "Quản lý Quận/Huyện",
   languages: "Quản lý ngôn ngữ",
   media: "Quản lý đa phương tiện",
   page: "Quản lý trang",
@@ -20,5 +20,11 @@ const permitMap = {
   travelCompanies: "Quản lý công ty lữ hành",
   utilities: "Quản lý tiện ích",
   utilitiesType: "Quản lý loại tiện ích",
+  room: "Quản lý thông tin phòng",
+  restaurantCategory: "Quản lý loại ẩm thực",
+  tourType: "Quản lý loại tour",
+  destinationsType: "Quản lý số điểm đến",
+  webSetting: "Quản lý WebSite",
+  form: "Quản lý nhập form",
 };
 export default permitMap;
