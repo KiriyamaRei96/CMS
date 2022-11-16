@@ -34,7 +34,7 @@ const Permissions = ({ id }: PermissionsProps) => {
       title: "Quyền truy cập",
       dataIndex: "tilte",
       key: "tilte",
-      render: (text) => <span>{permitMap[text]}</span>,
+      render: (text) => <span>{permitMap[text] ? permitMap[text] : text}</span>,
     },
     {
       title: "Xem",
@@ -302,7 +302,7 @@ const Permissions = ({ id }: PermissionsProps) => {
       }
     }
   };
-
+  console.log(option);
   return (
     <div>
       <Table columns={collums} dataSource={option}></Table>

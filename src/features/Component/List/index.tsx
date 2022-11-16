@@ -424,7 +424,7 @@ const List = memo((props: ListProps) => {
               actionApi: "/v1/destinations-type",
             },
           });
-          setName("Quản lý danh mục loại hình tour");
+          setName("Quản lý số điểm đến");
 
           break;
         case "/Manage/Room":

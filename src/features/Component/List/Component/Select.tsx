@@ -29,7 +29,9 @@ const SelectCategory = ({
     try {
       const cookie = Cookies.get("token");
       const result = await callApi
-        .get(getApi, { headers: { Authorization: cookie } })
+        .get(getApi + "&hideUnpublished=1", {
+          headers: { Authorization: cookie },
+        })
         .then((response) => response.data)
         .catch((err) => console.log(err));
 
