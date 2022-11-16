@@ -190,7 +190,7 @@ const List = memo((props: ListProps) => {
           dispatch({
             type: "USER_FETCH_REQUESTED",
             payload: {
-              getApi: `v1/point/gets?limit=10&page=1&search=&parentUser=${parentID}`,
+              getApi: `v1/point/gets?limit=10&order=asc&order_key=sort&page=1&search=&parentUser=${parentID}`,
               actionApi: "v1/point",
             },
           });
@@ -214,7 +214,7 @@ const List = memo((props: ListProps) => {
           dispatch({
             type: "USER_FETCH_REQUESTED",
             payload: {
-              getApi: `v1/news/gets?limit=10&page=1&search=&parentUser=${parentID}`,
+              getApi: `v1/news/gets?limit=10&order=asc&order_key=sort&page=1&search=&parentUser=${parentID}`,
               actionApi: "v1/news",
             },
           });
@@ -226,7 +226,7 @@ const List = memo((props: ListProps) => {
           dispatch({
             type: "USER_FETCH_REQUESTED",
             payload: {
-              getApi: `v1/event/gets?limit=10&page=1&search=&parentUser=${parentID}`,
+              getApi: `v1/event/gets?limit=10&order=asc&order_key=sort&page=1&search=&parentUser=${parentID}`,
               actionApi: "v1/event",
             },
           });
@@ -234,6 +234,43 @@ const List = memo((props: ListProps) => {
           setName("Quản lý sự kiện");
 
           break;
+        case "/ContentManage/restaurantList":
+          dispatch(setActionApi("v1/restaurant"));
+          dispatch({
+            type: "USER_FETCH_REQUESTED",
+            payload: {
+              getApi: `v1/restaurant/gets?limit=10&order=asc&order_key=sort&page=1&search=&parentUser=${parentID}`,
+              actionApi: "v1/restaurant",
+            },
+          });
+          setName("Quản lý điểm ẩm thực");
+
+          break;
+        case "/ContentManage/tour":
+          dispatch(setActionApi("v1/tour"));
+          dispatch({
+            type: "USER_FETCH_REQUESTED",
+            payload: {
+              getApi: `v1/tour/gets?limit=10&order=asc&order_key=sort&page=1&search=&parentUser=${parentID}`,
+              actionApi: "v1/tour",
+            },
+          });
+          setName("Quản lý tour lữ hành");
+
+          break;
+        case "/ContentManage/hotelList":
+          dispatch(setActionApi("v1/hotel"));
+          dispatch({
+            type: "USER_FETCH_REQUESTED",
+            payload: {
+              getApi: `v1/hotel/gets?limit=10&order=asc&order_key=sort&page=1&search=&parentUser=${parentID}`,
+              actionApi: "v1/hotel",
+            },
+          });
+          setName("Quản lý điểm lưu trú");
+
+          break;
+        // type
         case "/ContentManage/placeType":
           dispatch(setActionApi("v1/point-type"));
           dispatch({
@@ -270,18 +307,7 @@ const List = memo((props: ListProps) => {
           setName("Quản lý loại hình lưu trú");
 
           break;
-        case "/ContentManage/hotelList":
-          dispatch(setActionApi("v1/hotel"));
-          dispatch({
-            type: "USER_FETCH_REQUESTED",
-            payload: {
-              getApi: `v1/hotel/gets?limit=10&page=1&search=&parentUser=${parentID}`,
-              actionApi: "v1/hotel",
-            },
-          });
-          setName("Quản lý điểm lưu trú");
 
-          break;
         case "/Manage/utilitiesType":
           dispatch(setActionApi("v1/utilities-type"));
           dispatch({
@@ -306,30 +332,7 @@ const List = memo((props: ListProps) => {
           setName("Quản lý loại hình ẩm thực");
 
           break;
-        case "/ContentManage/restaurantList":
-          dispatch(setActionApi("v1/restaurant"));
-          dispatch({
-            type: "USER_FETCH_REQUESTED",
-            payload: {
-              getApi: `v1/restaurant/gets?limit=10&page=1&search=&parentUser=${parentID}`,
-              actionApi: "v1/restaurant",
-            },
-          });
-          setName("Quản lý điểm ẩm thực");
 
-          break;
-        case "/ContentManage/tour":
-          dispatch(setActionApi("v1/tour"));
-          dispatch({
-            type: "USER_FETCH_REQUESTED",
-            payload: {
-              getApi: `v1/tour/gets?limit=10&page=1&search=&parentUser=${parentID}`,
-              actionApi: "v1/tour",
-            },
-          });
-          setName("Quản lý tour lữ hành");
-
-          break;
         case "/ContentManage/travelCompanies":
           dispatch(setActionApi("v1/travel-companies"));
           dispatch({
