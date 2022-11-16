@@ -41,15 +41,15 @@ const Login = memo((props: LoginProps) => {
           <Form.Item
             label='Tài khoản'
             name='username'
-            rules={[{ required: true, message: "vui lòng nhập tên!" }]}
+            rules={[{ required: true, message: "Vui lòng nhập tên!" }]}
           >
             <Input />
           </Form.Item>
 
           <Form.Item
-            label='mật khẩu'
+            label='Mật khẩu'
             name='password'
-            rules={[{ required: true, message: "vui lòng nhập mật khẩu!" }]}
+            rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}
           >
             <Input.Password />
           </Form.Item>
