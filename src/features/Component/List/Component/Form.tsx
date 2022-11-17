@@ -13,9 +13,15 @@ import {
 import ReactQuill from "react-quill";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 // import ImageResize from "@ckeditor/ckeditor5-image/src/imageresize";
-
+import Autocomplete from "react-google-autocomplete";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import React, { ReactElement, useEffect, useState } from "react";
+import React, {
+  ReactElement,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { selectData } from "../../../../store/store";
 import { v4 as uuid } from "uuid";
@@ -55,6 +61,7 @@ const uploadButton = (
     <div style={{ marginTop: 8 }}>Upload</div>
   </div>
 );
+
 const CreateForm = ({
   setCurrent,
   setIsModalOpen,
@@ -73,6 +80,7 @@ const CreateForm = ({
   const [avatar, setAvatar] = useState<any>();
 
   const [district, setDistrict] = useState<any>();
+
   const [tag, setTag] = useState<string[]>();
 
   const [form] = Form.useForm();
@@ -147,6 +155,7 @@ const CreateForm = ({
     form.setFieldsValue(formData);
   }, [data, form]);
   const key = process.env.REACT_APP_GOOGLE_KEY;
+
   return (
     <>
       {storeSate !== "loading" && data ? (
@@ -792,37 +801,51 @@ const CreateForm = ({
               key={uuid()}
               label='Chọn vị trí trên bản đồ '
             >
-              <div style={{ width: "100%", height: "500px" }}>
-                <GoogleMapReact
-                  bootstrapURLKeys={{
-                    key: key ? key : "",
-                  }}
-                  defaultCenter={{
-                    lat: Number(point?.lat ? point?.lat : 21.027105947174572),
-                    lng: Number(point?.lng ? point?.lng : 105.8380794988938),
-                  }}
-                  defaultZoom={15}
-                  onClick={(e) =>
+              <>
+                <Autocomplete
+                  onPlaceSelected={(place) => {
                     setPoint({
-                      lat: e.lat.toString(),
-                      lng: e.lng.toString(),
-                    })
-                  }
-                >
-                  <Marker
-                    lat={Number(point?.lat ? point?.lat : 21.027105947174572)}
-                    lng={Number(point?.lng ? point?.lng : 105.8380794988938)}
-                    child={
-                      <i
-                        className={clsx(
-                          "fa-solid fa-location-dot",
-                          style.marker
-                        )}
-                      ></i>
+                      lat: place.geometry.location.lat(),
+                      lng: place.geometry.location.lng(),
+                    });
+                  }}
+                  apiKey={key ? key : ""}
+                  options={{
+                    types: ["(regions)"],
+                  }}
+                />
+                <div style={{ width: "100%", height: "500px" }}>
+                  <GoogleMapReact
+                    bootstrapURLKeys={{
+                      key: key ? key : "",
+                    }}
+                    defaultCenter={{
+                      lat: Number(point?.lat ? point?.lat : 21.027105947174572),
+                      lng: Number(point?.lng ? point?.lng : 105.8380794988938),
+                    }}
+                    defaultZoom={15}
+                    onClick={(e) =>
+                      setPoint({
+                        lat: e.lat.toString(),
+                        lng: e.lng.toString(),
+                      })
                     }
-                  ></Marker>
-                </GoogleMapReact>
-              </div>
+                  >
+                    <Marker
+                      lat={Number(point?.lat ? point?.lat : 21.027105947174572)}
+                      lng={Number(point?.lng ? point?.lng : 105.8380794988938)}
+                      child={
+                        <i
+                          className={clsx(
+                            "fa-solid fa-location-dot",
+                            style.marker
+                          )}
+                        ></i>
+                      }
+                    ></Marker>
+                  </GoogleMapReact>
+                </div>
+              </>
             </Form.Item>
           ) : (
             false
