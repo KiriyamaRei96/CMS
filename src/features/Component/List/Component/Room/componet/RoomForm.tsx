@@ -23,7 +23,7 @@ const RoomForm = ({ data, id, closeModal, setInputData }: RoomFormProps) => {
   const [error, setError] = useState<any>();
   const actionApi = useAppSelector(selectData).actionApi;
   const dispatch = useAppDispatch();
-
+  console.log(data);
   useEffect(() => {
     form.setFieldsValue(data);
     if (error) {
@@ -70,25 +70,34 @@ const RoomForm = ({ data, id, closeModal, setInputData }: RoomFormProps) => {
           .then((res) => res.data)
           .catch((err) => console.log(err));
         if (res.status === 1) {
-          dispatch({
-            type: "GET_ROW_REQUESTED",
-            payload: {
-              ID: { id: id },
-              action: actionApi,
-              locale,
-            },
-          });
+          const test = {
+            ...data,
+            ...value,
+          };
+          test.galleries = test?.galleries?.fileList;
+          // dispatch({
+          //   type: "GET_ROW_REQUESTED",
+          //   payload: {
+          //     ID: { id: id },
+          //     action: actionApi,
+          //     locale,
+          //   },
+          // });
+          console.log(test);
+          setInputData((prv) =>
+            prv.map((item) => (item.id === test.id ? test : item))
+          );
           closeModal(false);
         }
         if (res.status === 0) {
           setError(res.errors ? res.errors : res.error);
         }
       }}
-      layout='inline'
+      layout="inline"
       form={form}
       className={clsx(style.form)}
     >
-      <div className='d-flex flex-wrap'>
+      <div className="d-flex flex-wrap">
         <Form.Item key={uuid()} label={"id"}>
           <span key={uuid()}>{data.id}</span>
         </Form.Item>
@@ -123,7 +132,7 @@ const RoomForm = ({ data, id, closeModal, setInputData }: RoomFormProps) => {
           className={clsx(style.formDes)}
           key={uuid()}
           name={"price"}
-          label='Giá cả'
+          label="Giá cả"
         >
           <Input placeholder={data?.price}></Input>
         </Form.Item>
@@ -132,13 +141,13 @@ const RoomForm = ({ data, id, closeModal, setInputData }: RoomFormProps) => {
       <Form.Item
         className={clsx(style.formItem)}
         key={uuid()}
-        label='Nội dung'
-        name='content'
+        label="Nội dung"
+        name="content"
       >
-        <ReactQuill theme='snow' className={clsx(style.quill)}></ReactQuill>
+        <ReactQuill theme="snow" className={clsx(style.quill)}></ReactQuill>
       </Form.Item>
       <Form.Item>
-        <Button htmlType='submit' type='primary'>
+        <Button htmlType="submit" type="primary">
           Xác Nhận
         </Button>
       </Form.Item>
