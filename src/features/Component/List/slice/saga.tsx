@@ -228,7 +228,7 @@ function* updateRow(action) {
       .then((res) => res.data)
       .catch((err) => console.log(err));
     if (res.status === 1) {
-      openNotificationWithIcon("success", "Cập nhật thông tin thành công", "b");
+      openNotificationWithIcon("success", "Cập nhật thông tin thành công", "");
       yield put({
         type: "UPDATE_ROW",
         payload: res.data,

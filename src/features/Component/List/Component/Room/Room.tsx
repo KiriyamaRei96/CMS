@@ -128,7 +128,14 @@ const Room = ({ id, data }: RoomProps) => {
     },
     {
       title: "Sửa thông tin phòng",
-      content: <RoomForm id={id} closeModal={setCreateModal} data={formdata} />,
+      content: (
+        <RoomForm
+          setInputData={setInputData}
+          id={id}
+          closeModal={setCreateModal}
+          data={formdata}
+        />
+      ),
     },
   ];
   return (
@@ -180,7 +187,12 @@ const Room = ({ id, data }: RoomProps) => {
         footer={false}
         title={"Sửa thông tin phòng"}
       >
-        <RoomForm id={id} closeModal={setFixModal} data={formdata} />
+        <RoomForm
+          id={id}
+          setInputData={setInputData}
+          closeModal={setFixModal}
+          data={formdata}
+        />
       </Modal>
     </Form.Item>
   );

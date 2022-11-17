@@ -14,9 +14,10 @@ export interface RoomFormProps {
   data?: any;
   id: number | string;
   closeModal: Function;
+  setInputData: Function;
 }
 
-const RoomForm = ({ data, id, closeModal }: RoomFormProps) => {
+const RoomForm = ({ data, id, closeModal, setInputData }: RoomFormProps) => {
   const [form] = Form.useForm();
   const locale = useAppSelector(selectData).locale;
   const [error, setError] = useState<any>();
