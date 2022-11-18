@@ -12,7 +12,6 @@ const DashBroad = memo((props: DashBroadProps) => {
   const location = useLocation().pathname;
   const [name, setName] = useState("");
   const dashBroad = useAppSelector(dashBroadSelector).dashBroad;
-  console.log(dashBroad);
 
   useEffect(() => {
     switch (location) {
@@ -23,7 +22,7 @@ const DashBroad = memo((props: DashBroadProps) => {
         setName("Thống kê điểm đến");
         break;
     }
-  }, []);
+  }, [location]);
   const getTotal = (dashBroad) => {
     let total = 0;
     Object.keys(dashBroad).forEach((num) => (total += dashBroad[num]));
@@ -43,22 +42,22 @@ const DashBroad = memo((props: DashBroadProps) => {
             <div>
               <span>Điểm thăm quan:</span>
               <h4>{dashBroad.point}</h4>
-              <Link to="/ContentManage/placeList"> Xem chi tiết </Link>
+              <Link to='/ContentManage/placeList'> Xem chi tiết </Link>
             </div>
             <div>
               <span>Điểm ẩm thực:</span>
               <h4>{dashBroad.restaurant}</h4>
-              <Link to="/ContentManage/restaurantList"> Xem chi tiết </Link>
+              <Link to='/ContentManage/restaurantList'> Xem chi tiết </Link>
             </div>{" "}
             <div>
               <span>Điểm lưu trú</span>
               <h4>{dashBroad.hotel}</h4>
-              <Link to="/ContentManage/hotelList">Xem chi tiết</Link>
+              <Link to='/ContentManage/hotelList'>Xem chi tiết</Link>
             </div>
             <div>
               <span>Điểm tiện ích</span>
               <h4>{dashBroad.utilities}</h4>
-              <Link to="/ContentManage/utilities"> Xem chi tiết </Link>
+              <Link to='/ContentManage/utilities'> Xem chi tiết </Link>
             </div>
           </div>
         </div>

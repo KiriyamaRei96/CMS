@@ -47,7 +47,7 @@ const Room = ({ id, data }: RoomProps) => {
           <Popconfirm
             onConfirm={() => {
               dispatch({
-                type: "DELETE_REQUESTED",
+                type: "DELETE_ROOM",
                 payload: {
                   id: record.id ? record.id : record.name,
                   name: record?.name,

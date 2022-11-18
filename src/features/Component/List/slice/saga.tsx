@@ -104,6 +104,35 @@ function* deleteRow(action) {
   yield call(waitFor, (state) => selectData(state) != null);
   yield put({ type: "SET-IDLE" });
 }
+function* deleteRoom(action) {
+  const State = yield select(selectData);
+  const cookie = Cookies.get("token");
+  try {
+    const deleteID = new URLSearchParams({
+      ...action.payload,
+      parentUser: State.parentID,
+    }).toString();
+
+    const res = yield callApi({
+      method: "DELETE",
+      url: action.payload.action + "/delete",
+      headers: { Authorization: cookie },
+      data: deleteID,
+    })
+      .then((res) => res.data)
+      .catch((err) => console.log(err));
+    if (res.status === 1) {
+      openNotificationWithIcon("success", "Đã xóa thông tin", "");
+    }
+    // yield put({ type: "DELETE_ROW", payload: action.payload.id });
+    // yield put({ type: "SET-SUCCESS" });
+  } catch (e) {
+    console.log(e);
+  }
+  // // yield take("SET-SUCCESS");
+  // yield call(waitFor, (state) => selectData(state) != null);
+  // yield put({ type: "SET-IDLE" });
+}
 function* getRow(action) {
   const State = yield select(selectData);
   try {
@@ -346,6 +375,8 @@ function* listSaga() {
   yield takeLatest("USER_FETCH_REQUESTED", fetchItem);
   yield takeLatest("GET_LOCALE_REQUESTED", getLocale);
   yield takeLatest("DELETE_REQUESTED", deleteRow);
+  yield takeLatest("DELETE_ROOM", deleteRoom);
+
   yield takeLatest("ADD_ROW_REQUESTED", addRow);
   yield takeLatest("UPDATE_ROW_REQUESTED", updateRow);
   yield takeLatest("GET_ROW_REQUESTED", getRow);
