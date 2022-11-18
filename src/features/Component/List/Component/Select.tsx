@@ -29,7 +29,7 @@ const SelectCategory = ({
     try {
       const cookie = Cookies.get("token");
       const result = await callApi
-        .get(getApi + "&hideUnpublished=1", {
+        .get(getApi, {
           headers: { Authorization: cookie },
         })
         .then((response) => response.data)
@@ -38,7 +38,11 @@ const SelectCategory = ({
       const option = result.data.map((obj) => {
         if (obj?.title !== undefined || obj?.name !== undefined) {
           return (
-            <Select.Option key={uuid()} value={obj.id}>
+            <Select.Option
+              disabled={!obj.published}
+              key={uuid()}
+              value={obj.id}
+            >
               {obj?.title
                 ? obj?.title
                 : obj?.name
@@ -60,7 +64,7 @@ const SelectCategory = ({
       name={name}
       label={label}
     >
-      <Select placeholder={label} mode={mode}>
+      <Select allowClear placeholder={label} mode={mode}>
         {typeOption}
       </Select>
     </Form.Item>
