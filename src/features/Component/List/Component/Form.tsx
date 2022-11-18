@@ -45,6 +45,7 @@ import Galleries from "./Galleries";
 import SelectCategory from "./Select";
 import Room from "./Room/Room";
 import ChangePassForm from "./ChangePassForm";
+import ContentEditor from "../../ContentEditor";
 
 export interface CreateFormProps {
   setIsModalOpen?: any;
@@ -770,26 +771,7 @@ const CreateForm = ({
               label='Nội dung'
               name='content'
             >
-              {/* <CKEditor
-                id='#editor'
-                data={form.getFieldValue("content")}
-                editor={ClassicEditor}
-                config={{
-                  image: {
-                    resizeOptions: [
-                      "@ckeditor/ckeditor5-image/src/imageresize",
-                    ],
-                  },
-                }}
-                onChange={(event, editor) => {
-                  const data = editor.getData();
-                  form.setFieldValue("content", data);
-                }}
-              /> */}
-              <ReactQuill
-                theme='snow'
-                className={clsx(style.quill)}
-              ></ReactQuill>
+              <ContentEditor />
             </Form.Item>
           ) : (
             false
