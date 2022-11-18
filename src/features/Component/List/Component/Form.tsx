@@ -408,7 +408,7 @@ const CreateForm = ({
                 mode='multiple'
                 Url={`v1/utilities-type/gets?limit=1000&page=1&locale=${locale}&search=`}
                 name='utilitiesType'
-                label='chọn loại tiện ích'
+                label='Chọn loại tiện ích'
                 locale={locale}
               ></SelectCategory>
             ) : (
