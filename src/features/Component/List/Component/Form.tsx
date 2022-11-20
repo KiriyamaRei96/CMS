@@ -117,7 +117,7 @@ const CreateForm = ({
                 ? obj?.title
                 : obj?.name
                 ? obj?.name
-                : "Chưa cớ tiêu đề"}
+                : "Chưa có tiêu đề"}
             </Select.Option>
           );
         }
