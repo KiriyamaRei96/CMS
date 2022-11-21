@@ -212,9 +212,9 @@ const CreateForm = ({
               setIsModalOpen(false);
             }
           }}
-          layout="inline"
+          layout='inline'
         >
-          <div className="d-flex flex-wrap">
+          <div className='d-flex flex-wrap'>
             {data.id ? (
               <Form.Item key={uuid()} label={titleMap.id}>
                 <span key={uuid()}>{data.id}</span>
@@ -254,8 +254,8 @@ const CreateForm = ({
               <SelectCategory
                 mode={undefined}
                 Url={`/v1/district/gets?limit=1000&page=1&locale=${locale}&search=`}
-                name="district"
-                label="Chọn Quận/Huyện"
+                name='district'
+                label='Chọn Quận/Huyện'
                 locale={locale}
               ></SelectCategory>
             ) : (
@@ -266,7 +266,7 @@ const CreateForm = ({
               <Form.Item
                 key={uuid()}
                 name={"date"}
-                label="Thời gian cập nhật cuối"
+                label='Thời gian cập nhật cuối'
               >
                 <DatePicker key={uuid()}></DatePicker>
               </Form.Item>
@@ -294,9 +294,9 @@ const CreateForm = ({
                   return (
                     <Select.Option value={key}>
                       <img
-                        className="icon"
+                        className='icon'
                         src={localeArr[key].icon}
-                        alt=""
+                        alt=''
                       ></img>
                     </Select.Option>
                   );
@@ -307,10 +307,10 @@ const CreateForm = ({
           <div className={clsx(style.titleWraper, "d-flex")}>
             {data.category !== undefined ? (
               <SelectCategory
-                mode="multiple"
+                mode='multiple'
                 Url={`v1/category/gets?limit=1000&page=1&locale=${locale}&search=`}
-                name="category"
-                label="Chọn danh mục tin tức"
+                name='category'
+                label='Chọn danh mục tin tức'
                 locale={locale}
               ></SelectCategory>
             ) : (
@@ -318,10 +318,10 @@ const CreateForm = ({
             )}
             {data.pointType !== undefined ? (
               <SelectCategory
-                mode="multiple"
+                mode='multiple'
                 Url={`v1/point-type/gets?limit=1000&page=1&locale=${locale}&search=`}
-                name="pointType"
-                label="Chọn loại địa điểm"
+                name='pointType'
+                label='Chọn loại địa điểm'
                 locale={locale}
               ></SelectCategory>
             ) : (
@@ -329,10 +329,10 @@ const CreateForm = ({
             )}
             {data.restaurantType !== undefined ? (
               <SelectCategory
-                mode="multiple"
+                mode='multiple'
                 Url={`v1/restaurant-type/gets?limit=1000&page=1&locale=${locale}&search=`}
-                name="restaurantType"
-                label="Chọn loại điểm ẩm thực"
+                name='restaurantType'
+                label='Chọn loại điểm ẩm thực'
                 locale={locale}
               ></SelectCategory>
             ) : (
@@ -340,10 +340,10 @@ const CreateForm = ({
             )}
             {data.hotelType !== undefined ? (
               <SelectCategory
-                mode="multiple"
+                mode='multiple'
                 Url={`v1/hotel-type/gets?limit=1000&page=1&locale=${locale}&search=`}
-                name="hotelType"
-                label="Chọn loại hình lưu trú"
+                name='hotelType'
+                label='Chọn loại hình lưu trú'
                 locale={locale}
               ></SelectCategory>
             ) : (
@@ -351,10 +351,10 @@ const CreateForm = ({
             )}
             {data?.restaurantCategory !== undefined ? (
               <SelectCategory
-                mode="multiple"
+                mode='multiple'
                 Url={`/v1/restaurant-category/gets?limit=1000&page=1&locale=${locale}&search=`}
-                name="restaurantCategory"
-                label="Chọn kiểu ẩm thực"
+                name='restaurantCategory'
+                label='Chọn kiểu ẩm thực'
                 locale={locale}
               ></SelectCategory>
             ) : (
@@ -362,10 +362,10 @@ const CreateForm = ({
             )}
             {data?.tourType !== undefined ? (
               <SelectCategory
-                mode="multiple"
+                mode='multiple'
                 Url={`/v1/tour-type/gets?limit=1000&page=1&locale=${locale}&search=`}
-                name="tourType"
-                label="Chọn loại hình tour"
+                name='tourType'
+                label='Chọn loại hình tour'
                 locale={locale}
               ></SelectCategory>
             ) : (
@@ -375,8 +375,8 @@ const CreateForm = ({
               <SelectCategory
                 mode={undefined}
                 Url={`/v1/destinations-type/gets?limit=1000&page=1&locale=${locale}&search=`}
-                name="destinationsType"
-                label="Chọn số điểm đến"
+                name='destinationsType'
+                label='Chọn số điểm đến'
                 locale={locale}
               ></SelectCategory>
             ) : (
@@ -386,8 +386,8 @@ const CreateForm = ({
               <SelectCategory
                 mode={undefined}
                 Url={`/v1/travel-companies/gets?limit=1000&page=1&locale=${locale}&search=`}
-                name="travelCompanies"
-                label="Chọn công ty lữ hành"
+                name='travelCompanies'
+                label='Chọn công ty lữ hành'
                 locale={locale}
               ></SelectCategory>
             ) : (
@@ -395,10 +395,10 @@ const CreateForm = ({
             )}
             {data?.point !== undefined ? (
               <SelectCategory
-                mode="multiple"
+                mode='multiple'
                 Url={`/v1/point/gets?limit=1000&page=1&locale=${locale}&search=`}
-                name="point"
-                label="Chọn điểm đến"
+                name='point'
+                label='Chọn điểm đến'
                 locale={locale}
               ></SelectCategory>
             ) : (
@@ -406,10 +406,10 @@ const CreateForm = ({
             )}
             {data.utilitiesType !== undefined ? (
               <SelectCategory
-                mode="multiple"
+                mode='multiple'
                 Url={`v1/utilities-type/gets?limit=1000&page=1&locale=${locale}&search=`}
-                name="utilitiesType"
-                label="Chọn loại tiện ích"
+                name='utilitiesType'
+                label='Chọn loại tiện ích'
                 locale={locale}
               ></SelectCategory>
             ) : (
@@ -432,7 +432,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"address"}
-                label="Địa chỉ"
+                label='Địa chỉ'
               >
                 <Input placeholder={"Địa chỉ"}></Input>
               </Form.Item>
@@ -444,7 +444,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"description"}
-                label="Mô tả"
+                label='Mô tả'
               >
                 <Input placeholder={"Mô tả"}></Input>
               </Form.Item>
@@ -456,7 +456,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"highlights"}
-                label="Điểm nổi bật"
+                label='Điểm nổi bật'
               >
                 <Input></Input>
               </Form.Item>
@@ -468,7 +468,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"open"}
-                label="Thời gian mở cửa"
+                label='Thời gian mở cửa'
               >
                 <Input></Input>
               </Form.Item>
@@ -480,7 +480,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"close"}
-                label="Thời gian đóng cửa"
+                label='Thời gian đóng cửa'
               >
                 <Input></Input>
               </Form.Item>
@@ -492,7 +492,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"plan"}
-                label="Kế hoạch du lịch"
+                label='Kế hoạch du lịch'
               >
                 <Input></Input>
               </Form.Item>
@@ -504,7 +504,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"ar"}
-                label="AR"
+                label='AR'
               >
                 <Input placeholder={"AR"}></Input>
               </Form.Item>
@@ -516,7 +516,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"vr"}
-                label="VR"
+                label='VR'
               >
                 <Input placeholder={"VR"}></Input>
               </Form.Item>
@@ -529,14 +529,14 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"sort"}
-                label="Sắp xếp thứ tự"
+                label='Sắp xếp thứ tự'
               >
                 <Select placeholder={"Nhập thông tin thứ tự"}>
-                  <Select.Option value="1">{"1"}</Select.Option>
-                  <Select.Option value="2">{"2"}</Select.Option>
-                  <Select.Option value="3">{"3"}</Select.Option>
-                  <Select.Option value="4">{"4"}</Select.Option>
-                  <Select.Option value="5">{"5"}</Select.Option>
+                  <Select.Option value='1'>{"1"}</Select.Option>
+                  <Select.Option value='2'>{"2"}</Select.Option>
+                  <Select.Option value='3'>{"3"}</Select.Option>
+                  <Select.Option value='4'>{"4"}</Select.Option>
+                  <Select.Option value='5'>{"5"}</Select.Option>
                 </Select>
               </Form.Item>
             ) : (
@@ -547,14 +547,14 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"star"}
-                label="Xếp hạng sao"
+                label='Xếp hạng sao'
               >
                 <Select placeholder={"Xếp hạng sao"}>
-                  <Select.Option value="1">{"1 sao"}</Select.Option>
-                  <Select.Option value="2">{"2 sao"}</Select.Option>
-                  <Select.Option value="3">{"3 sao"}</Select.Option>
-                  <Select.Option value="4">{"4 sao"}</Select.Option>
-                  <Select.Option value="5">{"5 sao"}</Select.Option>
+                  <Select.Option value='1'>{"1 sao"}</Select.Option>
+                  <Select.Option value='2'>{"2 sao"}</Select.Option>
+                  <Select.Option value='3'>{"3 sao"}</Select.Option>
+                  <Select.Option value='4'>{"4 sao"}</Select.Option>
+                  <Select.Option value='5'>{"5 sao"}</Select.Option>
                 </Select>
               </Form.Item>
             ) : (
@@ -565,7 +565,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"contact"}
-                label="Liên hệ"
+                label='Liên hệ'
               >
                 <Input placeholder={"Liên hệ"}></Input>
               </Form.Item>
@@ -577,7 +577,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"price"}
-                label="Giá trung bình"
+                label='Giá trung bình'
               >
                 <Input placeholder={"Giá trung bình"}></Input>
               </Form.Item>
@@ -590,9 +590,9 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"tag"}
-                label="Tag"
+                label='Tag'
               >
-                <Select mode="tags" placeholder={"Nhập thông tin tag"}>
+                <Select mode='tags' placeholder={"Nhập thông tin tag"}>
                   {tag}
                 </Select>
               </Form.Item>
@@ -606,13 +606,13 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"featureImage"}
-                label="Ảnh đại diện"
+                label='Ảnh đại diện'
               >
                 <Upload
                   action={`${process.env.REACT_APP_CMS_API}/v1/asset/upload`}
                   headers={{ Authorization: getCookie("token") }}
                   maxCount={1}
-                  listType="picture-card"
+                  listType='picture-card'
                   fileList={avatar}
                   data={(file) => {
                     return { parentUser: parentID };
@@ -646,7 +646,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"name"}
-                label="Định danh"
+                label='Định danh'
               >
                 {/* <Input  placeholder={"Định danh"}></Input> */}
                 <span>{data.name}</span>
@@ -658,7 +658,7 @@ const CreateForm = ({
               <Form.Item
                 className={clsx(style.formDes)}
                 key={uuid()}
-                label="Tên tài khoản"
+                label='Tên tài khoản'
               >
                 <span>{data?.username}</span>
               </Form.Item>
@@ -669,9 +669,9 @@ const CreateForm = ({
               <Form.Item
                 className={clsx(style.formDes)}
                 key={uuid()}
-                label="Họ và tên"
+                label='Họ và tên'
               >
-                <div className="d-flex">
+                <div className='d-flex'>
                   <Form.Item
                     name={"firstname"}
                     style={{
@@ -682,7 +682,7 @@ const CreateForm = ({
                     <Input placeholder={data.firstname} />
                   </Form.Item>
                   <Form.Item
-                    name="lastname"
+                    name='lastname'
                     style={{
                       display: "inline-block",
                       width: "calc(50% - 8px)",
@@ -700,7 +700,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"email"}
-                label="Email"
+                label='Email'
               >
                 <Input placeholder={data?.email}></Input>
               </Form.Item>
@@ -712,7 +712,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"phone"}
-                label="Số điện thoại"
+                label='Số điện thoại'
               >
                 <Input placeholder={data?.phone}></Input>
               </Form.Item>
@@ -724,7 +724,7 @@ const CreateForm = ({
                 className={clsx(style.formDes)}
                 key={uuid()}
                 name={"password"}
-                label="Mật khẩu"
+                label='Mật khẩu'
               >
                 <ChangePassForm setField={form.setFieldValue}></ChangePassForm>
               </Form.Item>
@@ -733,10 +733,10 @@ const CreateForm = ({
             )}
             {data.role !== undefined ? (
               <SelectCategory
-                mode="multiple"
+                mode='multiple'
                 Url={`/v1/city/role/gets?limit=1000&page=1&search=`}
-                name="role"
-                label="Chọn nhóm quyền"
+                name='role'
+                label='Chọn nhóm quyền'
                 locale={"vi"}
               ></SelectCategory>
             ) : (
@@ -754,10 +754,10 @@ const CreateForm = ({
               className={clsx(style.formItem)}
               key={uuid()}
               name={"menu"}
-              label="Thực đơn"
+              label='Thực đơn'
             >
               <ReactQuill
-                theme="snow"
+                theme='snow'
                 className={clsx(style.quill)}
               ></ReactQuill>
             </Form.Item>
@@ -768,8 +768,8 @@ const CreateForm = ({
             <Form.Item
               className={clsx(style.formItem)}
               key={uuid()}
-              label="Nội dung"
-              name="content"
+              label='Nội dung'
+              name='content'
             >
               <ContentEditor
                 setContent={form.setFieldValue}
@@ -784,7 +784,7 @@ const CreateForm = ({
             <Form.Item
               className={clsx(style.formItem)}
               key={uuid()}
-              label="Chọn vị trí trên bản đồ "
+              label='Chọn vị trí trên bản đồ '
             >
               <>
                 <Autocomplete
@@ -796,7 +796,8 @@ const CreateForm = ({
                   }}
                   apiKey={key ? key : ""}
                   options={{
-                    types: ["(regions)"],
+                    componentRestrictions: { country: "VN" },
+                    types: ["address"],
                   }}
                 />
                 <div style={{ width: "100%", height: "500px" }}>
@@ -839,7 +840,7 @@ const CreateForm = ({
             <Form.Item
               className={clsx(style.formItem)}
               key={uuid()}
-              label="Khối nội dung"
+              label='Khối nội dung'
             >
               <Snippets data={data?.snippets} pageName={data?.name}></Snippets>
             </Form.Item>
@@ -850,7 +851,7 @@ const CreateForm = ({
             <Form.Item
               className={clsx(style.formItem)}
               key={uuid()}
-              label="Chọn quyền truy cập"
+              label='Chọn quyền truy cập'
             >
               <Permissions
                 id={
@@ -869,8 +870,8 @@ const CreateForm = ({
             <Button
               className={clsx(style.submit)}
               key={uuid()}
-              htmlType="submit"
-              type="primary"
+              htmlType='submit'
+              type='primary'
             >
               Xác Nhận
             </Button>
