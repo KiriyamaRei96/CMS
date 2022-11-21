@@ -43,7 +43,7 @@ export function ChangePass(props: ChangePassProps) {
           name='current_password'
           label='Mật khẩu hiện tại'
         >
-          <Input type='text' />
+          <Input.Password autoComplete='off' />
         </Form.Item>
         <Form.Item
           style={{ margin: "10px" }}
@@ -65,7 +65,7 @@ export function ChangePass(props: ChangePassProps) {
           hasFeedback
           label='Mật khẩu mới'
         >
-          <Input.Password />
+          <Input.Password autoComplete='off' />
         </Form.Item>
         <Form.Item
           style={{ margin: "10px" }}
@@ -99,7 +99,7 @@ export function ChangePass(props: ChangePassProps) {
           hasFeedback
           label='Nhập lại mật khẩu'
         >
-          <Input.Password />
+          <Input.Password autoComplete='off' />
         </Form.Item>
 
         <Form.Item style={{ margin: "10px" }}>
