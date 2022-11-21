@@ -71,7 +71,11 @@ export function UpdateInfo(props: UpdateInfoProps) {
             { required: true, message: "Không được bỏ trống trường này!" },
             () => ({
               validator(_, value) {
-                if (/(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/.test(value)) {
+                if (
+                  /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/.test(
+                    value
+                  )
+                ) {
                   return Promise.resolve();
                 }
                 return Promise.reject(new Error("Sai định dạng số điện thoại"));
@@ -80,7 +84,7 @@ export function UpdateInfo(props: UpdateInfoProps) {
             }),
           ]}
           name='phone'
-          label='Số điện thoại'
+          label='Số điện thoại cá nhân'
         >
           <Input type='number' />
         </Form.Item>
