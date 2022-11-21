@@ -284,7 +284,7 @@ const SideBar = memo((props: SideBarProps) => {
         // selectable
         // selectedKeys={[location.pathname]}
         items={
-          info?.role.id !== "2" && info?.role.parentUser === null
+          info?.role?.id !== "2" && info?.role?.parentUser === null
             ? managerMenu
             : cityMenu
         }

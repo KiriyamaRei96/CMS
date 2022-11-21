@@ -17,7 +17,8 @@ export function UpdateInfo(props: UpdateInfoProps) {
   };
   useEffect(() => {
     form.setFieldsValue(userInfo);
-  }, []);
+  }, [userInfo]);
+
   return (
     <div className={clsx(style.form)}>
       <Form form={form} onFinish={onFinish} layout='vertical'>
@@ -45,6 +46,19 @@ export function UpdateInfo(props: UpdateInfoProps) {
           style={{ margin: "10px" }}
           rules={[
             { required: true, message: "Không được bỏ trống trường này!" },
+            () => ({
+              validator(_, value) {
+                if (
+                  value.match(
+                    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                  )
+                ) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error("Sai định dạng email"));
+              },
+              message: "Sai định dạng email",
+            }),
           ]}
           name='email'
           label='Email'
@@ -55,11 +69,20 @@ export function UpdateInfo(props: UpdateInfoProps) {
           style={{ margin: "10px" }}
           rules={[
             { required: true, message: "Không được bỏ trống trường này!" },
+            () => ({
+              validator(_, value) {
+                if (/(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/.test(value)) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error("Sai định dạng số điện thoại"));
+              },
+              message: "Sai định dạng số điện thoại",
+            }),
           ]}
           name='phone'
           label='Số điện thoại'
         >
-          <Input type='text' />
+          <Input type='number' />
         </Form.Item>
         <Form.Item style={{ margin: "10px" }}>
           <Button htmlType='submit' type='primary'>

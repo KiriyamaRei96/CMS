@@ -26,21 +26,24 @@ const UserInfo = memo((props: UserInfoProps) => {
             <div className={clsx(style.avatarWrapper)}>
               <img src={avatar} alt='' />
               <h2 className={clsx(style.content)}>
-                {userInfo.firstname} {userInfo.lastname}
+                {userInfo?.firstname} {userInfo?.lastname}
               </h2>
             </div>
 
             <span>
               Email:{" "}
-              <span className={clsx(style.content)}>{userInfo.email}</span>{" "}
+              <span className={clsx(style.content)}>{userInfo?.email}</span>{" "}
             </span>
             <span>
               Số điện thoại:
-              <span className={clsx(style.content)}> {userInfo.phone}</span>
+              <span className={clsx(style.content)}> {userInfo?.phone}</span>
             </span>
             <span>
               Loại tài khoản:
-              <span className={clsx(style.content)}> {userInfo.role.name}</span>
+              <span className={clsx(style.content)}>
+                {" "}
+                {userInfo?.role?.name}
+              </span>
             </span>
           </>
         )}

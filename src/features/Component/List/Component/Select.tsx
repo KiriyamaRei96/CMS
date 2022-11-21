@@ -39,7 +39,7 @@ const SelectCategory = ({
         if (obj?.title !== undefined || obj?.name !== undefined) {
           return (
             <Select.Option
-              disabled={!obj.published}
+              disabled={obj.published !== undefined ? !obj.published : false}
               key={uuid()}
               value={obj.id}
             >

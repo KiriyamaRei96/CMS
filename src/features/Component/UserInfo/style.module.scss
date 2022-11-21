@@ -17,6 +17,17 @@
     border-radius: 15px;
     padding: 20px 24px;
 
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+
 }
 
 .info {

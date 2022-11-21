@@ -68,7 +68,7 @@ function* updateInfo(action) {
       console.log(res.error.message);
     }
     if (res.status === 1) {
-      yield put({ type: "UPDATE-SUCCESS", payload: res });
+      yield put({ type: "UPDATE-SUCCESS", payload: res.data });
     }
   } catch (e) {
     console.log(e);
