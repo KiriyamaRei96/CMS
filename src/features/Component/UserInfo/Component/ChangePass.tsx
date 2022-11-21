@@ -18,7 +18,12 @@ export function ChangePass(props: ChangePassProps) {
   };
   return (
     <div className={clsx(style.form)}>
-      <Form form={form} onFinish={onFinish} layout='vertical'>
+      <Form
+        autoComplete='none'
+        form={form}
+        onFinish={onFinish}
+        layout='vertical'
+      >
         <Form.Item
           style={{ margin: "10px" }}
           rules={[
@@ -32,16 +37,7 @@ export function ChangePass(props: ChangePassProps) {
                   new Error("Mật khẩu phải có nhiều hơn 6 ký tự")
                 );
               },
-            }),
-            () => ({
-              validator(_, value) {
-                if (storeState !== "error") {
-                  return Promise.resolve();
-                }
-                return Promise.reject(
-                  new Error("Bạn đã nhập sai mật khẩu hiện tại")
-                );
-              },
+              message: "Mật khẩu phải có nhiều hơn 6 ký tự",
             }),
           ]}
           name='current_password'
@@ -62,6 +58,7 @@ export function ChangePass(props: ChangePassProps) {
                   new Error("Mật khẩu phải có nhiều hơn 6 ký tự")
                 );
               },
+              message: "Mật khẩu phải có nhiều hơn 6 ký tự",
             }),
           ]}
           name='new_password'
@@ -84,6 +81,7 @@ export function ChangePass(props: ChangePassProps) {
                   new Error("Mật khẩu mới và mật khẩu xác nhận phải giống nhau")
                 );
               },
+              message: "Mật khẩu mới và mật khẩu xác nhận phải giống nhau",
             }),
             () => ({
               validator(_, value) {
@@ -94,6 +92,7 @@ export function ChangePass(props: ChangePassProps) {
                   new Error("Mật khẩu phải có nhiều hơn 6 ký tự")
                 );
               },
+              message: "Mật khẩu phải có nhiều hơn 6 ký tự",
             }),
           ]}
           name='confirm_password'

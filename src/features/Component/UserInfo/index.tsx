@@ -2,11 +2,14 @@ import React, { memo } from "react";
 import clsx from "clsx";
 
 import { userInfoSelector } from "../Login/slice/UserSlice";
-import { Menu, Skeleton } from "antd";
+import { Menu, Skeleton, Tabs } from "antd";
 
 import style from "./style.module.scss";
 import { Link, Outlet } from "react-router-dom";
 import { useAppSelector } from "../../../store/hooks";
+import avatar from "../../../asset/pngwing.com.png";
+import { UpdateInfo } from "./Component/UpdateInfo";
+import { ChangePass } from "./Component/ChangePass";
 export interface UserInfoProps {}
 
 const UserInfo = memo((props: UserInfoProps) => {
@@ -20,13 +23,13 @@ const UserInfo = memo((props: UserInfoProps) => {
           <Skeleton active />
         ) : (
           <>
-            <h3>Thông tin cá nhân</h3>
-            <span>
-              Tên người dùng:
-              <span className={clsx(style.content)}>
+            <div className={clsx(style.avatarWrapper)}>
+              <img src={avatar} alt='' />
+              <h2 className={clsx(style.content)}>
                 {userInfo.firstname} {userInfo.lastname}
-              </span>
-            </span>
+              </h2>
+            </div>
+
             <span>
               Email:{" "}
               <span className={clsx(style.content)}>{userInfo.email}</span>{" "}
@@ -42,30 +45,23 @@ const UserInfo = memo((props: UserInfoProps) => {
           </>
         )}
       </div>
-      <Menu
-        defaultSelectedKeys={[
-          userInfo?.phone === null ? "update info" : "Info",
-        ]}
-        mode="inline"
+      <Tabs
+        className={clsx(style.Tabs)}
+        defaultActiveKey='1'
+        // onChange={onChange}
         items={[
           {
-            key: "Info",
-            title: "Thông tin người dùng",
-            label: <Link to="/UserInfo">Thông tin người dùng </Link>,
+            label: `Cập nhật thông tin cá nhân`,
+            key: "1",
+            children: <UpdateInfo />,
           },
           {
-            key: "update info",
-            title: "Cập nhật thông tin",
-            label: <Link to="/UserInfo/updateInfo">Cập nhật thông tin </Link>,
-          },
-          {
-            key: "change password",
-            title: "Thay đổi mật khẩu",
-            label: <Link to="/UserInfo/changePass">Thay đổi mật khẩu </Link>,
+            label: `Thay đổi mật khẩu`,
+            key: "2",
+            children: <ChangePass />,
           },
         ]}
-      ></Menu>
-      <Outlet />
+      />
     </div>
   );
 });

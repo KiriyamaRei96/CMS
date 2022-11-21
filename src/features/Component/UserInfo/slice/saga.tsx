@@ -41,7 +41,7 @@ function* getUserInfo(action) {
   try {
     const userInfo = yield callApi
       .get("v1/account/profile", {
-        headers: { Authorization: cookie },
+        headers: { Authorization: Cookies.get("token") },
       })
       .then((response) => response.data)
       .catch((err) => console.log(err));
@@ -58,7 +58,7 @@ function* updateInfo(action) {
     const res = yield callApi({
       method: "PUT",
       url: "/v1/account/profile",
-      headers,
+      headers: { Authorization: Cookies.get("token") },
       data: updateData,
     })
       .then((res) => res.data)
@@ -82,7 +82,7 @@ function* changePass(action) {
     const res = yield callApi({
       method: "PUT",
       url: "/v1/account/change-password",
-      headers,
+      headers: { Authorization: Cookies.get("token") },
       data: passWordData,
     })
       .then((res) => res.data)
