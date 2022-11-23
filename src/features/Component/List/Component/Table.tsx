@@ -52,7 +52,12 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
   const [ID, setID] = useState<string | number>();
 
   const [data, setData] = useState<any>();
-  const permiss = actionApi?.replace("v1/", "").replace("/", ".");
+  const permiss = actionApi
+    ?.replace("v1/", "")
+    .replace("/", ".")
+    .replace("-", "")
+    .replace("type", "Type");
+  console.log(permiss);
   useEffect(() => {
     dataItem[dataItem.findIndex((obj) => obj.id === ID)]
       ? setData(dataItem[dataItem.findIndex((obj) => obj.id === ID)])
