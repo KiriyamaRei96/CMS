@@ -64,7 +64,7 @@ const SelectCategory = ({
       name={name}
       label={label}
     >
-      <Select allowClear placeholder={label} mode={mode}>
+      <Select disabled={!typeOption} allowClear placeholder={label} mode={mode}>
         {typeOption}
       </Select>
     </Form.Item>

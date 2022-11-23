@@ -5,6 +5,8 @@ import clsx from "clsx";
 import { Form, Upload } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import getCookie from "../../../../../../Api/getCookie";
+import { userInfoSelector } from "../../../../Login/slice/UserSlice";
+import { useAppSelector } from "../../../../../../store/hooks";
 
 export interface SnipAvatarProps {
   data: any | undefined;
@@ -33,6 +35,8 @@ const SnipAvatar = ({ style, data, label, name }: SnipAvatarProps) => {
       ]);
     }
   }, [data]);
+  const userInfo = useAppSelector(userInfoSelector).info;
+
   return (
     <Form.Item
       style={style}
@@ -42,6 +46,11 @@ const SnipAvatar = ({ style, data, label, name }: SnipAvatarProps) => {
       name={name ? name : "image"}
     >
       <Upload
+        disabled={
+          userInfo?.role?.id === "2"
+            ? false
+            : !userInfo?.permissions["media.upload"]
+        }
         action={`${process.env.REACT_APP_CMS_API}/v1/asset/upload`}
         headers={{ Authorization: getCookie("token") }}
         maxCount={1}

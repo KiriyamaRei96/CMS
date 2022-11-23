@@ -46,6 +46,7 @@ import SelectCategory from "./Select";
 import Room from "./Room/Room";
 import ChangePassForm from "./ChangePassForm";
 import ContentEditor from "../../ContentEditor";
+import { userInfoSelector } from "../../Login/slice/UserSlice";
 
 export interface CreateFormProps {
   setIsModalOpen?: any;
@@ -86,6 +87,7 @@ const CreateForm = ({
 
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
+  const info = useAppSelector(userInfoSelector).info;
 
   useEffect(() => {
     if (data?.featureImage !== null && data?.featureImage !== undefined) {
@@ -152,7 +154,7 @@ const CreateForm = ({
         `/v1/district/gets?limit=1000&page=1&locale=${locale}&search=`
       );
     }
-
+    console.log(data.type);
     form.setFieldsValue(formData);
   }, [data, form]);
   const key = process.env.REACT_APP_GOOGLE_KEY;
@@ -163,6 +165,12 @@ const CreateForm = ({
         <Form
           form={form}
           className={clsx(style.form)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.stopPropagation();
+              e.preventDefault();
+            }
+          }}
           onFinish={(value) => {
             Object.keys(value).forEach((key) => {
               if (value[key] === undefined) {
@@ -230,6 +238,11 @@ const CreateForm = ({
                 label={titleMap.published}
               >
                 <Checkbox
+                  disabled={
+                    info?.role?.id === "2"
+                      ? false
+                      : !info?.permissions["media.upload"]
+                  }
                   key={uuid()}
                   defaultChecked={data.published}
                   onChange={(e) => {
@@ -289,6 +302,7 @@ const CreateForm = ({
                   dispatch(setLocate(value));
                 }}
                 placeholder={"Chọn Ngôn ngữ"}
+                disabled={Object.keys(localeArr).length === 0}
               >
                 {Object.keys(localeArr).map((key) => {
                   return (
@@ -609,6 +623,11 @@ const CreateForm = ({
                 label='Ảnh đại diện'
               >
                 <Upload
+                  disabled={
+                    info?.role?.id === "2"
+                      ? false
+                      : !info?.permissions["media.upload"]
+                  }
                   action={`${process.env.REACT_APP_CMS_API}/v1/asset/upload`}
                   headers={{ Authorization: getCookie("token") }}
                   maxCount={1}

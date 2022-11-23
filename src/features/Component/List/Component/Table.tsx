@@ -24,6 +24,7 @@ import Cookies from "js-cookie";
 import { callApi } from "../../../../Api/Axios";
 import { info } from "console";
 import Create from "./Create";
+import { userInfoSelector } from "../../Login/slice/UserSlice";
 export interface TableProps {
   columns: any;
   typeOption?: Array<ReactElement>;
@@ -42,6 +43,7 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
   const pagination = useAppSelector(selectData).pagination;
   const locale = useAppSelector(selectData).locale;
   const storeState = useAppSelector(selectData).storeState;
+  const info = useAppSelector(userInfoSelector).info;
 
   const dispatch = useAppDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -50,7 +52,7 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
   const [ID, setID] = useState<string | number>();
 
   const [data, setData] = useState<any>();
-
+  const permiss = actionApi?.replace("v1/", "").replace("/", ".");
   useEffect(() => {
     dataItem[dataItem.findIndex((obj) => obj.id === ID)]
       ? setData(dataItem[dataItem.findIndex((obj) => obj.id === ID)])
@@ -62,6 +64,11 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
       <div className={clsx(style.wraper, "d-flex")}>
         <div className={clsx(style.function, "d-flex")}>
           <Button
+            disabled={
+              info?.role?.id === "2"
+                ? false
+                : !info?.permissions[permiss + ".create"]
+            }
             onClick={() => {
               setCreateModal(true);
             }}
@@ -97,12 +104,25 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
                       okText='Xóa'
                       cancelText='Hủy'
                     >
-                      <Button size='small' key={uuid()}>
+                      <Button
+                        disabled={
+                          info?.role?.id === "2"
+                            ? false
+                            : !info?.permissions[permiss + ".delete"]
+                        }
+                        size='small'
+                        key={uuid()}
+                      >
                         Xóa
                       </Button>
                     </Popconfirm>
 
                     <Button
+                      disabled={
+                        info?.role?.id === "2"
+                          ? false
+                          : !info?.permissions[permiss + ".update"]
+                      }
                       size='small'
                       onClick={() => {
                         dispatch({
