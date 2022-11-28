@@ -61,33 +61,33 @@ const SettingFrom = ({ arr, data, setArr, setModalOpen }: SettingFromProps) => {
       }}
       form={form}
       className={clsx(style.form)}
-      layout="inline"
+      layout='inline'
     >
       <div className={clsx(style.titleWraper, "d-flex flex-wrap")}>
-        <Form.Item name="name" label="Định danh" className={"formAvatar"}>
+        <Form.Item name='name' label='Định danh' className={"formAvatar"}>
           {data?.name ? <span>{data?.name}</span> : <Input />}
         </Form.Item>
 
         <Form.Item
-          name="fieldType"
-          label="loại thông tin"
+          name='fieldType'
+          label='Loại thông tin'
           className={"formAvatar"}
         >
-          <Select placeholder="Loại thông tin">
+          <Select placeholder='Loại thông tin'>
             <Select.Option value={"title"}>Tiêu đề</Select.Option>
             <Select.Option value={"content"}>Nội dung</Select.Option>
           </Select>
         </Form.Item>
-        <Form.Item name="text" label="Nội dung" className={"formAvatar"}>
+        <Form.Item name='text' label='Nội dung' className={"formAvatar"}>
           <Input />
         </Form.Item>
-        <Form.Item name="link" label="Link" className={"formAvatar"}>
+        <Form.Item name='link' label='Link' className={"formAvatar"}>
           <Input />
         </Form.Item>
       </div>
 
       <Form.Item className={clsx(style.submit)}>
-        <Button htmlType="submit" type="primary">
+        <Button htmlType='submit' type='primary'>
           Xác Nhận
         </Button>
       </Form.Item>

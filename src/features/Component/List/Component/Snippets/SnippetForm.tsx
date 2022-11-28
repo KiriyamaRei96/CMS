@@ -156,7 +156,14 @@ const SnippetsForm = ({
       );
     }
   }, [snippets?.key, snippets?.data]);
-
+  // console.log(
+  //   info?.filter(
+  //     (item) =>
+  //       !dataList?.some((itm) => {
+  //         return itm.id === item.id;
+  //       })
+  //   )
+  // );
   return (
     <>
       <Form
@@ -394,14 +401,21 @@ const SnippetsForm = ({
             </Form.Item>
             <Form.Item
               className={clsx(style.formItem)}
-              label={"Lựa chọn nhóm thông tin"}
+              label={"Lựa chọn thông tin"}
             >
               <Table
                 pagination={{ pageSize: 5 }}
-                dataSource={info?.map((item) => {
-                  item.key = item.id;
-                  return item;
-                })}
+                dataSource={info
+                  ?.map((item) => {
+                    item.key = item.id;
+                    return item;
+                  })
+                  .filter(
+                    (item) =>
+                      !dataList?.some((itm) => {
+                        return itm.id === item.id;
+                      })
+                  )}
                 columns={[
                   ...collums,
                   {

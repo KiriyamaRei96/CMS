@@ -31,28 +31,37 @@ const SideBar = memo((props: SideBarProps) => {
 
               title: "Quản lý website ",
               label: <Link to='Manage/website'>Quản lý website</Link>,
-              disabled:
+
+              style:
                 info?.role?.id === "2"
-                  ? false
-                  : !info?.permissions["webSetting.select"],
+                  ? {}
+                  : !info?.permissions["webSetting.select"]
+                  ? { display: "none" }
+                  : {},
             },
             {
               key: uuid(),
               title: "Quản lý ngôn ngữ ",
               label: <Link to='Manage/System'>Quản lý ngôn ngữ</Link>,
-              disabled:
+
+              style:
                 info?.role?.id === "2"
-                  ? false
-                  : !info?.permissions["languages.select"],
+                  ? {}
+                  : !info?.permissions["languages.select"]
+                  ? { display: "none" }
+                  : {},
             },
             {
               key: uuid(),
               title: "Quản lý Quận/Huyện",
               label: <Link to='Manage/district'>Quản lý Quận/Huyện</Link>,
-              disabled:
+
+              style:
                 info?.role?.id === "2"
-                  ? false
-                  : !info?.permissions["district.select"],
+                  ? {}
+                  : !info?.permissions["district.select"]
+                  ? { display: "none" }
+                  : {},
             },
             {
               key: uuid(),
@@ -60,10 +69,13 @@ const SideBar = memo((props: SideBarProps) => {
               label: (
                 <Link to='Manage/newsCategory'>Quản lý danh mục tin tức</Link>
               ),
-              disabled:
+
+              style:
                 info?.role?.id === "2"
-                  ? false
-                  : !info?.permissions["category.select"],
+                  ? {}
+                  : !info?.permissions["category.select"]
+                  ? { display: "none" }
+                  : {},
             },
             {
               key: uuid(),
@@ -74,10 +86,13 @@ const SideBar = memo((props: SideBarProps) => {
                   Quản lý danh mục loại tiện ích
                 </Link>
               ),
-              disabled:
+
+              style:
                 info?.role?.id === "2"
-                  ? false
-                  : !info?.permissions["utilitiesType.select"],
+                  ? {}
+                  : !info?.permissions["utilitiesType.select"]
+                  ? { display: "none" }
+                  : {},
             },
           ],
         },
@@ -95,10 +110,13 @@ const SideBar = memo((props: SideBarProps) => {
                   Quản lý loại hình lưu trú
                 </Link>
               ),
-              disabled:
+
+              style:
                 info?.role?.id === "2"
-                  ? false
-                  : !info?.permissions["hotelType.select"],
+                  ? {}
+                  : !info?.permissions["hotelType.select"]
+                  ? { display: "none" }
+                  : {},
             },
           ],
         },
@@ -116,10 +134,13 @@ const SideBar = memo((props: SideBarProps) => {
                   Quản lý loại hình ẩm thực
                 </Link>
               ),
-              disabled:
+
+              style:
                 info?.role?.id === "2"
-                  ? false
-                  : !info?.permissions["restaurantType.select"],
+                  ? {}
+                  : !info?.permissions["restaurantType.select"]
+                  ? { display: "none" }
+                  : {},
             },
             {
               key: uuid(),
@@ -127,10 +148,13 @@ const SideBar = memo((props: SideBarProps) => {
               label: (
                 <Link to='Manage/RestaurantCategory'>Quản lý kiểu ẩm thực</Link>
               ),
-              disabled:
+
+              style:
                 info?.role?.id === "2"
-                  ? false
-                  : !info?.permissions["restaurantCategory.select"],
+                  ? {}
+                  : !info?.permissions["restaurantCategory.select"]
+                  ? { display: "none" }
+                  : {},
             },
           ],
         },
@@ -146,10 +170,13 @@ const SideBar = memo((props: SideBarProps) => {
               label: (
                 <Link to='ContentManage/placeType'>Quản lý loại địa điểm</Link>
               ),
-              disabled:
+
+              style:
                 info?.role?.id === "2"
-                  ? false
-                  : !info?.permissions["pointType.select"],
+                  ? {}
+                  : !info?.permissions["pointType.select"]
+                  ? { display: "none" }
+                  : {},
             },
           ],
         },
@@ -167,19 +194,25 @@ const SideBar = memo((props: SideBarProps) => {
                   Quản lý công ty lữ hành
                 </Link>
               ),
-              disabled:
+
+              style:
                 info?.role?.id === "2"
-                  ? false
-                  : !info?.permissions["travelCompanies.select"],
+                  ? {}
+                  : !info?.permissions["travelCompanies.select"]
+                  ? { display: "none" }
+                  : {},
             },
             {
               key: uuid(),
               title: "Quản lý loại hình tour",
               label: <Link to='Manage/TourType'>Quản lý loại hình tour</Link>,
-              disabled:
+
+              style:
                 info?.role?.id === "2"
-                  ? false
-                  : !info?.permissions["tourType.select"],
+                  ? {}
+                  : !info?.permissions["tourType.select"]
+                  ? { display: "none" }
+                  : {},
             },
             {
               key: uuid(),
@@ -187,10 +220,13 @@ const SideBar = memo((props: SideBarProps) => {
               label: (
                 <Link to='Manage/DestinationsType'>Quản lý số điểm đến</Link>
               ),
-              disabled:
+
+              style:
                 info?.role?.id === "2"
-                  ? false
-                  : !info?.permissions["destinationsType.select"],
+                  ? {}
+                  : !info?.permissions["destinationsType.select"]
+                  ? { display: "none" }
+                  : {},
             },
           ],
         },
@@ -202,8 +238,13 @@ const SideBar = memo((props: SideBarProps) => {
       title: "Quản lý trang",
       icon: <i className='fa-solid  fa-folder-open'></i>,
       label: <Link to='Pages'>Quản lý trang</Link>,
-      disabled:
-        info?.role?.id === "2" ? false : !info?.permissions["page.select"],
+
+      style:
+        info?.role?.id === "2"
+          ? {}
+          : !info?.permissions["page.select"]
+          ? { display: "none" }
+          : {},
     },
     {
       key: uuid(),
@@ -215,15 +256,25 @@ const SideBar = memo((props: SideBarProps) => {
           key: uuid(),
           title: "Quản lý địa điểm",
           label: <Link to='ContentManage/placeList'>Quản lý địa điểm</Link>,
-          disabled:
-            info?.role?.id === "2" ? false : !info?.permissions["point.select"],
+
+          style:
+            info?.role?.id === "2"
+              ? {}
+              : !info?.permissions["point.select"]
+              ? { display: "none" }
+              : {},
         },
         {
           key: uuid(),
           title: "Quản lý điểm lưu trú",
           label: <Link to='ContentManage/hotelList'>Quản lý điểm lưu trú</Link>,
-          disabled:
-            info?.role?.id === "2" ? false : !info?.permissions["hotel.select"],
+
+          style:
+            info?.role?.id === "2"
+              ? {}
+              : !info?.permissions["hotel.select"]
+              ? { display: "none" }
+              : {},
         },
         {
           key: uuid(),
@@ -231,42 +282,63 @@ const SideBar = memo((props: SideBarProps) => {
           label: (
             <Link to='ContentManage/restaurantList'>Quản lý điểm ẩm thực</Link>
           ),
-          disabled:
+
+          style:
             info?.role?.id === "2"
-              ? false
-              : !info?.permissions["restaurant.select"],
+              ? {}
+              : !info?.permissions["restaurant.select"]
+              ? { display: "none" }
+              : {},
         },
         {
           key: uuid(),
           title: "Quản lý tour lữ hành",
           label: <Link to='ContentManage/tour'>Quản lý tour lữ hành</Link>,
-          disabled:
-            info?.role?.id === "2" ? false : !info?.permissions["tour.select"],
+
+          style:
+            info?.role?.id === "2"
+              ? {}
+              : !info?.permissions["tour.select"]
+              ? { display: "none" }
+              : {},
         },
 
         {
           key: uuid(),
           title: "Quản lý tin tức",
           label: <Link to='ContentManage/news'>Quản lý tin tức</Link>,
-          disabled:
-            info?.role?.id === "2" ? false : !info?.permissions["news.select"],
+
+          style:
+            info?.role?.id === "2"
+              ? {}
+              : !info?.permissions["news.select"]
+              ? { display: "none" }
+              : {},
         },
         {
           key: uuid(),
           title: "Quản lý sự kiện",
           label: <Link to='ContentManage/events'>Quản lý sự kiện</Link>,
-          disabled:
-            info?.role?.id === "2" ? false : !info?.permissions["event.select"],
+
+          style:
+            info?.role?.id === "2"
+              ? {}
+              : !info?.permissions["event.select"]
+              ? { display: "none" }
+              : {},
         },
         {
           key: uuid(),
           title:
             "Quản lý các tiện ích (địa điểm tiện ích dùng để hiển thị bản đồ)",
           label: <Link to='ContentManage/utilities'>Quản lý tiện ích</Link>,
-          disabled:
+
+          style:
             info?.role?.id === "2"
-              ? false
-              : !info?.permissions["utilities.select"],
+              ? {}
+              : !info?.permissions["utilities.select"]
+              ? { display: "none" }
+              : {},
         },
       ],
     },
@@ -281,19 +353,25 @@ const SideBar = memo((props: SideBarProps) => {
           key: uuid(),
           title: "Danh sách người dùng",
           label: <Link to='UserManager/userList'>Danh sách người dùng</Link>,
-          disabled:
+
+          style:
             info?.role?.id === "2"
-              ? false
-              : !info?.permissions["city.user.select"],
+              ? {}
+              : !info?.permissions["city.user.select"]
+              ? { display: "none" }
+              : {},
         },
         {
           key: uuid(),
           title: "Danh sách nhóm quyền",
           label: <Link to='UserManager/roleList'>Danh sách nhóm quyền</Link>,
-          disabled:
+
+          style:
             info?.role?.id === "2"
-              ? false
-              : !info?.permissions["city.role.select"],
+              ? {}
+              : !info?.permissions["city.role.select"]
+              ? { display: "none" }
+              : {},
         },
       ],
     },

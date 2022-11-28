@@ -23,7 +23,7 @@ const Header = memo((props: HeaderProps) => {
         {
           key: uuid(),
           title: "Thông tin cá nhân",
-          label: <Link to='/UserInfo'>thông tin cá nhân</Link>,
+          label: <Link to='/UserInfo'>Thông tin cá nhân</Link>,
           icon: <i className='fa-regular fa-user'></i>,
         },
 

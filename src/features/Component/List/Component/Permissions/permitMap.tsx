@@ -1,7 +1,7 @@
 const permitMap = {
   "city.user": "Quản lý người dùng",
   "city.role": "Quản lý nhóm quyền",
-  "city.permission": "Quản quyền truy cập",
+  "city.permission": "Quản lý quyền truy cập",
   district: "Quản lý Quận/Huyện",
   languages: "Quản lý ngôn ngữ",
   media: "Quản lý đa phương tiện",

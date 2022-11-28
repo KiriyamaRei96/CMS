@@ -10,6 +10,7 @@ import openNotificationWithIcon from "../../../../function/toast";
 const { Option, OptGroup } = Select;
 export interface PermissionsProps {
   id: object;
+  permissionRole?: any;
 }
 const functionMap = {
   "page.create": "Thêm trang",
@@ -25,7 +26,7 @@ const functionMap = {
   ".upload": "Tải lên",
   ".active": "thay đổi trạng thái tài khoản",
 };
-const Permissions = ({ id }: PermissionsProps) => {
+const Permissions = ({ id, permissionRole }: PermissionsProps) => {
   const [option, setOption] = useState<any>();
   const [permission, setPermission] = useState<any>([]);
   const cookie = Cookies.get("token");
@@ -44,6 +45,7 @@ const Permissions = ({ id }: PermissionsProps) => {
       render: (_, record) =>
         record["select"] ? (
           <Checkbox
+            disabled={permissionRole ? permissionRole[record["select"]] : false}
             checked={permission?.includes(record["select"])}
             onClick={(e) => changeHanlder(e, record["select"])}
           />
@@ -59,6 +61,7 @@ const Permissions = ({ id }: PermissionsProps) => {
       render: (_, record) =>
         record["create"] ? (
           <Checkbox
+            disabled={permissionRole ? permissionRole[record["create"]] : false}
             checked={permission?.includes(record["create"])}
             onClick={(e) => changeHanlder(e, record["create"])}
           />
@@ -74,6 +77,7 @@ const Permissions = ({ id }: PermissionsProps) => {
       render: (_, record) =>
         record["update"] ? (
           <Checkbox
+            disabled={permissionRole ? permissionRole[record["update"]] : false}
             checked={permission?.includes(record["update"])}
             onClick={(e) => changeHanlder(e, record["update"])}
           />
@@ -89,7 +93,7 @@ const Permissions = ({ id }: PermissionsProps) => {
       render: (_, record) =>
         record["delete"] ? (
           <Checkbox
-            checked={permission?.includes(record["delete"])}
+            disabled={permissionRole ? permissionRole[record["delete"]] : false}
             onClick={(e) => changeHanlder(e, record["delete"])}
           />
         ) : (
@@ -104,6 +108,9 @@ const Permissions = ({ id }: PermissionsProps) => {
       render: (_, record) =>
         record["published"] ? (
           <Checkbox
+            disabled={
+              permissionRole ? permissionRole[record["published"]] : false
+            }
             checked={permission?.includes(record["published"])}
             onClick={(e) => changeHanlder(e, record["published"])}
           />
@@ -119,6 +126,7 @@ const Permissions = ({ id }: PermissionsProps) => {
       render: (_, record) =>
         record["locked"] ? (
           <Checkbox
+            disabled={permissionRole ? permissionRole[record["locked"]] : false}
             checked={permission?.includes(record["locked"])}
             onClick={(e) => changeHanlder(e, record["locked"])}
           />
@@ -135,6 +143,7 @@ const Permissions = ({ id }: PermissionsProps) => {
       render: (_, record) =>
         record["active"] ? (
           <Checkbox
+            disabled={permissionRole ? permissionRole[record["active"]] : false}
             checked={permission?.includes(record["active"])}
             onClick={(e) => changeHanlder(e, record["active"])}
           />
@@ -150,6 +159,7 @@ const Permissions = ({ id }: PermissionsProps) => {
       render: (_, record) =>
         record["change"] ? (
           <Checkbox
+            disabled={permissionRole ? permissionRole[record["change"]] : false}
             checked={permission?.includes(record["change"])}
             onClick={(e) => changeHanlder(e, record["change"])}
           />
@@ -162,15 +172,17 @@ const Permissions = ({ id }: PermissionsProps) => {
       dataIndex: "upload",
       key: "upload",
       align: "center",
-      render: (_, record) =>
-        record["upload"] ? (
+      render: (_, record) => {
+        return record["upload"] ? (
           <Checkbox
+            disabled={permissionRole ? permissionRole[record["upload"]] : false}
             checked={permission?.includes(record["upload"])}
             onClick={(e) => changeHanlder(e, record["upload"])}
           />
         ) : (
           <Checkbox disabled />
-        ),
+        );
+      },
     },
   ];
   useEffect(() => {
@@ -302,7 +314,7 @@ const Permissions = ({ id }: PermissionsProps) => {
       }
     }
   };
-  console.log(option);
+
   return (
     <div>
       <Table columns={collums} dataSource={option}></Table>

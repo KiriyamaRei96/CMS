@@ -84,6 +84,7 @@ const CreateForm = ({
   const [district, setDistrict] = useState<any>();
 
   const [tag, setTag] = useState<string[]>();
+  const [highLights, setHighLights] = useState<string[]>();
 
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
@@ -149,6 +150,10 @@ const CreateForm = ({
     if (data?.tag !== undefined) {
       setTag(data?.tag);
     }
+    if (data.highlights !== undefined) {
+      setHighLights(data.highlights);
+    }
+
     if (data?.district !== undefined) {
       getSelectList(
         `/v1/district/gets?limit=1000&page=1&locale=${locale}&search=`
@@ -472,7 +477,9 @@ const CreateForm = ({
                 name={"highlights"}
                 label='Điểm nổi bật'
               >
-                <Input></Input>
+                <Select mode='tags' placeholder={"Nhập điểm nổi bật"}>
+                  {highLights}
+                </Select>
               </Form.Item>
             ) : (
               false
@@ -873,6 +880,7 @@ const CreateForm = ({
               label='Chọn quyền truy cập'
             >
               <Permissions
+                permissionRole={data.permissionRole}
                 id={
                   data.firstname
                     ? {
