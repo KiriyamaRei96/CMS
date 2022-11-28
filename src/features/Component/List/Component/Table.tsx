@@ -53,16 +53,19 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
 
   const [data, setData] = useState<any>();
   const permiss = actionApi
-    ?.replace("v1/", "")
+    ?.replace("/v1/", "")
+    .replace("v1/", "")
     .replace("/", ".")
     .replace("-", "")
     .replace("type", "Type");
-  console.log(permiss);
+
   useEffect(() => {
     dataItem[dataItem.findIndex((obj) => obj.id === ID)]
       ? setData(dataItem[dataItem.findIndex((obj) => obj.id === ID)])
       : setData(dataItem[dataItem.findIndex((obj) => obj.name === ID)]);
   }, [ID, dataItem]);
+  console.log(info?.permissions[permiss + ".create"]);
+  console.log(permiss);
 
   return (
     <>
@@ -77,7 +80,7 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
             onClick={() => {
               setCreateModal(true);
             }}
-            type='primary'
+            type="primary"
           >
             Thêm thông tin
           </Button>
@@ -105,9 +108,9 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
                           },
                         });
                       }}
-                      title='Bạn muốn xóa thông tin này ?'
-                      okText='Xóa'
-                      cancelText='Hủy'
+                      title="Bạn muốn xóa thông tin này ?"
+                      okText="Xóa"
+                      cancelText="Hủy"
                     >
                       <Button
                         disabled={
@@ -115,7 +118,7 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
                             ? false
                             : !info?.permissions[permiss + ".delete"]
                         }
-                        size='small'
+                        size="small"
                         key={uuid()}
                       >
                         Xóa
@@ -128,7 +131,7 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
                           ? false
                           : !info?.permissions[permiss + ".update"]
                       }
-                      size='small'
+                      size="small"
                       onClick={() => {
                         dispatch({
                           type: "GET_ROW_REQUESTED",
@@ -177,7 +180,7 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
         />
       </div>
       <Modal
-        width='70vw'
+        width="70vw"
         open={isModalOpen}
         onCancel={() => {
           dispatch(setLocate("vi"));
@@ -190,7 +193,7 @@ const TableItems = memo(({ typeOption, columns }: TableProps) => {
         <CreateForm data={data} id={ID} setIsModalOpen={setIsModalOpen} />
       </Modal>
       <Modal
-        width='70vw'
+        width="70vw"
         open={createModal}
         onCancel={() => {
           dispatch(setLocate("vi"));
