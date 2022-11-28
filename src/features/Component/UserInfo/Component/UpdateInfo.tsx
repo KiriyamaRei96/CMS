@@ -26,6 +26,15 @@ export function UpdateInfo(props: UpdateInfoProps) {
           style={{ margin: "10px" }}
           rules={[
             { required: true, message: "Không được bỏ trống trường này!" },
+            () => ({
+              validator(_, value) {
+                if (value.length > 1) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error("Họ phải nhiều hơn 1 ký tự"));
+              },
+              message: "Họ phải nhiều hơn 1 ký tự",
+            }),
           ]}
           name='firstname'
           label='Họ'
@@ -36,6 +45,15 @@ export function UpdateInfo(props: UpdateInfoProps) {
           style={{ margin: "10px" }}
           rules={[
             { required: true, message: "Không được bỏ trống trường này!" },
+            () => ({
+              validator(_, value) {
+                if (value.length > 1) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error("Tên phải nhiều hơn 1 ký tự"));
+              },
+              message: "Tên phải nhiều hơn 1 ký tự",
+            }),
           ]}
           name='lastname'
           label='Tên'
