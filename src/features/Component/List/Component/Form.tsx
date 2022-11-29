@@ -447,14 +447,14 @@ const CreateForm = ({
                   },
                   () => ({
                     validator(_, value) {
-                      if (value.length >= 1) {
+                      if (value.length >= 2) {
                         return Promise.resolve();
                       }
                       return Promise.reject(
-                        new Error("Tiêu đề phải có nhiều hơn 1 ký tự")
+                        new Error("Tiêu đề phải có nhiều hơn 2 ký tự")
                       );
                     },
-                    message: "Tiêu đề phải có nhiều hơn 1 ký tự",
+                    message: "Tiêu đề phải có nhiều hơn 2 ký tự",
                   }),
                 ]}
               >
