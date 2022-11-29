@@ -25,6 +25,16 @@ const SideBar = memo((props: SideBarProps) => {
           title: "Quản lý chung",
           icon: <i className='fa-solid fa-gear'></i>,
           label: <span>Quản lý chung</span>,
+          style:
+            info?.role?.id === "2"
+              ? {}
+              : !info?.permissions["webSetting.select"] &&
+                !info?.permissions["languages.select"] &&
+                !info?.permissions["district.select"] &&
+                !info?.permissions["category.select"] &&
+                !info?.permissions["utilitiesType.select"]
+              ? { display: "none" }
+              : {},
           children: [
             {
               key: uuid(),
@@ -101,6 +111,12 @@ const SideBar = memo((props: SideBarProps) => {
           title: "Quản lý danh mục lưu trú",
           label: <span>Quản lý danh mục lưu trú</span>,
           icon: <i className='fa-solid fa-hotel'></i>,
+          style:
+            info?.role?.id === "2"
+              ? {}
+              : !info?.permissions["hotelType.select"]
+              ? { display: "none" }
+              : {},
           children: [
             {
               key: uuid(),
@@ -125,6 +141,13 @@ const SideBar = memo((props: SideBarProps) => {
           icon: <i className='fa-solid fa-utensils'></i>,
           title: "Quản lý danh mục ẩm thực",
           label: <span>Quản lý danh mục ẩm thực</span>,
+          style:
+            info?.role?.id === "2"
+              ? {}
+              : !info?.permissions["restaurantType.select"] &&
+                !info?.permissions["restaurantCategory.select"]
+              ? { display: "none" }
+              : {},
           children: [
             {
               key: uuid(),
@@ -163,6 +186,12 @@ const SideBar = memo((props: SideBarProps) => {
           icon: <i className='fa-solid fa-map-location-dot'></i>,
           title: "Quản lý danh mục địa điểm",
           label: <span>Quản lý danh mục địa điểm</span>,
+          style:
+            info?.role?.id === "2"
+              ? {}
+              : !info?.permissions["pointType.select"]
+              ? { display: "none" }
+              : {},
           children: [
             {
               key: uuid(),
@@ -185,6 +214,14 @@ const SideBar = memo((props: SideBarProps) => {
           icon: <i className='fa-solid fa-plane'></i>,
           title: "Quản lý danh mục lữ hành",
           label: <span>Quản lý danh mục lữ hành</span>,
+          style:
+            info?.role?.id === "2"
+              ? {}
+              : !info?.permissions["travelCompanies.select"] &&
+                !info?.permissions["tourType.select"] &&
+                !info?.permissions["destinationsType.select"]
+              ? { display: "none" }
+              : {},
           children: [
             {
               key: uuid(),
@@ -251,6 +288,18 @@ const SideBar = memo((props: SideBarProps) => {
       title: "Quản lý nội dung",
       icon: <i className='fa-solid fa-folder'></i>,
       label: <span>Quản lý nội dung</span>,
+      style:
+        info?.role?.id === "2"
+          ? {}
+          : !info?.permissions["point.select"] &&
+            !info?.permissions["hotel.select"] &&
+            !info?.permissions["restaurant.select"] &&
+            !info?.permissions["tour.select"] &&
+            !info?.permissions["news.select"] &&
+            !info?.permissions["event.select"] &&
+            !info?.permissions["utilities.select"]
+          ? { display: "none" }
+          : {},
       children: [
         {
           key: uuid(),
@@ -348,6 +397,13 @@ const SideBar = memo((props: SideBarProps) => {
       title: "Quản trị người dùng",
       icon: <i className='fa-solid fa-users-gear'></i>,
       label: <span>Quản trị người dùng</span>,
+      style:
+        info?.role?.id === "2"
+          ? {}
+          : !info?.permissions["city.user.select"] &&
+            !info?.permissions["city.role.select"]
+          ? { display: "none" }
+          : {},
       children: [
         {
           key: uuid(),
