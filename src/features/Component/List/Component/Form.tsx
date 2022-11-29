@@ -808,7 +808,7 @@ const CreateForm = ({
             )}
             {data.role !== undefined ? (
               <SelectCategory
-                mode='multiple'
+                mode={undefined}
                 Url={`/v1/city/role/gets?limit=1000&page=1&search=`}
                 name='role'
                 label='Chọn nhóm quyền'
