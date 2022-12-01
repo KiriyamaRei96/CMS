@@ -721,6 +721,23 @@ const CreateForm = ({
                       display: "inline-block",
                       width: "calc(50% - 8px)",
                     }}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Không được bỏ trống trường này!",
+                      },
+                      () => ({
+                        validator(_, value) {
+                          if (value.length >= 2) {
+                            return Promise.resolve();
+                          }
+                          return Promise.reject(
+                            new Error("Họ phải có nhiều hơn 2 ký tự")
+                          );
+                        },
+                        message: "Họ phải có nhiều hơn 2 ký tự",
+                      }),
+                    ]}
                   >
                     <Input placeholder={data.firstname} />
                   </Form.Item>
@@ -730,6 +747,23 @@ const CreateForm = ({
                       display: "inline-block",
                       width: "calc(50% - 8px)",
                     }}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Không được bỏ trống trường này!",
+                      },
+                      () => ({
+                        validator(_, value) {
+                          if (value.length >= 2) {
+                            return Promise.resolve();
+                          }
+                          return Promise.reject(
+                            new Error("Tên phải có nhiều hơn 2 ký tự")
+                          );
+                        },
+                        message: "Tên phải có nhiều hơn 2 ký tự",
+                      }),
+                    ]}
                   >
                     <Input placeholder={data.lastname} />
                   </Form.Item>
@@ -789,7 +823,7 @@ const CreateForm = ({
                   }),
                 ]}
               >
-                <Input placeholder={data?.phone}></Input>
+                <Input type='number' placeholder={data?.phone}></Input>
               </Form.Item>
             ) : (
               false

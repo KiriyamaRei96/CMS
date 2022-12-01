@@ -81,19 +81,19 @@ const Create = ({ typeOption, setIsModalOpen, modal }: CreateProps) => {
     {
       title: "Tạo tiêu đề thông tin",
       content: (
-        <Form form={form} key={uuid()} onFinish={addRow} layout="inline">
+        <Form form={form} key={uuid()} onFinish={addRow} layout='inline'>
           {!actionApi?.includes("system") && !actionApi?.includes("city") ? (
             <Form.Item
-              label="Tiêu đề thông tin"
+              label='Tiêu đề thông tin'
               rules={[
                 {
                   required: true,
                   message: "Không được bỏ trống trường này!",
                 },
               ]}
-              name="title"
+              name='title'
             >
-              <Input type="text" />
+              <Input type='text' />
             </Form.Item>
           ) : (
             false
@@ -101,16 +101,16 @@ const Create = ({ typeOption, setIsModalOpen, modal }: CreateProps) => {
 
           {actionApi === "v1/page" || actionApi?.includes("city/role") ? (
             <Form.Item
-              label="Định danh "
+              label='Định danh '
               rules={[
                 {
                   required: true,
                   message: "Không được bỏ trống trường này!",
                 },
               ]}
-              name="name"
+              name='name'
             >
-              <Input type="text" />
+              <Input type='text' />
             </Form.Item>
           ) : (
             false
@@ -126,13 +126,13 @@ const Create = ({ typeOption, setIsModalOpen, modal }: CreateProps) => {
                   },
                 ]}
                 key={uuid()}
-                label="Tên tài khoản"
-                name="username"
+                label='Tên tài khoản'
+                name='username'
               >
                 <Input placeholder={"Tên tài khoản"} />
               </Form.Item>
-              <Form.Item key={uuid()} label="Họ và tên">
-                <div className="d-flex">
+              <Form.Item key={uuid()} label='Họ và tên'>
+                <div className='d-flex'>
                   <Form.Item
                     rules={[
                       {
@@ -155,7 +155,7 @@ const Create = ({ typeOption, setIsModalOpen, modal }: CreateProps) => {
                         message: "Không được bỏ trống trường này!",
                       },
                     ]}
-                    name="lastname"
+                    name='lastname'
                     style={{
                       display: "inline-block",
                       width: "calc(50% - 8px)",
@@ -174,7 +174,7 @@ const Create = ({ typeOption, setIsModalOpen, modal }: CreateProps) => {
                   },
                 ]}
                 name={"email"}
-                label="Email"
+                label='Email'
               >
                 <Input placeholder={"Email"}></Input>
               </Form.Item>
@@ -187,9 +187,9 @@ const Create = ({ typeOption, setIsModalOpen, modal }: CreateProps) => {
                   },
                 ]}
                 name={"phone"}
-                label="Số điện thoại"
+                label='Số điện thoại'
               >
-                <Input placeholder={"Số điện thoại"}></Input>
+                <Input type='number' placeholder={"Số điện thoại"}></Input>
               </Form.Item>
               <Form.Item
                 key={uuid()}
@@ -200,15 +200,15 @@ const Create = ({ typeOption, setIsModalOpen, modal }: CreateProps) => {
                   },
                 ]}
                 name={"password"}
-                label="Mật khẩu"
+                label='Mật khẩu'
               >
                 <Input placeholder={"Mật khẩu"}></Input>
               </Form.Item>
               {!actionApi?.includes("system/city") ? (
                 <SelectCategory
                   Url={`/v1/city/role/gets?limit=1000&page=1&search=`}
-                  name="role"
-                  label="Chọn nhóm quyền"
+                  name='role'
+                  label='Chọn nhóm quyền'
                   locale={"vi"}
                   mode={undefined}
                 ></SelectCategory>
@@ -217,7 +217,7 @@ const Create = ({ typeOption, setIsModalOpen, modal }: CreateProps) => {
               )}
 
               <Form.Item>
-                <Button htmlType="submit" type="primary">
+                <Button htmlType='submit' type='primary'>
                   Xác Nhận
                 </Button>
               </Form.Item>
@@ -228,7 +228,7 @@ const Create = ({ typeOption, setIsModalOpen, modal }: CreateProps) => {
           {!actionApi?.includes("system/city") &&
           !actionApi?.includes("city/user") ? (
             <Form.Item>
-              <Button htmlType="submit" type="primary">
+              <Button htmlType='submit' type='primary'>
                 Xác Nhận
               </Button>
             </Form.Item>
