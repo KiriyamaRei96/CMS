@@ -708,6 +708,18 @@ const CreateForm = ({
             ) : (
               false
             )}
+            {data.time !== undefined ? (
+              <Form.Item
+                className={clsx(style.formDes)}
+                name={"time"}
+                key={uuid()}
+                label='Thời gian Tour'
+              >
+                <Input />
+              </Form.Item>
+            ) : (
+              false
+            )}
             {data.firstname !== undefined ? (
               <Form.Item
                 className={clsx(style.formDes)}
